@@ -1,0 +1,9 @@
+https://groups.google.com/forum/#!topic/pac4j-users/Q_7eYrGFHaE
+
+org.pac4j.core.profile.UserProfile instead of a Principal
+
+bridge from dropwizard configuration object to pac4j Config?
+
+@Auth annotation tied to [DefaultSecurityLogic](https://github.com/pac4j/pac4j/blob/master/pac4j-core/src/main/java/org/pac4j/core/engine/DefaultSecurityLogic.java), returns [UserProfile](https://github.com/pac4j/pac4j/blob/master/pac4j-core/src/main/java/org/pac4j/core/profile/UserProfile.java) as resource method argument
+
+Matcher based on @Auth
