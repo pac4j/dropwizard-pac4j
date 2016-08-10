@@ -77,6 +77,11 @@ implement `ConfigFactory`s, `Client`s, `Authorizer`s, and `Matcher`s.
 * [`pac4j`'s README and wiki](https://github.com/pac4j/pac4j)
 * [`j2e-pac4j`'s README](https://github.com/pac4j/j2e-pac4j)
 
+## Maven Artifacts
+
+Public Maven artifacts are forthcoming, pending the release of an
+initial stable version of `dropwizard-pac4j`.
+
 ## Support
 
 Please file bug reports and feature requests in
