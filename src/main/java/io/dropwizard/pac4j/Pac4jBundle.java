@@ -17,7 +17,7 @@ import java.util.EnumSet;
  * into a Dropwizard application's Jetty servlet handler chain.
  */
 public abstract class Pac4jBundle<T extends Configuration>
-  implements ConfiguredBundle<T>, Pac4jConfiguration<T>
+    implements ConfiguredBundle<T>, Pac4jConfiguration<T>
 {
     @Override
     public final void initialize(Bootstrap<?> bootstrap) { }

@@ -56,7 +56,7 @@ public class Pac4jFactory {
 
     @JsonProperty
     public void setConfigFactory(String configFactory) {
-      this.configFactory = configFactory;
+        this.configFactory = configFactory;
     }
 
     @JsonProperty

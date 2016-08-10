@@ -16,7 +16,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
 
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,7 +42,7 @@ public class EndToEndTest {
 
     private String mkAuthField(String username, String password) {
         final String encodedBasicAuthCreds = BaseEncoding.base64()
-          .encode(String.format("%s:%s", username, password).getBytes(Charsets.UTF_8));
+            .encode(String.format("%s:%s", username, password).getBytes(Charsets.UTF_8));
         return String.format("Basic %s", encodedBasicAuthCreds);
     }
 
