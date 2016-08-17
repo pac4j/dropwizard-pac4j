@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://pac4j.github.io/pac4j/img/logo-dropwizard.png" width="300" />
+</p>
+
 # dropwizard-pac4j
 
 A [Dropwizard](http://www.dropwizard.io/) bundle for securing REST
