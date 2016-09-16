@@ -78,7 +78,7 @@ used by `org.pac4j.j2e.filter.SecurityFilter`.
 From here, `j2e-pac4j` takes over. See `pac4j` documentation on how to
 implement `ConfigFactory`s, `Client`s, `Authorizer`s, and `Matcher`s.
 
-* [`pac4j`'s README and wiki](https://github.com/pac4j/pac4j)
+* [pac4j's website](http://www.pac4j.org) and [README](https://github.com/pac4j/pac4j)
 * [`j2e-pac4j`'s README](https://github.com/pac4j/j2e-pac4j)
 
 ## Maven Artifacts
