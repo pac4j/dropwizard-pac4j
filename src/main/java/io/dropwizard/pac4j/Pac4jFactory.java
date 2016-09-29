@@ -1,81 +1,100 @@
 package io.dropwizard.pac4j;
 
+import java.util.Collection;
+
+import org.pac4j.jax.rs.filter.SecurityFilter;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.pac4j.j2e.filter.SecurityFilter;
 
 /**
  * An interface defining getters for parameters required to configure
  * a {@link SecurityFilter}.
  */
 public class Pac4jFactory {
-    private String configFactory;
-    private String clients;
-    private String authorizers;
-    private String matchers;
-    private boolean multiProfile;
 
-    /**
-     * A pac4j config factory class name.
-     */
-    @JsonProperty
-    public String getConfigFactory() {
-        return configFactory;
-    }
+    private Collection<FilterConfiguration> filters;
 
-    /**
-     * A pac4j clients string.
-     */
     @JsonProperty
-    public String getClients() {
-        return clients;
-    }
-
-    /**
-     * A pac4j authorizers string.
-     */
-    @JsonProperty
-    public String getAuthorizers() {
-        return authorizers;
-    }
-
-    /**
-     * A pac4j matchers string.
-     */
-    @JsonProperty
-    public String getMatchers() {
-        return matchers;
-    }
-
-    /**
-     * Returns true if multiple pac4j authentications are to be used.
-     */
-    @JsonProperty
-    public boolean getMultiProfile() {
-        return multiProfile;
+    public Collection<FilterConfiguration> getFilters() {
+        return filters;
     }
 
     @JsonProperty
-    public void setConfigFactory(String configFactory) {
-        this.configFactory = configFactory;
+    public void setFilters(Collection<FilterConfiguration> filters) {
+        this.filters = filters;
     }
 
-    @JsonProperty
-    public void setClients(String clients) {
-        this.clients = clients;
-    }
+    public static class FilterConfiguration {
 
-    @JsonProperty
-    public void setAuthorizers(String authorizers) {
-        this.authorizers = authorizers;
-    }
+        private Boolean skipResponse;
+        private String clients;
+        private String authorizers;
+        private String matchers;
+        private Boolean multiProfile;
 
-    @JsonProperty
-    public void setMatchers(String matchers) {
-        this.matchers = matchers;
-    }
+        /**
+         * A pac4j clients string.
+         */
+        @JsonProperty
+        public String getClients() {
+            return clients;
+        }
 
-    @JsonProperty
-    public void setMultiProfile(Boolean multiProfile) {
-        this.multiProfile = multiProfile;
+        /**
+         * A pac4j authorizers string.
+         */
+        @JsonProperty
+        public String getAuthorizers() {
+            return authorizers;
+        }
+
+        /**
+         * A pac4j matchers string.
+         */
+        @JsonProperty
+        public String getMatchers() {
+            return matchers;
+        }
+
+        /**
+         * Returns true if multiple pac4j authentications are to be used.
+         */
+        @JsonProperty
+        public Boolean getMultiProfile() {
+            return multiProfile;
+        }
+
+        /**
+         * Returns true if pac4j generated response are to be skipped.
+         */
+        @JsonProperty
+        public Boolean getSkipResponse() {
+            return skipResponse;
+        }
+
+        @JsonProperty
+        public void setClients(String clients) {
+            this.clients = clients;
+        }
+
+        @JsonProperty
+        public void setAuthorizers(String authorizers) {
+            this.authorizers = authorizers;
+        }
+
+        @JsonProperty
+        public void setMatchers(String matchers) {
+            this.matchers = matchers;
+        }
+
+        @JsonProperty
+        public void setMultiProfile(Boolean multiProfile) {
+            this.multiProfile = multiProfile;
+        }
+
+        @JsonProperty
+        public void setSkipResponse(Boolean skipResponse) {
+            this.skipResponse = skipResponse;
+        }
     }
 }

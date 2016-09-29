@@ -1,24 +1,27 @@
 package io.dropwizard.pac4j;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.BaseEncoding;
-import io.dropwizard.Application;
-import io.dropwizard.testing.ConfigOverride;
-import io.dropwizard.testing.DropwizardTestSupport;
-import io.dropwizard.testing.ResourceHelpers;
-import org.glassfish.jersey.client.JerseyClientBuilder;
-import org.junit.After;
-import org.junit.Test;
-import org.pac4j.http.client.direct.DirectBasicAuthClient;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static java.util.Objects.requireNonNull;
-import static org.assertj.core.api.Assertions.assertThat;
+import org.glassfish.jersey.client.JerseyClientBuilder;
+import org.junit.After;
+import org.junit.Test;
+import org.pac4j.core.config.Config;
+import org.pac4j.core.config.ConfigSingleton;
+import org.pac4j.http.client.direct.DirectBasicAuthClient;
+import org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator;
+
+import com.google.common.base.Charsets;
+import com.google.common.io.BaseEncoding;
+
+import io.dropwizard.Application;
+import io.dropwizard.testing.ConfigOverride;
+import io.dropwizard.testing.DropwizardTestSupport;
+import io.dropwizard.testing.ResourceHelpers;
 
 public class EndToEndTest {
     private DropwizardTestSupport dropwizardTestSupport;
@@ -56,7 +59,7 @@ public class EndToEndTest {
     public void grantsAccessToResources() throws Exception {
         setup(
             TestApplication.class,
-            ConfigOverride.config("pac4j.clients", DirectBasicAuthClient.class.getSimpleName())
+            ConfigOverride.config("pac4j.filters[0].clients", DirectBasicAuthClient.class.getSimpleName())
         );
 
         final String dogName = client.target(getUrlPrefix() + "/dogs/pierre")
@@ -72,7 +75,7 @@ public class EndToEndTest {
     public void restrictsAccessToResources() throws Exception {
         setup(
             TestApplication.class,
-            ConfigOverride.config("pac4j.clients", DirectBasicAuthClient.class.getSimpleName())
+            ConfigOverride.config("pac4j.filters[0].clients", DirectBasicAuthClient.class.getSimpleName())
         );
 
         final Response response = client.target(getUrlPrefix() + "/dogs/pierre")
