@@ -1,5 +1,10 @@
 package io.dropwizard.pac4j;
 
+import org.pac4j.core.config.Config;
+import org.pac4j.core.config.ConfigSingleton;
+import org.pac4j.http.client.direct.DirectBasicAuthClient;
+import org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator;
+
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
@@ -19,6 +24,12 @@ public class TestApplication extends Application<TestConfiguration> {
 
     @Override
     public void run(TestConfiguration config, Environment env) throws Exception {
+        final Config pac4j = new Config(
+            new DirectBasicAuthClient(
+                new SimpleTestUsernamePasswordAuthenticator()
+            )
+        );
+        ConfigSingleton.setConfig(pac4j);
         env.jersey().register(new DogsResource());
     }
 }

@@ -6,8 +6,8 @@ server:
     - type: http
       port: 0
 pac4j:
-  configFactory: "io.dropwizard.pac4j.TestConfigFactory"
-  clients: ""
-  authorizers: ""
-  matchers: ""
-  multiProfile: false
+  filters:
+    - clients: ""
+      authorizers: ""
+      matchers: ""
+      multiProfile: false
