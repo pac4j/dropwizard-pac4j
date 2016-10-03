@@ -1,4 +1,4 @@
-package io.dropwizard.pac4j;
+package org.pac4j.dropwizard;
 
 import java.util.Collection;
 

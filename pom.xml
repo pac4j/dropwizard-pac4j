@@ -5,33 +5,51 @@
     <maven>3.0.1</maven>
   </prerequisites>
 
-  <groupId>io.dropwizard.modules</groupId>
-  <artifactId>dropwizard-pac4j</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>9</version>
+  </parent>
 
+  <groupId>org.pac4j</groupId>
+  <artifactId>dropwizard-pac4j</artifactId>
+  <packaging>jar</packaging>
+  <version>0.0.1-SNAPSHOT</version>
   <name>Dropwizard pac4j Support</name>
   <description>Dropwizard bundle adding support for the pac4j security engine</description>
-  <url>https://github.com/evnm/dropwizard-pac4j</url>
+  <url>https://github.com/pac4j/dropwizard-pac4j</url>
+
+  <repositories>
+    <repository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 
   <licenses>
     <license>
-      <name>Apache 2.0</name>
+      <name>The Apache Software License, Version 2.0</name>
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
 
   <scm>
-    <developerConnection>scm:git:git@github.com:evnm/dropwizard-pac4j.git</developerConnection>
-    <connection>scm:git:https://github.com/evnm/dropwizard-pac4j.git</connection>
-    <url>https://github.com/evnm/dropwizard-pac4j</url>
-    <tag>HEAD</tag>
+    <url>https://github.com/pac4j/dropwizard-pac4j.git</url>
+    <connection>scm:git:git@github.com:pac4j/dropwizard-pac4j.git</connection>
+    <developerConnection>scm:git:git@github.com:pac4j/dropwizard-pac4j.git</developerConnection>
   </scm>
 
   <issueManagement>
     <system>GitHub Issues</system>
-    <url>https://github.com/evnm/dropwizard-pac4j/issues</url>
+    <url>https://github.com/pac4j/dropwizard-pac4j/issues</url>
   </issueManagement>
 
   <developers>
@@ -105,15 +123,74 @@
         <version>2.10.4</version>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.6</version>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <version>3.0.3</version>
+        <configuration>
+          <effort>Low</effort>
+          <threshold>Max</threshold>
+          <failOnError>true</failOnError>
+          <includeTests>true</includeTests>
+        </configuration>
+        <executions>
+          <execution>
+            <id>run-findbugs</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>3.0.2</version>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>3.6</version>
+        <configuration>
+          <includeTests>true</includeTests>
+          <printFailingErrors>true</printFailingErrors>
+        </configuration>
+        <executions>
+          <execution>
+            <id>run-pmd</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>release-sign-artifacts</id>
+      <activation>
+        <property>
+          <name>performRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 </project>

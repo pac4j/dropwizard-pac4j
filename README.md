@@ -83,13 +83,17 @@ implement `ConfigFactory`s, `Client`s, `Authorizer`s, and `Matcher`s.
 
 ## Maven Artifacts
 
+Build status: [![Build Status](https://travis-ci.org/pac4j/dropwizard-pac4j.png?branch=master)](https://travis-ci.org/pac4j/dropwizard-pac4j)
+
+Deployed on the [Sonatype snapshots repository](https://oss.sonatype.org/content/repositories/snapshots/org/pac4j). 
+
 Public Maven artifacts are forthcoming, pending the release of an
 initial stable version of `dropwizard-pac4j`.
 
 ## Support
 
 Please file bug reports and feature requests in
-[GitHub issues](https://github.com/evnm/dropwizard-pac4j/issues).
+[GitHub issues](https://github.com/pac4j/dropwizard-pac4j/issues).
 
 ## License
 

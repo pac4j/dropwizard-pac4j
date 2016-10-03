@@ -1,4 +1,4 @@
-package io.dropwizard.pac4j;
+package org.pac4j.dropwizard;
 
 import org.pac4j.core.config.Config;
 import org.pac4j.core.config.ConfigSingleton;
@@ -9,7 +9,7 @@ import org.pac4j.jax.rs.filter.SecurityFilter;
 
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
-import io.dropwizard.pac4j.Pac4jFactory.FilterConfiguration;
+import org.pac4j.dropwizard.Pac4jFactory.FilterConfiguration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 

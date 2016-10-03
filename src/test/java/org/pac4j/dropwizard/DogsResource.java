@@ -1,6 +1,4 @@
-package io.dropwizard.pac4j;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package org.pac4j.dropwizard;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

@@ -1,4 +1,4 @@
-package io.dropwizard.pac4j;
+package org.pac4j.dropwizard;
 
 import org.pac4j.core.config.Config;
 import org.pac4j.core.config.ConfigSingleton;
@@ -6,7 +6,6 @@ import org.pac4j.http.client.direct.DirectBasicAuthClient;
 import org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator;
 
 import io.dropwizard.Application;
-import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
