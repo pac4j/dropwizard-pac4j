@@ -21,7 +21,6 @@ import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.DropwizardTestSupport;
 import io.dropwizard.testing.ResourceHelpers;
 
-@Ignore
 public class EndToEndTest {
     private DropwizardTestSupport dropwizardTestSupport;
     private Client client = new JerseyClientBuilder().build();
