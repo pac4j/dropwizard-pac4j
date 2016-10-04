@@ -32,7 +32,7 @@ public abstract class Pac4jBundle<T extends Configuration>
         final Config config = ConfigSingleton.getConfig() == null ? new Config() : ConfigSingleton.getConfig();
         ConfigSingleton.setConfig(config);
 
-        if (pac4jFactory != null) {
+        if (pac4jFactory != null && pac4jFactory.getFilters() != null) {
             for (FilterConfiguration fConf : pac4jFactory.getFilters()) {
                 environment.jersey().register(new Pac4JSecurityFilterFeature(config, fConf.getSkipResponse(),
                         fConf.getAuthorizers(), fConf.getClients(), fConf.getMatchers(), fConf.getMultiProfile()));
