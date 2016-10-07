@@ -10,6 +10,7 @@ import org.pac4j.jax.rs.filter.SecurityFilter;
 
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
+import io.dropwizard.server.AbstractServerFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -43,8 +44,39 @@ public abstract class Pac4jBundle<T extends Configuration>
             }
         }
 
-        environment.jersey().register(new Pac4JSecurityFeature(config));
+        String urlPrefix = getUrlPrefix(configuration, environment);
+
+        environment.jersey()
+                .register(new Pac4JSecurityFeature(config, urlPrefix));
         environment.jersey()
                 .register(new Pac4JValueFactoryProvider.Binder(config));
+    }
+
+    private String getUrlPrefix(T configuration, Environment environment) {
+        // the context path on the
+        String cPath = environment.getApplicationContext().getContextPath();
+        String sPath = ((AbstractServerFactory) configuration
+                .getServerFactory()).getJerseyRootPath().orElse("");
+
+        return (clean(cPath) + clean(sPath)).replace("//", "/");
+    }
+
+    private String clean(String path) {
+        if (path == null) {
+            return "";
+        }
+
+        String res;
+        if (path.endsWith("*")) {
+            res = path.substring(0, path.length() - 2);
+        } else {
+            res = path;
+        }
+
+        if ("/".equals(res)) {
+            return "";
+        } else {
+            return res;
+        }
     }
 }
