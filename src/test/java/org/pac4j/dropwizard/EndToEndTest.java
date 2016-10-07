@@ -25,14 +25,12 @@ public class EndToEndTest {
     private Client client = new JerseyClientBuilder().build();
 
     public void setup(
-        Class<? extends Application<TestConfiguration>> applicationClass,
-        ConfigOverride... configOverrides
-    ) {
+            Class<? extends Application<TestConfiguration>> applicationClass,
+            ConfigOverride... configOverrides) {
         dropwizardTestSupport = new DropwizardTestSupport<TestConfiguration>(
-            applicationClass,
-            ResourceHelpers.resourceFilePath("end-to-end-test.yaml"),
-            configOverrides
-        );
+                applicationClass,
+                ResourceHelpers.resourceFilePath("end-to-end-test.yaml"),
+                configOverrides);
         dropwizardTestSupport.before();
     }
 
@@ -41,8 +39,8 @@ public class EndToEndTest {
     }
 
     private String mkAuthField(String username, String password) {
-        final String encodedBasicAuthCreds = BaseEncoding.base64()
-            .encode(String.format("%s:%s", username, password).getBytes(Charsets.UTF_8));
+        final String encodedBasicAuthCreds = BaseEncoding.base64().encode(String
+                .format("%s:%s", username, password).getBytes(Charsets.UTF_8));
         return String.format("Basic %s", encodedBasicAuthCreds);
     }
 
@@ -54,33 +52,33 @@ public class EndToEndTest {
 
     @Test
     public void grantsAccessToResources() throws Exception {
-        setup(
-            TestApplication.class,
-            ConfigOverride.config("pac4j.filters[0].clients", DirectBasicAuthClient.class.getSimpleName())
-        );
+        setup(TestApplication.class,
+                ConfigOverride.config("pac4j.filters[0].clients",
+                        DirectBasicAuthClient.class.getSimpleName()));
 
         final String dogName = client.target(getUrlPrefix() + "/dogs/pierre")
-            .request(MediaType.APPLICATION_JSON)
-            // username == password
-            .header(HttpHeaders.AUTHORIZATION, mkAuthField("rosebud", "rosebud"))
-            .get(String.class);
+                .request(MediaType.APPLICATION_JSON)
+                // username == password
+                .header(HttpHeaders.AUTHORIZATION,
+                        mkAuthField("rosebud", "rosebud"))
+                .get(String.class);
 
         assertThat(dogName).isEqualTo("pierre");
     }
 
     @Test
     public void restrictsAccessToResources() throws Exception {
-        setup(
-            TestApplication.class,
-            ConfigOverride.config("pac4j.filters[0].clients", DirectBasicAuthClient.class.getSimpleName())
-        );
+        setup(TestApplication.class,
+                ConfigOverride.config("pac4j.filters[0].clients",
+                        DirectBasicAuthClient.class.getSimpleName()));
 
         final Response response = client.target(getUrlPrefix() + "/dogs/pierre")
-            .request(MediaType.APPLICATION_JSON)
-            // username != password
-            .header(HttpHeaders.AUTHORIZATION, mkAuthField("boy", "howdy"))
-            .get();
+                .request(MediaType.APPLICATION_JSON)
+                // username != password
+                .header(HttpHeaders.AUTHORIZATION, mkAuthField("boy", "howdy"))
+                .get();
 
-        assertThat(response.getStatusInfo()).isEqualTo(Response.Status.UNAUTHORIZED);
+        assertThat(response.getStatusInfo())
+                .isEqualTo(Response.Status.UNAUTHORIZED);
     }
 }

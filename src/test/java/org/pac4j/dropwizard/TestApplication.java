@@ -14,7 +14,8 @@ public class TestApplication extends Application<TestConfiguration> {
     public void initialize(Bootstrap<TestConfiguration> bootstrap) {
         final Pac4jBundle<TestConfiguration> bundle = new Pac4jBundle<TestConfiguration>() {
             @Override
-            public Pac4jFactory getPac4jFactory(TestConfiguration configuration) {
+            public Pac4jFactory getPac4jFactory(
+                    TestConfiguration configuration) {
                 return configuration.pac4jFactory;
             }
         };
@@ -22,10 +23,11 @@ public class TestApplication extends Application<TestConfiguration> {
     }
 
     @Override
-    public void run(TestConfiguration config, Environment env) throws Exception {
-        ConfigSingleton.getConfig().setClients(new Clients(new DirectBasicAuthClient(
-                new SimpleTestUsernamePasswordAuthenticator()
-        )));
+    public void run(TestConfiguration config, Environment env)
+            throws Exception {
+        ConfigSingleton.getConfig()
+                .setClients(new Clients(new DirectBasicAuthClient(
+                        new SimpleTestUsernamePasswordAuthenticator())));
         env.jersey().register(new DogsResource());
     }
 }
