@@ -14,32 +14,37 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
 /**
- * A {@link ConfiguredBundle} which installs a {@link SecurityFilter}
- * into a Dropwizard application's Jersey filter chain.
+ * A {@link ConfiguredBundle} which installs a {@link SecurityFilter} into a
+ * Dropwizard application's Jersey filter chain.
  */
 public abstract class Pac4jBundle<T extends Configuration>
-    implements ConfiguredBundle<T>, Pac4jConfiguration<T>
-{
+        implements ConfiguredBundle<T>, Pac4jConfiguration<T> {
     @Override
     public final void initialize(Bootstrap<?> bootstrap) {
         // nothing to do
     }
 
     @Override
-    public final void run(T configuration, Environment environment) throws Exception {
+    public final void run(T configuration, Environment environment)
+            throws Exception {
         final Pac4jFactory pac4jFactory = getPac4jFactory(configuration);
 
-        final Config config = ConfigSingleton.getConfig() == null ? new Config() : ConfigSingleton.getConfig();
+        final Config config = ConfigSingleton.getConfig() == null ? new Config()
+                : ConfigSingleton.getConfig();
         ConfigSingleton.setConfig(config);
 
         if (pac4jFactory != null && pac4jFactory.getFilters() != null) {
             for (FilterConfiguration fConf : pac4jFactory.getFilters()) {
-                environment.jersey().register(new Pac4JSecurityFilterFeature(config, fConf.getSkipResponse(),
-                        fConf.getAuthorizers(), fConf.getClients(), fConf.getMatchers(), fConf.getMultiProfile()));
+                environment.jersey()
+                        .register(new Pac4JSecurityFilterFeature(config,
+                                fConf.getSkipResponse(), fConf.getAuthorizers(),
+                                fConf.getClients(), fConf.getMatchers(),
+                                fConf.getMultiProfile()));
             }
         }
 
         environment.jersey().register(new Pac4JSecurityFeature(config));
-        environment.jersey().register(new Pac4JValueFactoryProvider.Binder(config));
+        environment.jersey()
+                .register(new Pac4JValueFactoryProvider.Binder(config));
     }
 }

@@ -7,8 +7,8 @@ import org.pac4j.jax.rs.filter.SecurityFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * An interface defining getters for parameters required to configure
- * a {@link SecurityFilter}.
+ * An interface defining getters for parameters required to configure a
+ * {@link SecurityFilter}.
  */
 public class Pac4jFactory {
 
