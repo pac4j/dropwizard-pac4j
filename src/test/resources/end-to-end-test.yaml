@@ -5,9 +5,11 @@ server:
   adminConnectors:
     - type: http
       port: 0
+
 pac4j:
+  clients:
+    - org.pac4j.http.client.direct.DirectBasicAuthClient:
+        authenticator:
+          class: org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator
   filters:
     - clients: ""
-      authorizers: ""
-      matchers: ""
-      multiProfile: false

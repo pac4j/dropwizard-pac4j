@@ -1,4 +1,6 @@
-package org.pac4j.dropwizard;
+package org.pac4j.dropwizard.e2e;
+
+import org.pac4j.dropwizard.Pac4jFactory;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
