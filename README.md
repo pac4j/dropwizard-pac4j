@@ -26,61 +26,64 @@ applications:
 Add the bundle within the application class' `initialize` method, just like any
 other bundle:
 
-    public class MySecureApplication extends Application<MySecureConfiguration> {
-        @Override
-        public void initialize(Bootstrap<TestConfiguration> bootstrap) {
-            final Pac4jBundle<MySecureConfiguration> bundle = new Pac4jBundle<MySecureConfiguration>() {
-                @Override
-                public Pac4jFactory getPac4jFactory(MySecureConfiguration configuration) {
-                    return configuration.getPac4jFactory();
-                }
-            };
-            bootstrap.addBundle(bundle);
-        }
+```java
+public class MySecureApplication extends Application<MySecureConfiguration> {
+    @Override
+    public void initialize(Bootstrap<TestConfiguration> bootstrap) {
+        final Pac4jBundle<MySecureConfiguration> bundle = new Pac4jBundle<MySecureConfiguration>() {
+            @Override
+            public Pac4jFactory getPac4jFactory(MySecureConfiguration configuration) {
+                return configuration.getPac4jFactory();
+            }
+        };
+        bootstrap.addBundle(bundle);
+    }
 
-        ...
-
+    ...
+```
 ### Configuring the bundle
 
 Update the application's configuration class to expose accessor methods for
 `Pac4jFactory`:
 
-    public class MySecureConfiguration extends Configuration {
-        @NotNull
-        Pac4jFactory pac4jFactory = new Pac4jFactory();
+```java
+public class MySecureConfiguration extends Configuration {
+    @NotNull
+    Pac4jFactory pac4jFactory = new Pac4jFactory();
 
-        @JsonProperty("pac4j")
-        public Pac4jFactory getPac4jFactory() {
-            return pac4jFactory;
-        }
-
-        @JsonProperty("pac4j")
-        public void setPac4jFactory(Pac4jFactory pac4jFactory) {
-            this.pac4jFactory = pac4jFactory;
-        }
+    @JsonProperty("pac4j")
+    public Pac4jFactory getPac4jFactory() {
+        return pac4jFactory;
     }
 
-Note that it is also possible to have `pac4jFactory` be null and in this
+    @JsonProperty("pac4j")
+    public void setPac4jFactory(Pac4jFactory pac4jFactory) {
+        this.pac4jFactory = pac4jFactory;
+    }
+}
+```
+
+Note that it is also possible to have `pac4jFactory` be nullable and in this
 case, the bundle will be disabled.
 
 Add a `pac4j` section to a Dropwizard application's configuration file:
 
 ```yaml
-    pac4j:
-      filters:
-        # this protects the whole application
-        - matchers: excludeUserSession
-          authorizers: isAuthenticated
-      matchers:
-        # this let the /user/session url be handled by the annotations
-        excludeUserSession:
-          class: org.pac4j.core.matching.ExcludedPathMatcher
-          excludePath: ^/user/session$
-      callbackUrl: /user/session
-      clients:
-        org.pac4j.http.client.direct.DirectBasicAuthClient:
-          authenticator:
-            class: org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator
+pac4j:
+  filters:
+    # this protects the whole application
+    - matchers: excludeUserSession
+      authorizers: isAuthenticated
+  matchers:
+    # this let the /user/session url be handled by the annotations
+    excludeUserSession:
+      class: org.pac4j.core.matching.ExcludedPathMatcher
+      excludePath: ^/user/session$
+  callbackUrl: /user/session
+  clients:
+    - org.pac4j.http.client.direct.DirectBasicAuthClient:
+        authenticator:
+          class: org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator
 ```
 
 For `filters`, the properties directly map to
@@ -105,30 +108,32 @@ Their name can be used in `filter`'s `clients` as well as in the
 
 To specify instances of `Client`, `Authenticator`, `PasswordEncoder`,
 `CredentialsExtractor`, `ProfileCreator`, `AuthorizationGenerator`, `Authorizer`,
-`Matcher`, `CallbackUrlResolver` and `RedirectActionBuilder`, it only necessary to refer
-to their class name using the `class` key as above and the other properties are set on 
-the instantiated object.
+`Matcher`, `CallbackUrlResolver` and `RedirectActionBuilder`, it only necessary to
+refer to their class name using the `class` key as above and the other properties are set
+on the instantiated object.
 
 Note also that the configuration will use `JaxRsCallbackUrlResolver` as the default
-`CallbackUrlResolver`.
+`CallbackUrlResolver` if not overridden.
 
-For more complex setup of pac4j configuration, this can be done in your
-application using `ConfigSingleton` from pac4j:
+For more complex setup of pac4j configuration, this can be done in the
+`Application` using `ConfigSingleton` from pac4j:
 
-    public class MySecureApplication extends Application<MySecureConfiguration> {
+```java
+public class MySecureApplication extends Application<MySecureConfiguration> {
 
-        ....
+    ...
 
-        @Override
-        public void run(MySecureConfiguration config, Environment env) throws Exception {
-            Config conf = ConfigSingleton.getConfig()
-            
-            DirectBasicAuthClient c = conf.getClients().findClient(DirectBasicAuthClient.class);
-            c.setCredentialsExtractor(...);
-            
-            env.jersey().register(new DogsResource());
-        }
+    @Override
+    public void run(MySecureConfiguration config, Environment env) throws Exception {
+        Config conf = ConfigSingleton.getConfig()
+        
+        DirectBasicAuthClient c = conf.getClients().findClient(DirectBasicAuthClient.class);
+        c.setCredentialsExtractor(...);
+        
+        env.jersey().register(new DogsResource());
     }
+}
+```
 
 ### Securing REST endpoints
 
