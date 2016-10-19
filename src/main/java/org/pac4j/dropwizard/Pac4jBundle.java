@@ -5,8 +5,9 @@ import org.pac4j.core.config.ConfigSingleton;
 import org.pac4j.dropwizard.Pac4jFactory.FilterConfiguration;
 import org.pac4j.jax.rs.features.Pac4JSecurityFeature;
 import org.pac4j.jax.rs.features.Pac4JSecurityFilterFeature;
-import org.pac4j.jax.rs.features.jersey.Pac4JValueFactoryProvider;
-import org.pac4j.jax.rs.filter.SecurityFilter;
+import org.pac4j.jax.rs.filters.SecurityFilter;
+import org.pac4j.jax.rs.jersey.features.Pac4JValueFactoryProvider;
+import org.pac4j.jax.rs.servlet.features.ServletJaxRsContextFactoryProvider;
 
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
@@ -43,8 +44,10 @@ public abstract class Pac4jBundle<T extends Configuration>
             }
         }
 
+        environment.jersey()
+                .register(new ServletJaxRsContextFactoryProvider(config));
         environment.jersey().register(new Pac4JSecurityFeature(config));
         environment.jersey()
-                .register(new Pac4JValueFactoryProvider.Binder(config));
+                .register(new Pac4JValueFactoryProvider.Binder());
     }
 }

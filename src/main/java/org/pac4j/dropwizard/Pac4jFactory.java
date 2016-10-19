@@ -2,7 +2,7 @@ package org.pac4j.dropwizard;
 
 import java.util.Collection;
 
-import org.pac4j.jax.rs.filter.SecurityFilter;
+import org.pac4j.jax.rs.filters.SecurityFilter;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
