@@ -1,5 +1,8 @@
 package org.pac4j.dropwizard;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.pac4j.core.config.Config;
 import org.pac4j.core.config.ConfigSingleton;
 import org.pac4j.dropwizard.Pac4jFactory.FilterConfiguration;
@@ -15,14 +18,33 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
 /**
- * A {@link ConfiguredBundle} which installs a {@link SecurityFilter} into a
- * Dropwizard application's Jersey filter chain.
+ * A {@link ConfiguredBundle} which sets up {@link Pac4JSecurityFeature},
+ * {@link Pac4JValueFactoryProvider} as well as installs {@link SecurityFilter}s
+ * into a Dropwizard application's Jersey filter chain.
+ * 
+ * @author Evan Meagher
+ * @author Victor Noel - Linagora
+ * @since 1.0.0
  */
 public abstract class Pac4jBundle<T extends Configuration>
         implements ConfiguredBundle<T>, Pac4jConfiguration<T> {
+
     @Override
     public final void initialize(Bootstrap<?> bootstrap) {
-        // nothing to do
+        for (Pac4jFeatureSupport fs : supportedFeatures()) {
+            fs.setup(bootstrap);
+        }
+    }
+
+    /**
+     * In case of override, do not forget to call
+     * {@code super.supportedFeatures()} to get the default features, or to
+     * redefine them instead!
+     */
+    public Collection<Pac4jFeatureSupport> supportedFeatures() {
+        ArrayList<Pac4jFeatureSupport> res = new ArrayList<>();
+        res.add(new DefaultFeatureSupport());
+        return res;
     }
 
     @Override
@@ -30,11 +52,10 @@ public abstract class Pac4jBundle<T extends Configuration>
             throws Exception {
         final Pac4jFactory pac4jFactory = getPac4jFactory(configuration);
 
-        final Config config = ConfigSingleton.getConfig() == null ? new Config()
-                : ConfigSingleton.getConfig();
-        ConfigSingleton.setConfig(config);
+        if (pac4jFactory != null) {
+            final Config config = pac4jFactory.build();
+            ConfigSingleton.setConfig(config);
 
-        if (pac4jFactory != null && pac4jFactory.getFilters() != null) {
             for (FilterConfiguration fConf : pac4jFactory.getFilters()) {
                 environment.jersey()
                         .register(new Pac4JSecurityFilterFeature(config,
@@ -42,12 +63,12 @@ public abstract class Pac4jBundle<T extends Configuration>
                                 fConf.getClients(), fConf.getMatchers(),
                                 fConf.getMultiProfile()));
             }
-        }
 
-        environment.jersey()
-                .register(new ServletJaxRsContextFactoryProvider(config));
-        environment.jersey().register(new Pac4JSecurityFeature(config));
-        environment.jersey()
-                .register(new Pac4JValueFactoryProvider.Binder());
+            environment.jersey()
+                    .register(new ServletJaxRsContextFactoryProvider(config));
+            environment.jersey().register(new Pac4JSecurityFeature(config));
+            environment.jersey()
+                    .register(new Pac4JValueFactoryProvider.Binder());
+        }
     }
 }

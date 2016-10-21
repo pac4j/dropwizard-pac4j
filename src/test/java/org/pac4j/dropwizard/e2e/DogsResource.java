@@ -1,4 +1,4 @@
-package org.pac4j.dropwizard;
+package org.pac4j.dropwizard.e2e;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

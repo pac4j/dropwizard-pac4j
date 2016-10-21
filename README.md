@@ -60,20 +60,60 @@ Update the application's configuration class to expose accessor methods for
         }
     }
 
+Note that it is also possible to have `pac4jFactory` be null and in this
+case, the bundle will be disabled.
+
 Add a `pac4j` section to a Dropwizard application's configuration file:
 
+```yaml
     pac4j:
-      - clients: "DirectBaseicAuthClient"
-        authorizers: ""
-        matchers: ""
-        multiProfile: false
-        skipResponse: false
+      filters:
+        # this protects the whole application
+        - matchers: excludeUserSession
+          authorizers: isAuthenticated
+      matchers:
+        # this let the /user/session url be handled by the annotations
+        excludeUserSession:
+          class: org.pac4j.core.matching.ExcludedPathMatcher
+          excludePath: ^/user/session$
+      callbackUrl: /user/session
+      clients:
+        org.pac4j.http.client.direct.DirectBasicAuthClient:
+          authenticator:
+            class: org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator
+```
 
-These properties map directly to
+For `filters`, the properties directly map to
 [the five parameters](https://github.com/pac4j/jax-rs-pac4j/#3-protect-urls-securityfilter)
 used by `org.pac4j.jax.rs.filter.SecurityFilter.SecurityFilter`.
 
-Setup the configuration for pac4j in your application:
+For `matchers`, the key is the name of the `Matcher` and its instance is
+declared as explained below.
+Their name can be used in `filter`'s `matchers` as well as in the
+`Pac4JSecurity` annotation.
+
+For `authorizers`, the key is the name of the `Authorizer` and its instance is
+declared as explained below.
+Their name can be used in `filter`'s `authorizers` as well as in the
+`Pac4JSecurity` annotation.
+
+For `clients`'s, the key is the class of the `Client` and its instance
+is configured based on the properties. Its name is by default the short
+name of its class, but it can also be set explictly.
+Their name can be used in `filter`'s `clients` as well as in the
+`Pac4JSecurity` annotation.
+
+To specify instances of `Client`, `Authenticator`, `PasswordEncoder`,
+`CredentialsExtractor`, `ProfileCreator`, `AuthorizationGenerator`, `Authorizer`,
+`Matcher`, `CallbackUrlResolver` and `RedirectActionBuilder`, it only necessary to refer
+to their class name using the `class` key as above and the other properties are set on 
+the instantiated object.
+
+Note also that the configuration will use `JaxRsCallbackUrlResolver` as the default
+`CallbackUrlResolver`.
+
+For more complex setup of pac4j configuration, this can be done in your
+application using `ConfigSingleton` from pac4j:
 
     public class MySecureApplication extends Application<MySecureConfiguration> {
 
@@ -81,20 +121,20 @@ Setup the configuration for pac4j in your application:
 
         @Override
         public void run(MySecureConfiguration config, Environment env) throws Exception {
-            ConfigSingleton.getConfig().setClients(new Clients(new DirectBasicAuthClient(
-                    new SimpleTestUsernamePasswordAuthenticator()
-            )));
+            Config conf = ConfigSingleton.getConfig()
+            
+            DirectBasicAuthClient c = conf.getClients().findClient(DirectBasicAuthClient.class);
+            c.setCredentialsExtractor(...);
+            
             env.jersey().register(new DogsResource());
         }
     }
 
-Notice that it is needed to use `ConfigSingleton` to access the pac4j's `Config`
-because of the way dropwizard Bundles work.
-
 ### Securing REST endpoints
 
 From here, `jax-rs-pac4j` takes over with its annotations. See `pac4j`
-documentation on how to implement `Config`s, `Client`s, `Authorizer`s, and `Matcher`s.
+documentation on how to implement `Client`s, `Authorizer`s, `Matcher`s and all
+the other points of extension.
 
 * [pac4j's website](http://www.pac4j.org) and
   [README](https://github.com/pac4j/pac4j)

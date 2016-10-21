@@ -1,4 +1,4 @@
-package org.pac4j.dropwizard;
+package org.pac4j.dropwizard.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,14 +21,13 @@ import io.dropwizard.testing.DropwizardTestSupport;
 import io.dropwizard.testing.ResourceHelpers;
 
 public class EndToEndTest {
-    private DropwizardTestSupport dropwizardTestSupport;
+    private DropwizardTestSupport<TestConfiguration> dropwizardTestSupport;
     private Client client = new JerseyClientBuilder().build();
 
     public void setup(
             Class<? extends Application<TestConfiguration>> applicationClass,
             ConfigOverride... configOverrides) {
-        dropwizardTestSupport = new DropwizardTestSupport<TestConfiguration>(
-                applicationClass,
+        dropwizardTestSupport = new DropwizardTestSupport<>(applicationClass,
                 ResourceHelpers.resourceFilePath("end-to-end-test.yaml"),
                 configOverrides);
         dropwizardTestSupport.before();
