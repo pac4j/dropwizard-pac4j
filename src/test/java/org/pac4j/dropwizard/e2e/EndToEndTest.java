@@ -3,6 +3,8 @@ package org.pac4j.dropwizard.e2e;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Form;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -11,6 +13,7 @@ import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.After;
 import org.junit.Test;
 import org.pac4j.http.client.direct.DirectBasicAuthClient;
+import org.pac4j.http.client.direct.DirectFormClient;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.BaseEncoding;
@@ -47,6 +50,25 @@ public class EndToEndTest {
     public void tearDown() {
         dropwizardTestSupport.after();
         client.close();
+    }
+
+    @Test
+    public void grantsAccessToResourcesForm() throws Exception {
+        setup(TestApplication.class,
+                ConfigOverride.config("pac4j.filters[0].clients",
+                        DirectFormClient.class.getSimpleName()));
+
+        // username == password
+        Form form = new Form();
+        form.param("username", "rosebud");
+        form.param("password", "rosebud");
+        final String dogName = client.target(getUrlPrefix() + "/dogs/pierre")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form,
+                        MediaType.APPLICATION_FORM_URLENCODED_TYPE),
+                        String.class);
+
+        assertThat(dogName).isEqualTo("pierre");
     }
 
     @Test
