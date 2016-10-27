@@ -138,9 +138,13 @@ public class Pac4jFactory {
         Clients client = new Clients();
         Config config = new Config(client);
 
-        client.setCallbackUrl(callbackUrl);
+        if (callbackUrl != null) {
+            client.setCallbackUrl(callbackUrl);
+        }
+        if (clientNameParameter != null) {
+            client.setClientNameParameter(clientNameParameter);
+        }
         client.setCallbackUrlResolver(callbackUrlResolver);
-        client.setClientNameParameter(clientNameParameter);
         client.setAuthorizationGenerators(authorizationGenerators);
         client.setClients(clients);
 

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 import org.pac4j.core.client.Client;
+import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.matching.ExcludedPathMatcher;
 import org.pac4j.core.matching.Matcher;
@@ -45,6 +46,19 @@ public class DefaultConfigurationTest extends AbstractConfigurationTest {
         assertThat(client1.getName()).isEqualTo("basic");
         assertThat(((DirectBasicAuthClient) client1).getAuthenticator())
                 .isNull();
+    }
+
+    @Test
+    public void defaultsUnset() throws Exception {
+        Pac4jFactory conf = getPac4jFactory("defaults.yaml");
+        Config config = conf.build();
+
+        Clients clients = config.getClients();
+        // check that it is the correct file
+        assertThat(clients.getCallbackUrl()).isEqualTo("test");
+        // the default should be used!
+        assertThat(clients.getClientNameParameter())
+                .isEqualTo(new Clients().getClientNameParameter());
     }
 
 }
