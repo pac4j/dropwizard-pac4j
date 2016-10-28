@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.pac4j.core.config.Config;
-import org.pac4j.core.config.ConfigSingleton;
 import org.pac4j.dropwizard.Pac4jFactory.FilterConfiguration;
 import org.pac4j.jax.rs.features.Pac4JSecurityFeature;
 import org.pac4j.jax.rs.features.Pac4JSecurityFilterFeature;
@@ -28,6 +27,8 @@ import io.dropwizard.setup.Environment;
  */
 public abstract class Pac4jBundle<T extends Configuration>
         implements ConfiguredBundle<T>, Pac4jConfiguration<T> {
+
+    private Config config;
 
     @Override
     public final void initialize(Bootstrap<?> bootstrap) {
@@ -53,8 +54,7 @@ public abstract class Pac4jBundle<T extends Configuration>
         final Pac4jFactory pac4jFactory = getPac4jFactory(configuration);
 
         if (pac4jFactory != null) {
-            final Config config = pac4jFactory.build();
-            ConfigSingleton.setConfig(config);
+            config = pac4jFactory.build();
 
             for (FilterConfiguration fConf : pac4jFactory.getFilters()) {
                 environment.jersey()
@@ -70,5 +70,9 @@ public abstract class Pac4jBundle<T extends Configuration>
             environment.jersey()
                     .register(new Pac4JValueFactoryProvider.Binder());
         }
+    }
+
+    public Config getConfig() {
+        return config;
     }
 }

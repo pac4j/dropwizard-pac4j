@@ -28,19 +28,24 @@ other bundle:
 
 ```java
 public class MySecureApplication extends Application<MySecureConfiguration> {
+    final Pac4jBundle<MySecureConfiguration> bundle = new Pac4jBundle<MySecureConfiguration>() {
+        @Override
+        public Pac4jFactory getPac4jFactory(MySecureConfiguration configuration) {
+            return configuration.getPac4jFactory();
+        }
+    };
+
     @Override
     public void initialize(Bootstrap<TestConfiguration> bootstrap) {
-        final Pac4jBundle<MySecureConfiguration> bundle = new Pac4jBundle<MySecureConfiguration>() {
-            @Override
-            public Pac4jFactory getPac4jFactory(MySecureConfiguration configuration) {
-                return configuration.getPac4jFactory();
-            }
-        };
         bootstrap.addBundle(bundle);
     }
 
     ...
 ```
+
+It can be useful to store the bundle in its own field in order to be able to
+access pac4j configuration as shown at the end of the next section.
+
 ### Configuring the bundle
 
 Update the application's configuration class to expose accessor methods for
@@ -115,17 +120,17 @@ on the instantiated object.
 Note also that the configuration will use `JaxRsCallbackUrlResolver` as the default
 `CallbackUrlResolver` if not overridden.
 
-For more complex setup of pac4j configuration, this can be done in the
-`Application` using `ConfigSingleton` from pac4j:
+For more complex setup of pac4j configuration, the Config can be retrieved from
+the Pac4jBundle object stored in your `Application`:
 
 ```java
 public class MySecureApplication extends Application<MySecureConfiguration> {
 
-    ...
+    final Pac4jBundle<MySecureConfiguration> bundle = ...;
 
     @Override
     public void run(MySecureConfiguration config, Environment env) throws Exception {
-        Config conf = ConfigSingleton.getConfig()
+        Config conf = bundle.getConfig()
         
         DirectBasicAuthClient c = conf.getClients().findClient(DirectBasicAuthClient.class);
         c.setCredentialsExtractor(...);
