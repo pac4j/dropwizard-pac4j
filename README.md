@@ -21,6 +21,20 @@ applications:
     - enables the use of the annotation provided in by the
       [`jax-rs-pac4j`](https://github.com/pac4j/jax-rs-pac4j/) library.
 
+### Dependencies (`dropwizard-pac4j` + `pac4j-*` libraries)
+
+You need to add a dependency on:
+
+- the `dropwizard-pac4j` library (<em>groupId</em>: **org.pac4j**, *version*:
+**1.0.0-SNAPSHOT**)
+- the appropriate `pac4j` [submodules](http://www.pac4j.org/docs/clients.html)
+(<em>groupId</em>: **org.pac4j**, *version*: **1.9.4**): `pac4j-oauth` for
+OAuth support (Facebook, Twitter...), `pac4j-cas` for CAS support, `pac4j-ldap`
+for LDAP authentication, etc.
+
+All released artifacts are available in the
+[Maven central repository](http://search.maven.org/#search%7Cga%7C1%7Cpac4j).
+
 ### Installing the bundle
 
 Add the bundle within the application class' `initialize` method, just like any
@@ -153,24 +167,45 @@ the other points of extension.
   [README](https://github.com/pac4j/pac4j)
 * [`jax-rs-pac4j`'s README](https://github.com/pac4j/jax-rs-pac4j)
 
-## Maven Artifacts
 
-Build status: [![Build Status](https://travis-ci.org/pac4j/dropwizard-pac4j.png?branch=master)](https://travis-ci.org/pac4j/dropwizard-pac4j)
+## Release notes
 
-Deployed on the [Sonatype snapshots repository](https://oss.sonatype.org/content/repositories/snapshots/org/pac4j).
+See the [release notes](https://github.com/pac4j/dropwizard-pac4j/wiki/Release-Notes).
+Learn more by browsing the
+[dropwizard-pac4j Javadoc](http://www.javadoc.io/doc/org.pac4j/dropwizard-pac4j/1.0.0)
+and the [pac4j Javadoc](http://www.pac4j.org/apidocs/pac4j/1.9.4/index.html).
 
-Public Maven artifacts are forthcoming, pending the release of an initial
-stable version of `dropwizard-pac4j`.
 
-## Support
+## Need help?
 
-Please file bug reports and feature requests in [GitHub issues](https://github.com/pac4j/dropwizard-pac4j/issues).
+If you have any question, please use the following mailing lists:
 
-## License
+- [pac4j users](https://groups.google.com/forum/?hl=en#!forum/pac4j-users)
+- [pac4j developers](https://groups.google.com/forum/?hl=en#!forum/pac4j-dev)
 
-Copyright (c) 2016 Evan Meagher
 
-This library is licensed under the Apache License, Version 2.0.
+## Development
 
-See http://www.apache.org/licenses/LICENSE-2.0.html or the LICENSE
-file in this repository for the full license text.
+The version 1.0.0-SNAPSHOT is under development.
+
+Maven artifacts are built via Travis:
+[![Build Status](https://travis-ci.org/pac4j/dropwizard-pac4j.png?branch=master)](https://travis-ci.org/pac4j/dropwizard-pac4j)
+and available in the
+[Sonatype snapshots repository](https://oss.sonatype.org/content/repositories/snapshots/org/pac4j).
+This repository must be added in the Maven `pom.xml` file for example:
+
+```xml
+<repositories>
+  <repository>
+    <id>sonatype-nexus-snapshots</id>
+    <name>Sonatype Nexus Snapshots</name>
+    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    <releases>
+      <enabled>false</enabled>
+    </releases>
+    <snapshots>
+      <enabled>true</enabled>
+    </snapshots>
+  </repository>
+</repositories>
+```
