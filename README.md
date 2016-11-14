@@ -75,8 +75,8 @@ Add a `pac4j` section to a Dropwizard application's configuration file:
 
 ```yaml
 pac4j:
-  filters:
-    # this protects the whole application
+  # those protect the whole application at Jersey level
+  globalFilters:
     - matchers: excludeUserSession
       authorizers: isAuthenticated
   matchers:
@@ -91,34 +91,37 @@ pac4j:
           class: org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator
 ```
 
-For `filters`, the properties directly map to
-[the five parameters](https://github.com/pac4j/jax-rs-pac4j/#3-protect-urls-securityfilter)
-used by `org.pac4j.jax.rs.filter.SecurityFilter.SecurityFilter`.
+- `globalFilters` to declare global filters: the `clients`, `authorizers`,
+`matchers`, `multiProfile` and `skipResponse` properties directly map to
+[the parameters](https://github.com/pac4j/jax-rs-pac4j/#3-protect-urls-securityfilter)
+used by `org.pac4j.jax.rs.filter.SecurityFilter`.
 
-For `matchers`, the key is the name of the `Matcher` and its instance is
+- `matchers`: the key is the name of the `Matcher` and its instance is
 declared as explained below.
 Their name can be used in `filter`'s `matchers` as well as in the
 `Pac4JSecurity` annotation.
 
-For `authorizers`, the key is the name of the `Authorizer` and its instance is
+- `authorizers`: the key is the name of the `Authorizer` and its instance is
 declared as explained below.
 Their name can be used in `filter`'s `authorizers` as well as in the
 `Pac4JSecurity` annotation.
 
-For `clients`'s, the key is the class of the `Client` and its instance
+- `clients`: the key is the class of the `Client` and its instance
 is configured based on the properties. Its name is by default the short
 name of its class, but it can also be set explictly.
 Their name can be used in `filter`'s `clients` as well as in the
 `Pac4JSecurity` annotation.
 
 To specify instances of `Client`, `Authenticator`, `PasswordEncoder`,
-`CredentialsExtractor`, `ProfileCreator`, `AuthorizationGenerator`, `Authorizer`,
-`Matcher`, `CallbackUrlResolver` and `RedirectActionBuilder`, it only necessary to
-refer to their class name using the `class` key as above and the other properties are set
-on the instantiated object.
+`CredentialsExtractor`, `ProfileCreator`, `AuthorizationGenerator`,
+`Authorizer`, `Matcher`, `CallbackUrlResolver` and `RedirectActionBuilder`, it
+only necessary to refer to their class name using the `class` key as above and
+the other properties are set on the instantiated object.
 
 Note also that the configuration will use `JaxRsCallbackUrlResolver` as the default
 `CallbackUrlResolver` if not overridden.
+
+#### Advanced Configuration
 
 For more complex setup of pac4j configuration, the Config can be retrieved from
 the Pac4jBundle object stored in your `Application`:

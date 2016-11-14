@@ -12,7 +12,6 @@ import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.http.CallbackUrlResolver;
 import org.pac4j.core.matching.Matcher;
-import org.pac4j.jax.rs.filters.SecurityFilter;
 import org.pac4j.jax.rs.pac4j.JaxRsCallbackUrlResolver;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,9 +19,13 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 /**
- * An interface defining getters for parameters required to configure a pac4j
- * {@link Config} and {@link SecurityFilter}.
+ * Dropwizard configuration factory to configure pac4j's {@link Config},
+ * {@link Clients} as well as global JAX-RS
+ * {@link org.pac4j.jax.rs.filters.SecurityFilter}s.
  * 
+ * @see Pac4jConfiguration
+ * @see org.pac4j.core.config.Config
+ * @see org.pac4j.core.client.Clients
  * @author Evan Meagher
  * @author Victor Noel - Linagora
  * @since 1.0.0
@@ -30,7 +33,7 @@ import com.google.common.collect.ImmutableMap;
 public class Pac4jFactory {
 
     @NotNull
-    private ImmutableList<FilterConfiguration> filters = ImmutableList.of();
+    private List<FilterConfiguration> globalFilters = ImmutableList.of();
 
     private String clientNameParameter;
 
@@ -39,26 +42,26 @@ public class Pac4jFactory {
     private CallbackUrlResolver callbackUrlResolver = new JaxRsCallbackUrlResolver();
 
     @NotNull
-    private ImmutableList<AuthorizationGenerator> authorizationGenerators = ImmutableList
+    private List<AuthorizationGenerator> authorizationGenerators = ImmutableList
             .of();
 
     @NotNull
-    private ImmutableMap<String, Matcher> matchers = ImmutableMap.of();
+    private Map<String, Matcher> matchers = ImmutableMap.of();
 
     @NotNull
-    private ImmutableList<Client> clients = ImmutableList.of();
+    private List<Client> clients = ImmutableList.of();
 
     @NotNull
-    private ImmutableMap<String, Authorizer> authorizers = ImmutableMap.of();
+    private Map<String, Authorizer> authorizers = ImmutableMap.of();
 
     @JsonProperty
-    public ImmutableList<FilterConfiguration> getFilters() {
-        return filters;
+    public List<FilterConfiguration> getGlobalFilters() {
+        return globalFilters;
     }
 
     @JsonProperty
-    public void setFilters(List<FilterConfiguration> filters) {
-        this.filters = ImmutableList.copyOf(filters);
+    public void setGlobalFilters(List<FilterConfiguration> filters) {
+        this.globalFilters = ImmutableList.copyOf(filters);
     }
 
     @JsonProperty
@@ -82,10 +85,10 @@ public class Pac4jFactory {
     }
 
     @JsonProperty
-    public ImmutableList<AuthorizationGenerator> getAuthorizationGenerators() {
+    public List<AuthorizationGenerator> getAuthorizationGenerators() {
         return authorizationGenerators;
     }
-    
+
     @JsonProperty
     public void setAuthorizationGenerators(
             List<AuthorizationGenerator> authorizationGenerators) {
@@ -94,27 +97,27 @@ public class Pac4jFactory {
     }
 
     @JsonProperty
-    public ImmutableMap<String, Matcher> getMatchers() {
+    public Map<String, Matcher> getMatchers() {
         return matchers;
     }
-    
+
     @JsonProperty
     public void setMatchers(Map<String, Matcher> matchers) {
         this.matchers = ImmutableMap.copyOf(matchers);
     }
 
     @JsonProperty
-    public ImmutableList<Client> getClients() {
+    public List<Client> getClients() {
         return clients;
     }
-    
+
     @JsonProperty
     public void setClients(List<Client> clients) {
         this.clients = ImmutableList.copyOf(clients);
     }
 
     @JsonProperty
-    public ImmutableMap<String, Authorizer> getAuthorizers() {
+    public Map<String, Authorizer> getAuthorizers() {
         return authorizers;
     }
 

@@ -51,12 +51,12 @@ public abstract class Pac4jBundle<T extends Configuration>
     @Override
     public final void run(T configuration, Environment environment)
             throws Exception {
-        final Pac4jFactory pac4jFactory = getPac4jFactory(configuration);
+        final Pac4jFactory pac4j = getPac4jFactory(configuration);
 
-        if (pac4jFactory != null) {
-            config = pac4jFactory.build();
+        if (pac4j != null) {
+            config = pac4j.build();
 
-            for (FilterConfiguration fConf : pac4jFactory.getFilters()) {
+            for (FilterConfiguration fConf : pac4j.getGlobalFilters()) {
                 environment.jersey()
                         .register(new Pac4JSecurityFilterFeature(config,
                                 fConf.getSkipResponse(), fConf.getAuthorizers(),

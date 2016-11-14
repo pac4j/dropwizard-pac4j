@@ -55,7 +55,7 @@ public class EndToEndTest {
     @Test
     public void grantsAccessToResourcesForm() throws Exception {
         setup(TestApplication.class,
-                ConfigOverride.config("pac4j.filters[0].clients",
+                ConfigOverride.config("pac4j.globalFilters[0].clients",
                         DirectFormClient.class.getSimpleName()));
 
         // username == password
@@ -74,7 +74,7 @@ public class EndToEndTest {
     @Test
     public void grantsAccessToResources() throws Exception {
         setup(TestApplication.class,
-                ConfigOverride.config("pac4j.filters[0].clients",
+                ConfigOverride.config("pac4j.globalFilters[0].clients",
                         DirectBasicAuthClient.class.getSimpleName()));
 
         final String dogName = client.target(getUrlPrefix() + "/dogs/pierre")
@@ -90,7 +90,7 @@ public class EndToEndTest {
     @Test
     public void restrictsAccessToResources() throws Exception {
         setup(TestApplication.class,
-                ConfigOverride.config("pac4j.filters[0].clients",
+                ConfigOverride.config("pac4j.globalFilters[0].clients",
                         DirectBasicAuthClient.class.getSimpleName()));
 
         final Response response = client.target(getUrlPrefix() + "/dogs/pierre")

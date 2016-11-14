@@ -14,5 +14,5 @@ pac4j:
     - org.pac4j.http.client.direct.DirectFormClient:
         authenticator:
           class: org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator
-  filters:
+  globalFilters:
     - clients: ""
