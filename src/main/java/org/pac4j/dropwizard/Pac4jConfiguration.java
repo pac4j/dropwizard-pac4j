@@ -11,6 +11,7 @@ import io.dropwizard.Configuration;
  * @since 1.0.0
  *
  * @param <T>
+ *            the application configuration type
  */
 public interface Pac4jConfiguration<T extends Configuration> {
     Pac4jFactory getPac4jFactory(T configuration);

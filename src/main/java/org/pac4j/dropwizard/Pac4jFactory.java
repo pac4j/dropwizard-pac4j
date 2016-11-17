@@ -169,41 +169,26 @@ public class Pac4jFactory {
 
         private Boolean multiProfile;
 
-        /**
-         * A pac4j clients string.
-         */
         @JsonProperty
         public String getClients() {
             return clients;
         }
 
-        /**
-         * A pac4j authorizers string.
-         */
         @JsonProperty
         public String getAuthorizers() {
             return authorizers;
         }
 
-        /**
-         * A pac4j matchers string.
-         */
         @JsonProperty
         public String getMatchers() {
             return matchers;
         }
 
-        /**
-         * Returns true if multiple pac4j authentications are to be used.
-         */
         @JsonProperty
         public Boolean getMultiProfile() {
             return multiProfile;
         }
 
-        /**
-         * Returns true if pac4j generated response are to be skipped.
-         */
         @JsonProperty
         public Boolean getSkipResponse() {
             return skipResponse;

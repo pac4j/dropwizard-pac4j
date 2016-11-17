@@ -41,6 +41,9 @@ public abstract class Pac4jBundle<T extends Configuration>
      * In case of override, do not forget to call
      * {@code super.supportedFeatures()} to get the default features, or to
      * redefine them instead!
+     * 
+     * @see DefaultFeatureSupport
+     * @return the features to support for configuration parsing
      */
     public Collection<Pac4jFeatureSupport> supportedFeatures() {
         ArrayList<Pac4jFeatureSupport> res = new ArrayList<>();
