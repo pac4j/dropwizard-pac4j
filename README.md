@@ -26,7 +26,7 @@ applications:
 You need to add a dependency on:
 
 - the `dropwizard-pac4j` library (<em>groupId</em>: **org.pac4j**, *version*:
-**1.0.0-SNAPSHOT**)
+**1.0.0**)
 - the appropriate `pac4j` [submodules](http://www.pac4j.org/docs/clients.html)
 (<em>groupId</em>: **org.pac4j**, *version*: **1.9.4**): `pac4j-oauth` for
 OAuth support (Facebook, Twitter...), `pac4j-cas` for CAS support, `pac4j-ldap`
@@ -186,7 +186,7 @@ If you have any question, please use the following mailing lists:
 
 ## Development
 
-The version 1.0.0-SNAPSHOT is under development.
+The version 1.0.1-SNAPSHOT is under development.
 
 Maven artifacts are built via Travis:
 [![Build Status](https://travis-ci.org/pac4j/dropwizard-pac4j.png?branch=master)](https://travis-ci.org/pac4j/dropwizard-pac4j)
