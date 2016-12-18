@@ -3,6 +3,7 @@ package org.pac4j.dropwizard;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.eclipse.jetty.server.session.SessionHandler;
 import org.pac4j.core.config.Config;
 import org.pac4j.dropwizard.Pac4jFactory.FilterConfiguration;
 import org.pac4j.jax.rs.features.Pac4JSecurityFeature;
@@ -14,6 +15,7 @@ import org.pac4j.jax.rs.servlet.features.ServletJaxRsContextFactoryProvider;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
+import io.dropwizard.jetty.MutableServletContextHandler;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -73,6 +75,26 @@ public abstract class Pac4jBundle<T extends Configuration>
             environment.jersey().register(new Pac4JSecurityFeature(config));
             environment.jersey()
                     .register(new Pac4JValueFactoryProvider.Binder());
+
+            if (pac4j.getSessionEnabled()) {
+                setupJettySession(environment);
+            }
+        }
+    }
+
+    /**
+     * Override if needed, but prefer to exploit
+     * {@link Pac4jFactory#setSessionEnable(Boolean)} first.
+     * 
+     * @param environment
+     *            the dropwizard {@link Environment}
+     * @since 1.1.0
+     */
+    protected void setupJettySession(Environment environment) {
+        MutableServletContextHandler contextHandler = environment
+                .getApplicationContext();
+        if (contextHandler.getSessionHandler() == null) {
+            contextHandler.setSessionHandler(new SessionHandler());
         }
     }
 

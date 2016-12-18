@@ -41,6 +41,8 @@ public class Pac4jFactory {
 
     private CallbackUrlResolver callbackUrlResolver = new JaxRsCallbackUrlResolver();
 
+    private boolean sessionEnabled = true;
+
     @NotNull
     private List<AuthorizationGenerator> authorizationGenerators = new ArrayList<>();
 
@@ -133,6 +135,25 @@ public class Pac4jFactory {
     public void setCallbackUrlResolver(
             CallbackUrlResolver callbackUrlResolver) {
         this.callbackUrlResolver = callbackUrlResolver;
+    }
+
+    /**
+     * @since 1.1.0
+     */
+    @JsonProperty
+    public boolean getSessionEnabled() {
+        return sessionEnabled;
+    }
+
+    /**
+     * @param sessionEnabled
+     *            if <code>true</code> session management will be enabled at the
+     *            Jetty level, if <code>false</code> it won't.
+     * @since 1.1.0
+     */
+    @JsonProperty
+    public void setSessionEnabled(boolean sessionEnabled) {
+        this.sessionEnabled = sessionEnabled;
     }
 
     public Config build() {
