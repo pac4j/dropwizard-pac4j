@@ -11,6 +11,7 @@ import org.pac4j.jax.rs.filters.SecurityFilter;
 import org.pac4j.jax.rs.jersey.features.Pac4JValueFactoryProvider;
 import org.pac4j.jax.rs.servlet.features.ServletJaxRsContextFactoryProvider;
 
+import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -75,6 +76,13 @@ public abstract class Pac4jBundle<T extends Configuration>
         }
     }
 
+    /**
+     * To be used only after this bundle has been run (i.e., in the
+     * {@link Application#run(Configuration, Environment)} method.
+     * 
+     * @return the {@link Config} built during
+     *         {@link #run(Configuration, Environment)} execution.
+     */
     public Config getConfig() {
         return config;
     }
