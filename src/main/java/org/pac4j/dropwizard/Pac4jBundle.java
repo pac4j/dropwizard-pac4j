@@ -45,7 +45,7 @@ public abstract class Pac4jBundle<T extends Configuration>
      * @see DefaultFeatureSupport
      * @return the features to support for configuration parsing
      */
-    public Collection<Pac4jFeatureSupport> supportedFeatures() {
+    protected Collection<Pac4jFeatureSupport> supportedFeatures() {
         ArrayList<Pac4jFeatureSupport> res = new ArrayList<>();
         res.add(new DefaultFeatureSupport());
         return res;
