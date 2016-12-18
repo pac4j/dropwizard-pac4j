@@ -83,7 +83,8 @@ public class MySecureConfiguration extends Configuration {
 ```
 
 Note that it is also possible to have `pac4jFactory` be nullable and in this
-case, the bundle will be disabled.
+case, pac4j won't be configured but pac4j's type will be readable in the
+configuration. If the latter is not desired, do not use this bundle!
 
 Add a `pac4j` section to a Dropwizard application's configuration file:
 
