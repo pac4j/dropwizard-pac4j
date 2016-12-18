@@ -1,4 +1,4 @@
-package org.pac4j.dropwizard;
+package org.pac4j.dropwizard.factory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -8,6 +8,8 @@ import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.matching.ExcludedPathMatcher;
 import org.pac4j.core.matching.Matcher;
+import org.pac4j.dropwizard.AbstractConfigurationTest;
+import org.pac4j.dropwizard.Pac4jFactory;
 import org.pac4j.http.client.direct.DirectBasicAuthClient;
 import org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator;
 

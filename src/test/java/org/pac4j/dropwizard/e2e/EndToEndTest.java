@@ -2,38 +2,36 @@ package org.pac4j.dropwizard.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.glassfish.jersey.client.JerseyClientBuilder;
-import org.junit.After;
 import org.junit.Test;
+import org.pac4j.dropwizard.AbstractApplicationTest;
 import org.pac4j.http.client.direct.DirectBasicAuthClient;
 import org.pac4j.http.client.direct.DirectFormClient;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.BaseEncoding;
 
-import io.dropwizard.Application;
+import io.dropwizard.setup.Environment;
 import io.dropwizard.testing.ConfigOverride;
-import io.dropwizard.testing.DropwizardTestSupport;
-import io.dropwizard.testing.ResourceHelpers;
 
-public class EndToEndTest {
-    private DropwizardTestSupport<TestConfiguration> dropwizardTestSupport;
-    private Client client = new JerseyClientBuilder().build();
+public class EndToEndTest extends AbstractApplicationTest {
 
-    public void setup(
-            Class<? extends Application<TestConfiguration>> applicationClass,
-            ConfigOverride... configOverrides) {
-        dropwizardTestSupport = new DropwizardTestSupport<>(applicationClass,
-                ResourceHelpers.resourceFilePath("end-to-end-test.yaml"),
-                configOverrides);
-        dropwizardTestSupport.before();
+    public static class App extends TestApplication<TestConfiguration> {
+
+        @Override
+        public void run(TestConfiguration configuration,
+                Environment environment) throws Exception {
+            environment.jersey().register(new DogsResource());
+        }
+    }
+
+    private void setup(ConfigOverride config) {
+        super.setup(App.class, "end-to-end-test.yaml", config);
     }
 
     private String getUrlPrefix() {
@@ -46,17 +44,10 @@ public class EndToEndTest {
         return String.format("Basic %s", encodedBasicAuthCreds);
     }
 
-    @After
-    public void tearDown() {
-        dropwizardTestSupport.after();
-        client.close();
-    }
-
     @Test
     public void grantsAccessToResourcesForm() throws Exception {
-        setup(TestApplication.class,
-                ConfigOverride.config("pac4j.globalFilters[0].clients",
-                        DirectFormClient.class.getSimpleName()));
+        setup(ConfigOverride.config("pac4j.globalFilters[0].clients",
+                DirectFormClient.class.getSimpleName()));
 
         // username == password
         Form form = new Form();
@@ -73,9 +64,8 @@ public class EndToEndTest {
 
     @Test
     public void grantsAccessToResources() throws Exception {
-        setup(TestApplication.class,
-                ConfigOverride.config("pac4j.globalFilters[0].clients",
-                        DirectBasicAuthClient.class.getSimpleName()));
+        setup(ConfigOverride.config("pac4j.globalFilters[0].clients",
+                DirectBasicAuthClient.class.getSimpleName()));
 
         final String dogName = client.target(getUrlPrefix() + "/dogs/pierre")
                 .request(MediaType.APPLICATION_JSON)
@@ -89,9 +79,8 @@ public class EndToEndTest {
 
     @Test
     public void restrictsAccessToResources() throws Exception {
-        setup(TestApplication.class,
-                ConfigOverride.config("pac4j.globalFilters[0].clients",
-                        DirectBasicAuthClient.class.getSimpleName()));
+        setup(ConfigOverride.config("pac4j.globalFilters[0].clients",
+                DirectBasicAuthClient.class.getSimpleName()));
 
         final Response response = client.target(getUrlPrefix() + "/dogs/pierre")
                 .request(MediaType.APPLICATION_JSON)

@@ -32,14 +32,15 @@ public abstract class AbstractConfigurationTest {
                 Validators.newValidator(), om, "dw").build(
                         new File(Resources.getResource(resourceName).toURI()));
     }
-    
+
     protected Collection<Pac4jFeatureSupport> featuresSupported() {
         ArrayList<Pac4jFeatureSupport> res = new ArrayList<>();
         res.add(new DefaultFeatureSupport());
         return res;
     }
-    
-    protected Pac4jFactory getPac4jFactory(String resourceName) throws Exception {
+
+    protected Pac4jFactory getPac4jFactory(String resourceName)
+            throws Exception {
         return getPac4jFactory(featuresSupported(), resourceName);
     }
 }
