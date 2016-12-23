@@ -20,6 +20,7 @@ applications:
       [`jax-rs-pac4j`](https://github.com/pac4j/jax-rs-pac4j/) library.
     - enables the use of the annotation provided in by the
       [`jax-rs-pac4j`](https://github.com/pac4j/jax-rs-pac4j/) library.
+    - enables Jetty session management by default.
 
 ### Dependencies (`dropwizard-pac4j` + `pac4j-*` libraries)
 
@@ -111,6 +112,9 @@ pac4j:
 [the parameters](https://github.com/pac4j/jax-rs-pac4j/#3-protect-urls-securityfilter)
 used by `org.pac4j.jax.rs.filter.SecurityFilter`.
 
+- `sessionEnabled`: set to `false` to disable Jetty session management.
+If not set, the bundle will simply enable it by default.
+
 - `matchers`: the key is the name of the `Matcher` and its instance is
 declared as explained below.
 Their name can be used in `filter`'s `matchers` as well as in the
@@ -187,7 +191,7 @@ If you have any question, please use the following mailing lists:
 
 ## Development
 
-The version 1.0.1-SNAPSHOT is under development.
+The version 1.1.0-SNAPSHOT is under development.
 
 Maven artifacts are built via Travis:
 [![Build Status](https://travis-ci.org/pac4j/dropwizard-pac4j.png?branch=master)](https://travis-ci.org/pac4j/dropwizard-pac4j)
