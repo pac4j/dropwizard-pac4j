@@ -101,6 +101,7 @@ pac4j:
       class: org.pac4j.core.matching.ExcludedPathMatcher
       excludePath: ^/user/session$
   callbackUrl: /user/session
+  defaultClient: DirectBasicAuthClient
   clients:
     - org.pac4j.http.client.direct.DirectBasicAuthClient:
         authenticator:
@@ -130,6 +131,15 @@ is configured based on the properties. Its name is by default the short
 name of its class, but it can also be set explictly.
 Their name can be used in `filter`'s `clients` as well as in the
 `Pac4JSecurity` annotation.
+
+- `defaultClient`: the name of one of the client configured via `clients`.
+It will be used as the default pac4j `Client`. Pac4j exploits it in particular
+when no client is specified during callback, but also when no clients are
+specified on a security filter.
+
+- `defaultClients`: the names (separated by commas) of some of the clients
+configured via `clients`. They will be used as the default value for the
+`clients` parameter of the `Pac4JSecurity` annotation.
 
 To specify instances of `Client`, `Authenticator`, `PasswordEncoder`,
 `CredentialsExtractor`, `ProfileCreator`, `AuthorizationGenerator`,

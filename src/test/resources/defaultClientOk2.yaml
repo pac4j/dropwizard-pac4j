@@ -1,0 +1,3 @@
+clients:
+  - org.pac4j.http.client.direct.DirectBasicAuthClient: {}
+defaultClient: DirectBasicAuthClient

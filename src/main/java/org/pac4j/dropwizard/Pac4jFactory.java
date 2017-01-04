@@ -52,6 +52,10 @@ public class Pac4jFactory {
     @NotNull
     private List<Client> clients = new ArrayList<>();
 
+    private String defaultClient = null;
+
+    private String defaultClients = null;
+
     @NotNull
     private Map<String, Authorizer> authorizers = new HashMap<>();
 
@@ -116,6 +120,38 @@ public class Pac4jFactory {
         this.clients = clients;
     }
 
+    /**
+     * @since 1.1.0
+     */
+    @JsonProperty
+    public String getDefaultClient() {
+        return defaultClient;
+    }
+
+    /**
+     * @since 1.1.0
+     */
+    @JsonProperty
+    public void setDefaultClient(String defaultClient) {
+        this.defaultClient = defaultClient;
+    }
+
+    /**
+     * @since 1.1.0
+     */
+    @JsonProperty
+    public String getDefaultClients() {
+        return defaultClients;
+    }
+
+    /**
+     * @since 1.1.0
+     */
+    @JsonProperty
+    public void setDefaultClients(String defaultClients) {
+        this.defaultClients = defaultClients;
+    }
+
     @JsonProperty
     public Map<String, Authorizer> getAuthorizers() {
         return authorizers;
@@ -169,6 +205,21 @@ public class Pac4jFactory {
         client.setCallbackUrlResolver(callbackUrlResolver);
         client.setAuthorizationGenerators(authorizationGenerators);
         client.setClients(clients);
+
+        if (defaultClient != null) {
+            boolean found = false;
+            for (Client c : clients) {
+                if (defaultClient.equals(c.getName())) {
+                    client.setDefaultClient(c);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                throw new IllegalArgumentException("Client '" + defaultClient
+                        + "' is not one of the configured clients");
+            }
+        }
 
         config.setAuthorizers(authorizers);
         config.setMatchers(matchers);

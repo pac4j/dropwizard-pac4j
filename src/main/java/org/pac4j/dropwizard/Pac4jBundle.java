@@ -72,7 +72,8 @@ public abstract class Pac4jBundle<T extends Configuration>
 
             environment.jersey()
                     .register(new ServletJaxRsContextFactoryProvider(config));
-            environment.jersey().register(new Pac4JSecurityFeature(config));
+            environment.jersey().register(new Pac4JSecurityFeature(config,
+                    pac4j.getDefaultClients()));
             environment.jersey()
                     .register(new Pac4JValueFactoryProvider.Binder());
 

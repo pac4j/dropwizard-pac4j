@@ -63,4 +63,33 @@ public class DefaultConfigurationTest extends AbstractConfigurationTest {
                 .isEqualTo(new Clients().getClientNameParameter());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void defaultClientTestNOk() throws Exception {
+        Pac4jFactory conf = getPac4jFactory("defaultClientNOk.yaml");
+        
+        conf.build();
+    }
+
+    @Test
+    public void defaultClientTestOk() throws Exception {
+        Pac4jFactory conf = getPac4jFactory("defaultClientOk.yaml");
+
+        Config config = conf.build();
+        Clients clients = config.getClients();
+
+        assertThat(clients.getClients().get(0))
+                .isEqualTo(clients.getDefaultClient());
+    }
+
+    @Test
+    public void defaultClientTestOk2() throws Exception {
+        Pac4jFactory conf = getPac4jFactory("defaultClientOk2.yaml");
+
+        Config config = conf.build();
+        Clients clients = config.getClients();
+
+        assertThat(clients.getClients().get(0))
+                .isEqualTo(clients.getDefaultClient());
+    }
+
 }
