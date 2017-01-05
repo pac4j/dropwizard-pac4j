@@ -20,8 +20,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Dropwizard configuration factory to configure pac4j's {@link Config},
- * {@link Clients} as well as global JAX-RS
- * {@link org.pac4j.jax.rs.filters.SecurityFilter}s.
+ * {@link Clients}, global JAX-RS
+ * {@link org.pac4j.jax.rs.filters.SecurityFilter}s as well as Servlet's
+ * {@link org.pac4j.j2e.filter.SecurityFilter}s,
+ * {@link org.pac4j.j2e.filter.CallbackFilter}s and
+ * {@link org.pac4j.j2e.filter.ApplicationLogoutFilter}s.
  * 
  * @see Pac4jConfiguration
  * @see org.pac4j.core.config.Config
@@ -34,6 +37,9 @@ public class Pac4jFactory {
 
     @NotNull
     private List<FilterConfiguration> globalFilters = new ArrayList<>();
+
+    @NotNull
+    private ServletConfiguration servlet = new ServletConfiguration();
 
     private String clientNameParameter;
 
@@ -67,6 +73,25 @@ public class Pac4jFactory {
     @JsonProperty
     public void setGlobalFilters(List<FilterConfiguration> filters) {
         this.globalFilters = filters;
+    }
+
+    /**
+     * @since 1.1.0
+     */
+    @JsonProperty
+    public ServletConfiguration getServlet() {
+        return servlet;
+    }
+
+    /**
+     * @since 1.1.0
+     * 
+     * @param servlet
+     *            configuration for servlet filters
+     */
+    @JsonProperty
+    public void setServlet(ServletConfiguration servlet) {
+        this.servlet = servlet;
     }
 
     @JsonProperty
@@ -227,9 +252,99 @@ public class Pac4jFactory {
         return config;
     }
 
-    public static class FilterConfiguration {
+    /**
+     * @since 1.1.0
+     */
+    public static class ServletConfiguration {
+
+        @NotNull
+        private List<ServletSecurityFilterConfiguration> security = new ArrayList<>();
+
+        @NotNull
+        private List<ServletCallbackFilterConfiguration> callback = new ArrayList<>();
+
+        @NotNull
+        private List<ServletLogoutFilterConfiguration> logout = new ArrayList<>();
+
+        @JsonProperty
+        public List<ServletSecurityFilterConfiguration> getSecurity() {
+            return security;
+        }
+
+        @JsonProperty
+        public List<ServletCallbackFilterConfiguration> getCallback() {
+            return callback;
+        }
+
+        @JsonProperty
+        public List<ServletLogoutFilterConfiguration> getLogout() {
+            return logout;
+        }
+
+        @JsonProperty
+        public void setSecurity(
+                List<ServletSecurityFilterConfiguration> filters) {
+            this.security = filters;
+        }
+
+        @JsonProperty
+        public void setCallback(
+                List<ServletCallbackFilterConfiguration> filters) {
+            this.callback = filters;
+        }
+
+        @JsonProperty
+        public void setLogout(List<ServletLogoutFilterConfiguration> filters) {
+            this.logout = filters;
+        }
+
+    }
+
+    /**
+     * @since 1.0.0
+     * @see org.pac4j.jax.rs.filters.SecurityFilter
+     */
+    public static class FilterConfiguration
+            extends SecurityFilterConfiguration {
 
         private Boolean skipResponse;
+
+        @JsonProperty
+        public Boolean getSkipResponse() {
+            return skipResponse;
+        }
+
+        @JsonProperty
+        public void setSkipResponse(Boolean skipResponse) {
+            this.skipResponse = skipResponse;
+        }
+    }
+
+    /**
+     * @since 1.1.0
+     * @see org.pac4j.j2e.filter.SecurityFilter
+     */
+    public static class ServletSecurityFilterConfiguration
+            extends SecurityFilterConfiguration {
+
+        @NotNull
+        private String mapping = "/*";
+
+        @JsonProperty
+        public String getMapping() {
+            return mapping;
+        }
+
+        @JsonProperty
+        public void setMapping(String mapping) {
+            this.mapping = mapping;
+        }
+    }
+
+    /**
+     * @since 1.1.0
+     */
+    public abstract static class SecurityFilterConfiguration {
 
         private String clients;
 
@@ -260,11 +375,6 @@ public class Pac4jFactory {
         }
 
         @JsonProperty
-        public Boolean getSkipResponse() {
-            return skipResponse;
-        }
-
-        @JsonProperty
         public void setClients(String clients) {
             this.clients = clients;
         }
@@ -283,10 +393,105 @@ public class Pac4jFactory {
         public void setMultiProfile(Boolean multiProfile) {
             this.multiProfile = multiProfile;
         }
+    }
+
+    /**
+     * @since 1.1.0
+     * @see org.pac4j.j2e.filter.CallbackFilter
+     */
+    public static class ServletCallbackFilterConfiguration {
+
+        @NotNull
+        private String mapping;
+
+        private String defaultUrl;
+
+        private Boolean multiProfile;
+
+        private Boolean renewSession;
 
         @JsonProperty
-        public void setSkipResponse(Boolean skipResponse) {
-            this.skipResponse = skipResponse;
+        public String getMapping() {
+            return mapping;
+        }
+
+        @JsonProperty
+        public String getDefaultUrl() {
+            return defaultUrl;
+        }
+
+        @JsonProperty
+        public Boolean getMultiProfile() {
+            return multiProfile;
+        }
+
+        @JsonProperty
+        public Boolean getRenewSession() {
+            return renewSession;
+        }
+
+        @JsonProperty
+        public void setMapping(String mapping) {
+            this.mapping = mapping;
+        }
+
+        @JsonProperty
+        public void setDefaultUrl(String defaultUrl) {
+            this.defaultUrl = defaultUrl;
+        }
+
+        @JsonProperty
+        public void setMultiProfile(Boolean multiProfile) {
+            this.multiProfile = multiProfile;
+        }
+
+        @JsonProperty
+        public void setRenewSession(Boolean renewSession) {
+            this.renewSession = renewSession;
+        }
+    }
+
+    /**
+     * @since 1.1.0
+     * @see org.pac4j.j2e.filter.ApplicationLogoutFilter
+     */
+    public static class ServletLogoutFilterConfiguration {
+
+        @NotNull
+        private String mapping;
+
+        private String defaultUrl;
+
+        private String logoutUrlPattern;
+
+        @JsonProperty
+        public String getMapping() {
+            return mapping;
+        }
+
+        @JsonProperty
+        public String getDefaultUrl() {
+            return defaultUrl;
+        }
+
+        @JsonProperty
+        public String getLogoutUrlPattern() {
+            return logoutUrlPattern;
+        }
+
+        @JsonProperty
+        public void setMapping(String mapping) {
+            this.mapping = mapping;
+        }
+
+        @JsonProperty
+        public void setDefaultUrl(String defaultUrl) {
+            this.defaultUrl = defaultUrl;
+        }
+
+        @JsonProperty
+        public void setLogoutUrlPattern(String logoutUrlPattern) {
+            this.logoutUrlPattern = logoutUrlPattern;
         }
     }
 }

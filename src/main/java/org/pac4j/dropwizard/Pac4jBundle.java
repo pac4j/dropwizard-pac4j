@@ -6,6 +6,9 @@ import java.util.Collection;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.pac4j.core.config.Config;
 import org.pac4j.dropwizard.Pac4jFactory.FilterConfiguration;
+import org.pac4j.dropwizard.Pac4jFactory.ServletCallbackFilterConfiguration;
+import org.pac4j.dropwizard.Pac4jFactory.ServletLogoutFilterConfiguration;
+import org.pac4j.dropwizard.Pac4jFactory.ServletSecurityFilterConfiguration;
 import org.pac4j.jax.rs.features.Pac4JSecurityFeature;
 import org.pac4j.jax.rs.features.Pac4JSecurityFilterFeature;
 import org.pac4j.jax.rs.filters.SecurityFilter;
@@ -68,6 +71,21 @@ public abstract class Pac4jBundle<T extends Configuration>
                                 fConf.getSkipResponse(), fConf.getAuthorizers(),
                                 fConf.getClients(), fConf.getMatchers(),
                                 fConf.getMultiProfile()));
+            }
+
+            for (ServletSecurityFilterConfiguration fConf : pac4j.getServlet()
+                    .getSecurity()) {
+                J2EHelper.registerSecurityFilter(environment, config, fConf);
+            }
+
+            for (ServletCallbackFilterConfiguration fConf : pac4j.getServlet()
+                    .getCallback()) {
+                J2EHelper.registerCallbackFilter(environment, config, fConf);
+            }
+
+            for (ServletLogoutFilterConfiguration fConf : pac4j.getServlet()
+                    .getLogout()) {
+                J2EHelper.registerLogoutFilter(environment, config, fConf);
             }
 
             environment.jersey()

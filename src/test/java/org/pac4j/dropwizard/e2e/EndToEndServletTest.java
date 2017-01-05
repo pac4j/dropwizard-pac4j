@@ -16,7 +16,7 @@ import org.pac4j.http.client.direct.DirectFormClient;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.testing.ConfigOverride;
 
-public class EndToEndTest extends AbstractApplicationTest {
+public class EndToEndServletTest extends AbstractApplicationTest {
 
     public static class App extends TestApplication<TestConfiguration> {
 
@@ -28,12 +28,12 @@ public class EndToEndTest extends AbstractApplicationTest {
     }
 
     private void setup(ConfigOverride config) {
-        super.setup(App.class, "end-to-end-test.yaml", config);
+        super.setup(App.class, "end-to-end-servlet-test.yaml", config);
     }
 
     @Test
     public void grantsAccessToResourcesForm() throws Exception {
-        setup(ConfigOverride.config("pac4j.globalFilters[0].clients",
+        setup(ConfigOverride.config("pac4j.servlet.security[0].clients",
                 DirectFormClient.class.getSimpleName()));
 
         // username == password
@@ -51,7 +51,7 @@ public class EndToEndTest extends AbstractApplicationTest {
 
     @Test
     public void grantsAccessToResources() throws Exception {
-        setup(ConfigOverride.config("pac4j.globalFilters[0].clients",
+        setup(ConfigOverride.config("pac4j.servlet.security[0].clients",
                 DirectBasicAuthClient.class.getSimpleName()));
 
         final String dogName = client.target(getUrlPrefix() + "/dogs/pierre")
@@ -66,7 +66,7 @@ public class EndToEndTest extends AbstractApplicationTest {
 
     @Test
     public void restrictsAccessToResources() throws Exception {
-        setup(ConfigOverride.config("pac4j.globalFilters[0].clients",
+        setup(ConfigOverride.config("pac4j.servlet.security[0].clients",
                 DirectBasicAuthClient.class.getSimpleName()));
 
         final Response response = client.target(getUrlPrefix() + "/dogs/pierre")

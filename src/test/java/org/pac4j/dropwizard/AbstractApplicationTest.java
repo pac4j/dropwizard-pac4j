@@ -6,6 +6,8 @@ import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.After;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.Charsets;
+import com.google.common.io.BaseEncoding;
 
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
@@ -33,6 +35,16 @@ public class AbstractApplicationTest {
     public void tearDown() {
         dropwizardTestSupport.after();
         client.close();
+    }
+
+    protected String getUrlPrefix() {
+        return "http://localhost:" + dropwizardTestSupport.getLocalPort();
+    }
+
+    protected String mkAuthField(String username, String password) {
+        final String encodedBasicAuthCreds = BaseEncoding.base64().encode(String
+                .format("%s:%s", username, password).getBytes(Charsets.UTF_8));
+        return String.format("Basic %s", encodedBasicAuthCreds);
     }
 
     public static class TestConfiguration extends Configuration {

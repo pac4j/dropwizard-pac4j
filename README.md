@@ -17,7 +17,8 @@ applications:
 - A Dropwizard [bundle](http://www.dropwizard.io/1.0.2/docs/manual/core.html#bundles)
   which:
     - connects the values defined in the `pac4j` configuration section to the
-      [`jax-rs-pac4j`](https://github.com/pac4j/jax-rs-pac4j/) library.
+      [`jax-rs-pac4j`](https://github.com/pac4j/jax-rs-pac4j/) and
+      [`j2e-pac4j`](https://github.com/pac4j/j2e-pac4j/) libraries.
     - enables the use of the annotation provided in by the
       [`jax-rs-pac4j`](https://github.com/pac4j/jax-rs-pac4j/) library.
     - enables Jetty session management by default.
@@ -95,6 +96,13 @@ pac4j:
   globalFilters:
     - matchers: excludeUserSession
       authorizers: isAuthenticated
+  servlet:
+    security:
+      - ...
+    callback:
+      - ...
+    logout:
+      - ...
   matchers:
     # this let the /user/session url be handled by the annotations
     excludeUserSession:
@@ -112,6 +120,25 @@ pac4j:
 `matchers`, `multiProfile` and `skipResponse` properties directly map to
 [the parameters](https://github.com/pac4j/jax-rs-pac4j/#3-protect-urls-securityfilter)
 used by `org.pac4j.jax.rs.filter.SecurityFilter`.
+
+- `servlet` to declare servlet-level filters:
+ - `security`: the `clients`, `authorizers`, `matchers` and `multiProfile`
+   properties directly map to
+   [the parameters](https://github.com/pac4j/j2e-pac4j#3-protect-urls-securityfilter)
+   used by `org.pac4j.j2e.filter.SecurityFilter`.
+   The `mapping` property is used to optionally specify urls to which this
+   filter will be applied to, defaulting to all urls (`/*`).
+ - `callback`: the `defaultUrl`, `renewSession` and `multiProfile` properties
+   directly map to
+   [the parameters](https://github.com/pac4j/j2e-pac4j#4-define-the-callback-endpoint-only-for-indirect-clients-callbackfilter)
+   used by `org.pac4j.j2e.filter.CallbackFilter`.
+   The `mapping` property is used to specify urls to which this filter will be
+   applied to. It does not usually contains a wildcard.
+ - `logout`: the `defaultUrl` and `logoutUrlPattern` properties directly map to
+   [the parameters](https://github.com/pac4j/j2e-pac4j#6-logout-applicationlogoutfilter)
+   used by `org.pac4j.j2e.filter.ApplicationLogoutFilter`.
+   The `mapping` property is used to specify urls to which this filter will be
+   applied to. It does not usually contains a wildcard.
 
 - `sessionEnabled`: set to `false` to disable Jetty session management.
 If not set, the bundle will simply enable it by default.
@@ -147,8 +174,16 @@ To specify instances of `Client`, `Authenticator`, `PasswordEncoder`,
 only necessary to refer to their class name using the `class` key as above and
 the other properties are set on the instantiated object.
 
-Note also that the configuration will use `JaxRsCallbackUrlResolver` as the default
-`CallbackUrlResolver` if not overridden.
+#### URLs Relativity
+
+Note that all urls used within Jersey filters are relative to the dropwizard
+`applicationContext` suffixed by the dropwizard `roothPath` while the urls used
+within Servlet filters are only relative to the dropwizard
+`applicationContext`.
+
+For Jersey, this also includes `callbackUrl`s, enforced by
+`JaxRsCallbackUrlResolver`, which is the default`CallbackUrlResolver` in the
+config if not overridden.
 
 #### Advanced Configuration
 
