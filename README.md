@@ -14,7 +14,7 @@ applications:
 
 - A configuration factory populated by values from a `pac4j` section within an
   application's config file.
-- A Dropwizard [bundle](http://www.dropwizard.io/1.0.2/docs/manual/core.html#bundles)
+- A Dropwizard [bundle](http://www.dropwizard.io/1.0.5/docs/manual/core.html#bundles)
   which:
     - connects the values defined in the `pac4j` configuration section to the
       [`jax-rs-pac4j`](https://github.com/pac4j/jax-rs-pac4j/) and
@@ -28,9 +28,9 @@ applications:
 You need to add a dependency on:
 
 - the `dropwizard-pac4j` library (<em>groupId</em>: **org.pac4j**, *version*:
-**1.0.0**)
+**1.1.0**)
 - the appropriate `pac4j` [submodules](http://www.pac4j.org/docs/clients.html)
-(<em>groupId</em>: **org.pac4j**, *version*: **1.9.4**): `pac4j-oauth` for
+(<em>groupId</em>: **org.pac4j**, *version*: **1.9.5**): `pac4j-oauth` for
 OAuth support (Facebook, Twitter...), `pac4j-cas` for CAS support, `pac4j-ldap`
 for LDAP authentication, etc.
 
@@ -222,8 +222,8 @@ the other points of extension.
 
 See the [release notes](https://github.com/pac4j/dropwizard-pac4j/wiki/Release-Notes).
 Learn more by browsing the
-[dropwizard-pac4j Javadoc](http://www.javadoc.io/doc/org.pac4j/dropwizard-pac4j/1.0.0)
-and the [pac4j Javadoc](http://www.pac4j.org/apidocs/pac4j/1.9.4/index.html).
+[dropwizard-pac4j Javadoc](http://www.javadoc.io/doc/org.pac4j/dropwizard-pac4j/1.1.0)
+and the [pac4j Javadoc](http://www.pac4j.org/apidocs/pac4j/1.9.5/index.html).
 
 
 ## Need help?
@@ -236,7 +236,7 @@ If you have any question, please use the following mailing lists:
 
 ## Development
 
-The version 1.1.0-SNAPSHOT is under development.
+The version 1.1.1-SNAPSHOT is under development.
 
 Maven artifacts are built via Travis:
 [![Build Status](https://travis-ci.org/pac4j/dropwizard-pac4j.png?branch=master)](https://travis-ci.org/pac4j/dropwizard-pac4j)
