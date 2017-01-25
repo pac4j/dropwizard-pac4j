@@ -103,7 +103,7 @@ public abstract class Pac4jBundle<T extends Configuration>
 
     /**
      * Override if needed, but prefer to exploit
-     * {@link Pac4jFactory#setSessionEnable(Boolean)} first.
+     * {@link Pac4jFactory#setSessionEnabled(boolean)} first.
      * 
      * @param environment
      *            the dropwizard {@link Environment}

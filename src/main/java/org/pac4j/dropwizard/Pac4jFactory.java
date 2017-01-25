@@ -14,6 +14,7 @@ import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.http.CallbackUrlResolver;
 import org.pac4j.core.matching.Matcher;
+import org.pac4j.jax.rs.annotations.Pac4JSecurity;
 import org.pac4j.jax.rs.pac4j.JaxRsCallbackUrlResolver;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -77,6 +78,7 @@ public class Pac4jFactory {
 
     /**
      * @since 1.1.0
+     * @return configuration for servlet filters
      */
     @JsonProperty
     public ServletConfiguration getServlet() {
@@ -147,6 +149,8 @@ public class Pac4jFactory {
 
     /**
      * @since 1.1.0
+     * @return the name of the client to set with
+     *         {@link Clients#setDefaultClient(Client)}
      */
     @JsonProperty
     public String getDefaultClient() {
@@ -155,6 +159,9 @@ public class Pac4jFactory {
 
     /**
      * @since 1.1.0
+     * @param defaultClient
+     *            the name of the client to set with
+     *            {@link Clients#setDefaultClient(Client)}
      */
     @JsonProperty
     public void setDefaultClient(String defaultClient) {
@@ -163,6 +170,8 @@ public class Pac4jFactory {
 
     /**
      * @since 1.1.0
+     * @return the names of he clients to use by default with
+     *         {@link Pac4JSecurity}
      */
     @JsonProperty
     public String getDefaultClients() {
@@ -171,6 +180,9 @@ public class Pac4jFactory {
 
     /**
      * @since 1.1.0
+     * @param defaultClients
+     *            the names of he clients to use by default with
+     *            {@link Pac4JSecurity}
      */
     @JsonProperty
     public void setDefaultClients(String defaultClients) {
@@ -200,6 +212,8 @@ public class Pac4jFactory {
 
     /**
      * @since 1.1.0
+     * @return <code>true</code> if the session management is to be enabled at
+     *         Jetty level
      */
     @JsonProperty
     public boolean getSessionEnabled() {
