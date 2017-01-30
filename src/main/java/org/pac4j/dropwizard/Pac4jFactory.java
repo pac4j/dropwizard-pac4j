@@ -13,6 +13,7 @@ import org.pac4j.core.client.Client;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.http.CallbackUrlResolver;
+import org.pac4j.core.http.HttpActionAdapter;
 import org.pac4j.core.matching.Matcher;
 import org.pac4j.jax.rs.annotations.Pac4JSecurity;
 import org.pac4j.jax.rs.pac4j.JaxRsCallbackUrlResolver;
@@ -47,6 +48,8 @@ public class Pac4jFactory {
     private String callbackUrl;
 
     private CallbackUrlResolver callbackUrlResolver = new JaxRsCallbackUrlResolver();
+
+    private HttpActionAdapter httpActionAdapter;
 
     private boolean sessionEnabled = true;
 
@@ -211,6 +214,20 @@ public class Pac4jFactory {
     }
 
     /**
+     * @since 1.1.1
+     * @return an {@link HttpActionAdapter}
+     */
+    @JsonProperty
+    public HttpActionAdapter getHttpActionAdapter() {
+        return httpActionAdapter;
+    }
+
+    @JsonProperty
+    public void setHttpActionAdapter(HttpActionAdapter httpActionAdapter) {
+        this.httpActionAdapter = httpActionAdapter;
+    }
+
+    /**
      * @since 1.1.0
      * @return <code>true</code> if the session management is to be enabled at
      *         Jetty level
@@ -260,6 +277,7 @@ public class Pac4jFactory {
             }
         }
 
+        config.setHttpActionAdapter(httpActionAdapter);
         config.setAuthorizers(authorizers);
         config.setMatchers(matchers);
 

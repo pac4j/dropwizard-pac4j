@@ -8,6 +8,7 @@ import org.pac4j.core.credentials.authenticator.Authenticator;
 import org.pac4j.core.credentials.extractor.CredentialsExtractor;
 import org.pac4j.core.credentials.password.PasswordEncoder;
 import org.pac4j.core.http.CallbackUrlResolver;
+import org.pac4j.core.http.HttpActionAdapter;
 import org.pac4j.core.matching.Matcher;
 import org.pac4j.core.profile.creator.ProfileCreator;
 import org.pac4j.core.redirect.RedirectActionBuilder;
@@ -42,6 +43,11 @@ public class DefaultFeatureSupport implements Pac4jFeatureSupport {
         om.addMixIn(Matcher.class, matcherMixin());
         om.addMixIn(RedirectActionBuilder.class, redirectActionBuilderMixin());
         om.addMixIn(CallbackUrlResolver.class, callbackUrlResolverMixin());
+        om.addMixIn(HttpActionAdapter.class, httpActionAdapterMixin());
+    }
+
+    private Class<?> httpActionAdapterMixin() {
+        return Pac4jMixins.InstantiateByClassNameMixin.class;
     }
 
     private Class<?> callbackUrlResolverMixin() {
@@ -87,4 +93,5 @@ public class DefaultFeatureSupport implements Pac4jFeatureSupport {
     private Class<?> clientMixin() {
         return Pac4jMixins.ClientMixin.class;
     }
+
 }
