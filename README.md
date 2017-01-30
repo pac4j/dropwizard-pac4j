@@ -170,9 +170,10 @@ configured via `clients`. They will be used as the default value for the
 
 To specify instances of `Client`, `Authenticator`, `PasswordEncoder`,
 `CredentialsExtractor`, `ProfileCreator`, `AuthorizationGenerator`,
-`Authorizer`, `Matcher`, `CallbackUrlResolver` and `RedirectActionBuilder`, it
-only necessary to refer to their class name using the `class` key as above and
-the other properties are set on the instantiated object.
+`Authorizer`, `Matcher`, `CallbackUrlResolver`, `HttpActionAdapter`
+and `RedirectActionBuilder`, it only necessary to refer to their class name
+using the `class` key as above and the other properties are set on the
+instantiated object.
 
 #### URLs Relativity
 
