@@ -7,6 +7,9 @@ import org.pac4j.core.client.Client;
 import org.pac4j.core.credentials.authenticator.Authenticator;
 import org.pac4j.core.credentials.extractor.CredentialsExtractor;
 import org.pac4j.core.credentials.password.PasswordEncoder;
+import org.pac4j.core.engine.ApplicationLogoutLogic;
+import org.pac4j.core.engine.CallbackLogic;
+import org.pac4j.core.engine.SecurityLogic;
 import org.pac4j.core.http.CallbackUrlResolver;
 import org.pac4j.core.http.HttpActionAdapter;
 import org.pac4j.core.matching.Matcher;
@@ -44,6 +47,22 @@ public class DefaultFeatureSupport implements Pac4jFeatureSupport {
         om.addMixIn(RedirectActionBuilder.class, redirectActionBuilderMixin());
         om.addMixIn(CallbackUrlResolver.class, callbackUrlResolverMixin());
         om.addMixIn(HttpActionAdapter.class, httpActionAdapterMixin());
+        om.addMixIn(SecurityLogic.class, securityLogicMixin());
+        om.addMixIn(CallbackLogic.class, callbackLogicMixin());
+        om.addMixIn(ApplicationLogoutLogic.class,
+                applicationLogoutLogicMixin());
+    }
+
+    private Class<?> applicationLogoutLogicMixin() {
+        return Pac4jMixins.InstantiateByClassNameMixin.class;
+    }
+
+    private Class<?> callbackLogicMixin() {
+        return Pac4jMixins.InstantiateByClassNameMixin.class;
+    }
+
+    private Class<?> securityLogicMixin() {
+        return Pac4jMixins.InstantiateByClassNameMixin.class;
     }
 
     private Class<?> httpActionAdapterMixin() {

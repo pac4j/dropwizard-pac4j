@@ -12,6 +12,9 @@ import org.pac4j.core.authorization.generator.AuthorizationGenerator;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
+import org.pac4j.core.engine.ApplicationLogoutLogic;
+import org.pac4j.core.engine.CallbackLogic;
+import org.pac4j.core.engine.SecurityLogic;
 import org.pac4j.core.http.CallbackUrlResolver;
 import org.pac4j.core.http.HttpActionAdapter;
 import org.pac4j.core.matching.Matcher;
@@ -42,6 +45,12 @@ public class Pac4jFactory {
 
     @NotNull
     private ServletConfiguration servlet = new ServletConfiguration();
+
+    private SecurityLogic securityLogic;
+
+    private CallbackLogic callbackLogic;
+
+    private ApplicationLogoutLogic applicationLogoutLogic;
 
     private String clientNameParameter;
 
@@ -97,6 +106,55 @@ public class Pac4jFactory {
     @JsonProperty
     public void setServlet(ServletConfiguration servlet) {
         this.servlet = servlet;
+    }
+
+    /**
+     * @since 1.1.1
+     * 
+     * @param securityLogic
+     *            the {@link SecurityLogic} to use globally
+     */
+    @JsonProperty
+    public void setSecurityLogic(SecurityLogic securityLogic) {
+        this.securityLogic = securityLogic;
+    }
+
+    @JsonProperty
+    public SecurityLogic getSecurityLogic() {
+        return securityLogic;
+    }
+
+    /**
+     * @since 1.1.1
+     * 
+     * @param callbackLogic
+     *            the {@link CallbackLogic} to use globally
+     */
+    @JsonProperty
+    public void setCallbackLogic(CallbackLogic callbackLogic) {
+        this.callbackLogic = callbackLogic;
+    }
+
+    @JsonProperty
+    public CallbackLogic getCallbackLogic() {
+        return callbackLogic;
+    }
+
+    /**
+     * @since 1.1.1
+     * 
+     * @param applicationLogoutLogic
+     *            the {@link ApplicationLogoutLogic} to use globally
+     */
+    @JsonProperty
+    public void setApplicationLogoutLogic(
+            ApplicationLogoutLogic applicationLogoutLogic) {
+        this.applicationLogoutLogic = applicationLogoutLogic;
+    }
+
+    @JsonProperty
+    public ApplicationLogoutLogic getApplicationLogoutLogic() {
+        return applicationLogoutLogic;
     }
 
     @JsonProperty
@@ -277,6 +335,9 @@ public class Pac4jFactory {
             }
         }
 
+        config.setSecurityLogic(securityLogic);
+        config.setCallbackLogic(callbackLogic);
+        config.setApplicationLogoutLogic(applicationLogoutLogic);
         config.setHttpActionAdapter(httpActionAdapter);
         config.setAuthorizers(authorizers);
         config.setMatchers(matchers);
