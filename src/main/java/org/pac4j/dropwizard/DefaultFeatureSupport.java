@@ -7,8 +7,8 @@ import org.pac4j.core.client.Client;
 import org.pac4j.core.credentials.authenticator.Authenticator;
 import org.pac4j.core.credentials.extractor.CredentialsExtractor;
 import org.pac4j.core.credentials.password.PasswordEncoder;
-import org.pac4j.core.engine.ApplicationLogoutLogic;
 import org.pac4j.core.engine.CallbackLogic;
+import org.pac4j.core.engine.LogoutLogic;
 import org.pac4j.core.engine.SecurityLogic;
 import org.pac4j.core.http.CallbackUrlResolver;
 import org.pac4j.core.http.HttpActionAdapter;
@@ -49,11 +49,10 @@ public class DefaultFeatureSupport implements Pac4jFeatureSupport {
         om.addMixIn(HttpActionAdapter.class, httpActionAdapterMixin());
         om.addMixIn(SecurityLogic.class, securityLogicMixin());
         om.addMixIn(CallbackLogic.class, callbackLogicMixin());
-        om.addMixIn(ApplicationLogoutLogic.class,
-                applicationLogoutLogicMixin());
+        om.addMixIn(LogoutLogic.class, logoutLogicMixin());
     }
 
-    private Class<?> applicationLogoutLogicMixin() {
+    private Class<?> logoutLogicMixin() {
         return Pac4jMixins.InstantiateByClassNameMixin.class;
     }
 

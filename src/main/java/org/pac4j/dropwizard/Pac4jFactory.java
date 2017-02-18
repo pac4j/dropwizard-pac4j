@@ -12,8 +12,8 @@ import org.pac4j.core.authorization.generator.AuthorizationGenerator;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
-import org.pac4j.core.engine.ApplicationLogoutLogic;
 import org.pac4j.core.engine.CallbackLogic;
+import org.pac4j.core.engine.LogoutLogic;
 import org.pac4j.core.engine.SecurityLogic;
 import org.pac4j.core.http.CallbackUrlResolver;
 import org.pac4j.core.http.HttpActionAdapter;
@@ -41,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Pac4jFactory {
 
     @NotNull
-    private List<FilterConfiguration> globalFilters = new ArrayList<>();
+    private List<JaxRsSecurityFilterConfiguration> globalFilters = new ArrayList<>();
 
     @NotNull
     private ServletConfiguration servlet = new ServletConfiguration();
@@ -50,7 +50,7 @@ public class Pac4jFactory {
 
     private CallbackLogic callbackLogic;
 
-    private ApplicationLogoutLogic applicationLogoutLogic;
+    private LogoutLogic logoutLogic;
 
     private String clientNameParameter;
 
@@ -79,12 +79,12 @@ public class Pac4jFactory {
     private Map<String, Authorizer> authorizers = new HashMap<>();
 
     @JsonProperty
-    public List<FilterConfiguration> getGlobalFilters() {
+    public List<JaxRsSecurityFilterConfiguration> getGlobalFilters() {
         return globalFilters;
     }
 
     @JsonProperty
-    public void setGlobalFilters(List<FilterConfiguration> filters) {
+    public void setGlobalFilters(List<JaxRsSecurityFilterConfiguration> filters) {
         this.globalFilters = filters;
     }
 
@@ -143,18 +143,17 @@ public class Pac4jFactory {
     /**
      * @since 1.1.1
      * 
-     * @param applicationLogoutLogic
-     *            the {@link ApplicationLogoutLogic} to use globally
+     * @param logoutLogic
+     *            the {@link LogoutLogic} to use globally
      */
     @JsonProperty
-    public void setApplicationLogoutLogic(
-            ApplicationLogoutLogic applicationLogoutLogic) {
-        this.applicationLogoutLogic = applicationLogoutLogic;
+    public void setApplicationLogoutLogic(LogoutLogic logoutLogic) {
+        this.logoutLogic = logoutLogic;
     }
 
     @JsonProperty
-    public ApplicationLogoutLogic getApplicationLogoutLogic() {
-        return applicationLogoutLogic;
+    public LogoutLogic getApplicationLogoutLogic() {
+        return logoutLogic;
     }
 
     @JsonProperty
@@ -337,7 +336,7 @@ public class Pac4jFactory {
 
         config.setSecurityLogic(securityLogic);
         config.setCallbackLogic(callbackLogic);
-        config.setApplicationLogoutLogic(applicationLogoutLogic);
+        config.setLogoutLogic(logoutLogic);
         config.setHttpActionAdapter(httpActionAdapter);
         config.setAuthorizers(authorizers);
         config.setMatchers(matchers);
@@ -397,7 +396,7 @@ public class Pac4jFactory {
      * @since 1.0.0
      * @see org.pac4j.jax.rs.filters.SecurityFilter
      */
-    public static class FilterConfiguration
+    public static class JaxRsSecurityFilterConfiguration
             extends SecurityFilterConfiguration {
 
         private Boolean skipResponse;
@@ -557,6 +556,12 @@ public class Pac4jFactory {
 
         private String logoutUrlPattern;
 
+        private Boolean localLogout;
+
+        private Boolean destroySession;
+
+        private Boolean centralLogout;
+
         @JsonProperty
         public String getMapping() {
             return mapping;
@@ -573,6 +578,21 @@ public class Pac4jFactory {
         }
 
         @JsonProperty
+        public Boolean getLocalLogout() {
+            return localLogout;
+        }
+
+        @JsonProperty
+        public Boolean getDestroySession() {
+            return destroySession;
+        }
+
+        @JsonProperty
+        public Boolean getCentralLogout() {
+            return centralLogout;
+        }
+
+        @JsonProperty
         public void setMapping(String mapping) {
             this.mapping = mapping;
         }
@@ -585,6 +605,21 @@ public class Pac4jFactory {
         @JsonProperty
         public void setLogoutUrlPattern(String logoutUrlPattern) {
             this.logoutUrlPattern = logoutUrlPattern;
+        }
+
+        @JsonProperty
+        public void setLocalLogout(Boolean localLogout) {
+            this.localLogout = localLogout;
+        }
+
+        @JsonProperty
+        public void setDestroySession(Boolean destroySession) {
+            this.destroySession = destroySession;
+        }
+
+        @JsonProperty
+        public void setCentralLogout(Boolean centralLogout) {
+            this.centralLogout = centralLogout;
         }
     }
 }

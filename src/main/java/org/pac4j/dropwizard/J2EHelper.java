@@ -10,8 +10,8 @@ import org.pac4j.dropwizard.Pac4jFactory.ServletCallbackFilterConfiguration;
 import org.pac4j.dropwizard.Pac4jFactory.ServletLogoutFilterConfiguration;
 import org.pac4j.dropwizard.Pac4jFactory.ServletSecurityFilterConfiguration;
 import org.pac4j.j2e.filter.AbstractConfigFilter;
-import org.pac4j.j2e.filter.ApplicationLogoutFilter;
 import org.pac4j.j2e.filter.CallbackFilter;
+import org.pac4j.j2e.filter.LogoutFilter;
 import org.pac4j.j2e.filter.SecurityFilter;
 
 import io.dropwizard.setup.Environment;
@@ -57,10 +57,13 @@ public final class J2EHelper {
     public static void registerLogoutFilter(Environment environment,
             Config config, ServletLogoutFilterConfiguration fConf) {
 
-        final ApplicationLogoutFilter filter = new ApplicationLogoutFilter();
+        final LogoutFilter filter = new LogoutFilter();
 
         filter.setDefaultUrl(fConf.getDefaultUrl());
         filter.setLogoutUrlPattern(fConf.getLogoutUrlPattern());
+        filter.setLocalLogout(fConf.getLocalLogout());
+        filter.setDestroySession(fConf.getDestroySession());
+        filter.setCentralLogout(fConf.getCentralLogout());
 
         registerFilter(environment, config, filter, fConf.getMapping());
     }
@@ -68,8 +71,7 @@ public final class J2EHelper {
     private static void registerFilter(Environment environment, Config config,
             AbstractConfigFilter filter, String mapping) {
 
-        // TODO replace that with something that does not use ConfigSingleton!
-        filter.setConfig(config);
+        filter.setConfigOnly(config);
 
         final FilterRegistration.Dynamic filterRegistration = environment
                 .servlets().addFilter(filter.getClass().getName(), filter);

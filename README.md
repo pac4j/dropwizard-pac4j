@@ -237,7 +237,7 @@ If you have any question, please use the following mailing lists:
 
 ## Development
 
-The version 1.2.2-SNAPSHOT is under development.
+The version 2.0.0-SNAPSHOT is under development.
 
 Maven artifacts are built via Travis:
 [![Build Status](https://travis-ci.org/pac4j/dropwizard-pac4j.png?branch=master)](https://travis-ci.org/pac4j/dropwizard-pac4j)
