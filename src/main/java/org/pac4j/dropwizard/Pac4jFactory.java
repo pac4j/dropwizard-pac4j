@@ -29,8 +29,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * {@link org.pac4j.jax.rs.filters.SecurityFilter}s as well as Servlet's
  * {@link org.pac4j.j2e.filter.SecurityFilter}s,
  * {@link org.pac4j.j2e.filter.CallbackFilter}s and
- * {@link org.pac4j.j2e.filter.ApplicationLogoutFilter}s.
- * 
+ * {@link org.pac4j.j2e.filter.LogoutFilter}s.
+ *
  * @see Pac4jConfiguration
  * @see org.pac4j.core.config.Config
  * @see org.pac4j.core.client.Clients
@@ -99,7 +99,7 @@ public class Pac4jFactory {
 
     /**
      * @since 1.1.0
-     * 
+     *
      * @param servlet
      *            configuration for servlet filters
      */
@@ -110,7 +110,7 @@ public class Pac4jFactory {
 
     /**
      * @since 1.1.1
-     * 
+     *
      * @param securityLogic
      *            the {@link SecurityLogic} to use globally
      */
@@ -126,7 +126,7 @@ public class Pac4jFactory {
 
     /**
      * @since 1.1.1
-     * 
+     *
      * @param callbackLogic
      *            the {@link CallbackLogic} to use globally
      */
@@ -142,7 +142,7 @@ public class Pac4jFactory {
 
     /**
      * @since 1.1.1
-     * 
+     *
      * @param logoutLogic
      *            the {@link LogoutLogic} to use globally
      */
@@ -545,7 +545,7 @@ public class Pac4jFactory {
 
     /**
      * @since 1.1.0
-     * @see org.pac4j.j2e.filter.ApplicationLogoutFilter
+     * @see org.pac4j.j2e.filter.LogoutFilter
      */
     public static class ServletLogoutFilterConfiguration {
 
