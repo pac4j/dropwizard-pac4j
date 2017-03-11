@@ -9,6 +9,7 @@ import org.pac4j.dropwizard.Pac4jFactory.JaxRsSecurityFilterConfiguration;
 import org.pac4j.dropwizard.Pac4jFactory.ServletCallbackFilterConfiguration;
 import org.pac4j.dropwizard.Pac4jFactory.ServletLogoutFilterConfiguration;
 import org.pac4j.dropwizard.Pac4jFactory.ServletSecurityFilterConfiguration;
+import org.pac4j.jax.rs.features.JaxRsConfigProvider;
 import org.pac4j.jax.rs.features.Pac4JSecurityFeature;
 import org.pac4j.jax.rs.features.Pac4JSecurityFilterFeature;
 import org.pac4j.jax.rs.filters.SecurityFilter;
@@ -65,9 +66,12 @@ public abstract class Pac4jBundle<T extends Configuration>
         if (pac4j != null) {
             config = pac4j.build();
 
-            for (JaxRsSecurityFilterConfiguration fConf : pac4j.getGlobalFilters()) {
+            environment.jersey().register(new JaxRsConfigProvider(config));
+
+            for (JaxRsSecurityFilterConfiguration fConf : pac4j
+                    .getGlobalFilters()) {
                 environment.jersey()
-                        .register(new Pac4JSecurityFilterFeature(config,
+                        .register(new Pac4JSecurityFilterFeature(
                                 fConf.getSkipResponse(), fConf.getAuthorizers(),
                                 fConf.getClients(), fConf.getMatchers(),
                                 fConf.getMultiProfile()));
@@ -89,9 +93,8 @@ public abstract class Pac4jBundle<T extends Configuration>
             }
 
             environment.jersey()
-                    .register(new ServletJaxRsContextFactoryProvider(config));
-            environment.jersey().register(new Pac4JSecurityFeature(config,
-                    pac4j.getDefaultClients()));
+                    .register(new ServletJaxRsContextFactoryProvider());
+            environment.jersey().register(new Pac4JSecurityFeature());
             environment.jersey()
                     .register(new Pac4JValueFactoryProvider.Binder());
 

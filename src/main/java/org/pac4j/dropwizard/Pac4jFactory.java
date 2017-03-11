@@ -15,11 +15,12 @@ import org.pac4j.core.config.Config;
 import org.pac4j.core.engine.CallbackLogic;
 import org.pac4j.core.engine.LogoutLogic;
 import org.pac4j.core.engine.SecurityLogic;
-import org.pac4j.core.http.CallbackUrlResolver;
 import org.pac4j.core.http.HttpActionAdapter;
+import org.pac4j.core.http.UrlResolver;
 import org.pac4j.core.matching.Matcher;
 import org.pac4j.jax.rs.annotations.Pac4JSecurity;
-import org.pac4j.jax.rs.pac4j.JaxRsCallbackUrlResolver;
+import org.pac4j.jax.rs.pac4j.JaxRsConfig;
+import org.pac4j.jax.rs.pac4j.JaxRsUrlResolver;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -56,7 +57,7 @@ public class Pac4jFactory {
 
     private String callbackUrl;
 
-    private CallbackUrlResolver callbackUrlResolver = new JaxRsCallbackUrlResolver();
+    private UrlResolver urlResolver = new JaxRsUrlResolver();
 
     private HttpActionAdapter httpActionAdapter;
 
@@ -84,7 +85,8 @@ public class Pac4jFactory {
     }
 
     @JsonProperty
-    public void setGlobalFilters(List<JaxRsSecurityFilterConfiguration> filters) {
+    public void setGlobalFilters(
+            List<JaxRsSecurityFilterConfiguration> filters) {
         this.globalFilters = filters;
     }
 
@@ -260,14 +262,13 @@ public class Pac4jFactory {
     }
 
     @JsonProperty
-    public CallbackUrlResolver getCallbackUrlResolver() {
-        return callbackUrlResolver;
+    public UrlResolver getUrlResolver() {
+        return urlResolver;
     }
 
     @JsonProperty
-    public void setCallbackUrlResolver(
-            CallbackUrlResolver callbackUrlResolver) {
-        this.callbackUrlResolver = callbackUrlResolver;
+    public void setUrlResolver(UrlResolver urlResolver) {
+        this.urlResolver = urlResolver;
     }
 
     /**
@@ -307,7 +308,10 @@ public class Pac4jFactory {
 
     public Config build() {
         Clients client = new Clients();
-        Config config = new Config(client);
+        JaxRsConfig config = new JaxRsConfig();
+
+        config.setClients(client);
+        config.setDefaultClients(defaultClients);
 
         if (callbackUrl != null) {
             client.setCallbackUrl(callbackUrl);
@@ -315,7 +319,7 @@ public class Pac4jFactory {
         if (clientNameParameter != null) {
             client.setClientNameParameter(clientNameParameter);
         }
-        client.setCallbackUrlResolver(callbackUrlResolver);
+        client.setUrlResolver(urlResolver);
         client.setAuthorizationGenerators(authorizationGenerators);
         client.setClients(clients);
 
