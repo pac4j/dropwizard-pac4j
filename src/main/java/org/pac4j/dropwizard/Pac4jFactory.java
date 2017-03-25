@@ -149,12 +149,12 @@ public class Pac4jFactory {
      *            the {@link LogoutLogic} to use globally
      */
     @JsonProperty
-    public void setApplicationLogoutLogic(LogoutLogic logoutLogic) {
+    public void setLogoutLogic(LogoutLogic logoutLogic) {
         this.logoutLogic = logoutLogic;
     }
 
     @JsonProperty
-    public LogoutLogic getApplicationLogoutLogic() {
+    public LogoutLogic getLogoutLogic() {
         return logoutLogic;
     }
 
