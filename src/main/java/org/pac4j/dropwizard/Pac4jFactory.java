@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import javax.validation.constraints.NotNull;
 
@@ -12,12 +13,14 @@ import org.pac4j.core.authorization.generator.AuthorizationGenerator;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
+import org.pac4j.core.context.WebContext;
 import org.pac4j.core.engine.CallbackLogic;
 import org.pac4j.core.engine.LogoutLogic;
 import org.pac4j.core.engine.SecurityLogic;
 import org.pac4j.core.http.HttpActionAdapter;
 import org.pac4j.core.http.UrlResolver;
 import org.pac4j.core.matching.Matcher;
+import org.pac4j.core.profile.ProfileManager;
 import org.pac4j.jax.rs.annotations.Pac4JSecurity;
 import org.pac4j.jax.rs.pac4j.JaxRsConfig;
 import org.pac4j.jax.rs.pac4j.JaxRsUrlResolver;
@@ -60,6 +63,8 @@ public class Pac4jFactory {
     private UrlResolver urlResolver = new JaxRsUrlResolver();
 
     private HttpActionAdapter httpActionAdapter;
+
+    private Function<WebContext, ProfileManager> profileManagerFactory;
 
     private boolean sessionEnabled = true;
 
@@ -285,6 +290,23 @@ public class Pac4jFactory {
         this.httpActionAdapter = httpActionAdapter;
     }
 
+    @JsonProperty
+    public Function<WebContext, ProfileManager> getProfileManagerFactory() {
+        return profileManagerFactory;
+    }
+
+    /**
+     * @since 2.0.0
+     * @param profileManagerFactory
+     *            a class implementing a function from context to profile
+     *            manager
+     */
+    @JsonProperty
+    public void setProfileManagerFactory(
+            Function<WebContext, ProfileManager> profileManagerFactory) {
+        this.profileManagerFactory = profileManagerFactory;
+    }
+
     /**
      * @since 1.1.0
      * @return <code>true</code> if the session management is to be enabled at
@@ -344,6 +366,7 @@ public class Pac4jFactory {
         config.setHttpActionAdapter(httpActionAdapter);
         config.setAuthorizers(authorizers);
         config.setMatchers(matchers);
+        config.setProfileManagerFactory(profileManagerFactory);
 
         return config;
     }
