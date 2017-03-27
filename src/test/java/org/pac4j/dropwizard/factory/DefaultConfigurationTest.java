@@ -12,6 +12,7 @@ import org.pac4j.dropwizard.AbstractConfigurationTest;
 import org.pac4j.dropwizard.Pac4jFactory;
 import org.pac4j.http.client.direct.DirectBasicAuthClient;
 import org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator;
+import org.pac4j.jax.rs.pac4j.JaxRsConfig;
 import org.pac4j.oauth.client.FacebookClient;
 
 public class DefaultConfigurationTest extends AbstractConfigurationTest {
@@ -75,6 +76,47 @@ public class DefaultConfigurationTest extends AbstractConfigurationTest {
         assertThat(config.getAuthorizers().size()).isEqualTo(1);
 
         assertThat(config.getMatchers().size()).isEqualTo(1);
+    }
+
+    @Test
+    public void clientsAndProperties() throws Exception {
+        Pac4jFactory conf = getPac4jFactory("clientsandproperties-pac4j.yaml");
+        Config config = conf.build();
+
+        assertThat(config).isExactlyInstanceOf(JaxRsConfig.class);
+        assertThat(config.getClients().getClients()).hasSize(2);
+
+        Client client0 = config.getClients().getClients().get(0);
+        assertThat(client0).isExactlyInstanceOf(FacebookClient.class);
+        assertThat(((FacebookClient) client0).getKey()).isEqualTo("fbId");
+
+        Client client1 = config.getClients().getClients().get(1);
+        assertThat(client1).isInstanceOf(DirectBasicAuthClient.class);
+        assertThat(client1.getName()).isEqualTo("DirectBasicAuthClient");
+        assertThat(((DirectBasicAuthClient) client1).getAuthenticator())
+            .isNotNull()
+            .isInstanceOf(SimpleTestUsernamePasswordAuthenticator.class);
+
+        assertThat(config.getAuthorizers().size()).isEqualTo(0);
+
+        assertThat(config.getMatchers().size()).isEqualTo(0);
+    }
+
+    @Test
+    public void clientsProperties() throws Exception {
+        Pac4jFactory conf = getPac4jFactory("clientsproperties-pac4j.yaml");
+        Config config = conf.build();
+
+        assertThat(config).isExactlyInstanceOf(JaxRsConfig.class);
+        assertThat(config.getClients().getClients()).hasSize(1);
+
+        Client client0 = config.getClients().getClients().get(0);
+        assertThat(client0).isExactlyInstanceOf(FacebookClient.class);
+        assertThat(((FacebookClient) client0).getKey()).isEqualTo("fbId");
+
+        assertThat(config.getAuthorizers().size()).isEqualTo(1);
+
+        assertThat(config.getMatchers().size()).isEqualTo(0);
     }
 
     @Test

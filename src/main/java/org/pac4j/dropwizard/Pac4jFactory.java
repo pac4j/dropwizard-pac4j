@@ -363,7 +363,7 @@ public class Pac4jFactory {
     }
 
     public Config build() {
-        // either we whole Config is built from a ConfigFactory class, or we initialize a default JaxRsConfig
+        // either the whole Config is built from a ConfigFactory class, or we initialize a default JaxRsConfig
         final JaxRsConfig config;
         if (configClass != null && configProperties != null) {
             config = (JaxRsConfig) ConfigBuilder.build(configClass, configProperties);

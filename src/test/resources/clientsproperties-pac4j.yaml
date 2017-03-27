@@ -1,0 +1,7 @@
+clientsProperties:
+  facebook.id: fbId
+  facebook.secret: fbSecret
+authorizers:
+    mustBeAuth:
+      class: org.pac4j.core.authorization.authorizer.IsAuthenticatedAuthorizer
+      redirectionUrl: /?mustBeAuth
