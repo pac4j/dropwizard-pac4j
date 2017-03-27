@@ -12,6 +12,7 @@ import org.pac4j.dropwizard.AbstractConfigurationTest;
 import org.pac4j.dropwizard.Pac4jFactory;
 import org.pac4j.http.client.direct.DirectBasicAuthClient;
 import org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator;
+import org.pac4j.oauth.client.FacebookClient;
 
 public class DefaultConfigurationTest extends AbstractConfigurationTest {
 
@@ -51,6 +52,32 @@ public class DefaultConfigurationTest extends AbstractConfigurationTest {
     }
 
     @Test
+    public void allOptionsClients() throws Exception {
+        Pac4jFactory conf = getPac4jFactory("alloptions-pac4j.yaml");
+        Config config = conf.build();
+
+        assertThat(config).isExactlyInstanceOf(FakeConfig.class);
+        final FakeConfig fakeConfig = (FakeConfig) config;
+        assertThat(fakeConfig.getProperties().size()).isEqualTo(2);
+        assertThat(config.getClients().getClients()).hasSize(2);
+
+        Client client0 = config.getClients().getClients().get(0);
+        assertThat(client0).isExactlyInstanceOf(FacebookClient.class);
+        assertThat(((FacebookClient) client0).getKey()).isEqualTo("fbId");
+
+        Client client1 = config.getClients().getClients().get(1);
+        assertThat(client1).isInstanceOf(DirectBasicAuthClient.class);
+        assertThat(client1.getName()).isEqualTo("DirectBasicAuthClient");
+        assertThat(((DirectBasicAuthClient) client1).getAuthenticator())
+            .isNotNull()
+            .isInstanceOf(SimpleTestUsernamePasswordAuthenticator.class);
+
+        assertThat(config.getAuthorizers().size()).isEqualTo(1);
+
+        assertThat(config.getMatchers().size()).isEqualTo(1);
+    }
+
+    @Test
     public void defaultsUnset() throws Exception {
         Pac4jFactory conf = getPac4jFactory("defaults.yaml");
         Config config = conf.build();
@@ -66,7 +93,7 @@ public class DefaultConfigurationTest extends AbstractConfigurationTest {
     @Test(expected = IllegalArgumentException.class)
     public void defaultClientTestNOk() throws Exception {
         Pac4jFactory conf = getPac4jFactory("defaultClientNOk.yaml");
-        
+
         conf.build();
     }
 
