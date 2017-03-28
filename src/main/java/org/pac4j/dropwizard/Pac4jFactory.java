@@ -378,12 +378,11 @@ public class Pac4jFactory {
         if (newClients.getClients() == null) {
             newClients.setClients(new ArrayList<>());
         }
-        config.setClients(newClients);
 
         config.setDefaultClients(defaultClients);
 
         // we can take the clients built from the properties
-        if (clientsProperties != null && clientsProperties.size() > 0) {
+        if (clientsProperties != null && !clientsProperties.isEmpty()) {
             final PropertiesConfigFactory propertiesConfigFactory = new PropertiesConfigFactory(clientsProperties);
             final Config propertiesConfig = propertiesConfigFactory.build();
             config.getClients().getClients().addAll(propertiesConfig.getClients().getClients());
@@ -401,23 +400,12 @@ public class Pac4jFactory {
         }
         newClients.setUrlResolver(urlResolver);
         if (authorizationGenerators != null) {
-            newClients.setAuthorizationGenerators(authorizationGenerators);
+            newClients.getAuthorizationGenerators().addAll(authorizationGenerators);
         }
 
-        // TODO: to be removed after pac4j#870
         if (defaultClient != null) {
-            boolean found = false;
-            for (Client c : clients) {
-                if (defaultClient.equals(c.getName())) {
-                    newClients.setDefaultClient(c);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                throw new IllegalArgumentException("Client '" + defaultClient
-                    + "' is not one of the configured clients");
-            }
+            final Client defClient = newClients.findClient(defaultClient);
+            newClients.setDefaultClient(defClient);
         }
 
         if (securityLogic != null) {

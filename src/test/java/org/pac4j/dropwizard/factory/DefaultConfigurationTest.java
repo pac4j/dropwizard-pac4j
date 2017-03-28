@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
+import org.pac4j.core.exception.TechnicalException;
 import org.pac4j.core.matching.ExcludedPathMatcher;
 import org.pac4j.core.matching.Matcher;
 import org.pac4j.dropwizard.AbstractConfigurationTest;
@@ -132,7 +133,7 @@ public class DefaultConfigurationTest extends AbstractConfigurationTest {
                 .isEqualTo(new Clients().getClientNameParameter());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = TechnicalException.class)
     public void defaultClientTestNOk() throws Exception {
         Pac4jFactory conf = getPac4jFactory("defaultClientNOk.yaml");
 
