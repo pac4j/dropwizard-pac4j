@@ -70,22 +70,28 @@ public class Pac4jFactory {
 
     private boolean sessionEnabled = true;
 
+    @NotNull
     private List<AuthorizationGenerator> authorizationGenerators = new ArrayList<>();
 
+    @NotNull
     private Map<String, Matcher> matchers = new HashMap<>();
 
+    @NotNull
     private List<Client> clients = new ArrayList<>();
 
     private String defaultClient = null;
 
     private String defaultClients = null;
 
+    @NotNull
     private Map<String, Authorizer> authorizers = new HashMap<>();
 
+    @NotNull
     private Map<String, String> configProperties = new HashMap<>();
 
     private String configClass;
 
+    @NotNull
     private Map<String, String> clientsProperties = new HashMap<>();
 
     @JsonProperty
@@ -365,7 +371,7 @@ public class Pac4jFactory {
     public Config build() {
         // either the whole Config is built from a ConfigFactory class, or we initialize a default JaxRsConfig
         final JaxRsConfig config;
-        if (configClass != null && configProperties != null) {
+        if (configClass != null && !configProperties.isEmpty()) {
             config = (JaxRsConfig) ConfigBuilder.build(configClass, configProperties);
         } else {
             config = new JaxRsConfig();
@@ -382,13 +388,13 @@ public class Pac4jFactory {
         config.setDefaultClients(defaultClients);
 
         // we can take the clients built from the properties
-        if (clientsProperties != null && !clientsProperties.isEmpty()) {
+        if (!clientsProperties.isEmpty()) {
             final PropertiesConfigFactory propertiesConfigFactory = new PropertiesConfigFactory(clientsProperties);
             final Config propertiesConfig = propertiesConfigFactory.build();
             config.getClients().getClients().addAll(propertiesConfig.getClients().getClients());
         }
         // and the clients directly defined in the YAML file
-        if (clients != null) {
+        if (!clients.isEmpty()) {
             config.getClients().getClients().addAll(clients);
         }
 
@@ -399,7 +405,7 @@ public class Pac4jFactory {
             newClients.setClientNameParameter(clientNameParameter);
         }
         newClients.setUrlResolver(urlResolver);
-        if (authorizationGenerators != null) {
+        if (!authorizationGenerators.isEmpty()) {
             newClients.getAuthorizationGenerators().addAll(authorizationGenerators);
         }
 
@@ -420,10 +426,10 @@ public class Pac4jFactory {
         if (httpActionAdapter != null) {
             config.setHttpActionAdapter(httpActionAdapter);
         }
-        if (authorizers != null) {
+        if (!authorizers.isEmpty()) {
             config.getAuthorizers().putAll(authorizers);
         }
-        if (matchers != null) {
+        if (!matchers.isEmpty()) {
             config.getMatchers().putAll(matchers);
         }
         if (profileManagerFactory != null) {
