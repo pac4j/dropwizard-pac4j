@@ -8,11 +8,13 @@ import java.util.function.Function;
 
 import javax.validation.constraints.NotNull;
 
+import org.pac4j.config.client.PropertiesConfigFactory;
 import org.pac4j.core.authorization.authorizer.Authorizer;
 import org.pac4j.core.authorization.generator.AuthorizationGenerator;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
+import org.pac4j.core.config.ConfigBuilder;
 import org.pac4j.core.context.WebContext;
 import org.pac4j.core.engine.CallbackLogic;
 import org.pac4j.core.engine.LogoutLogic;
@@ -83,6 +85,44 @@ public class Pac4jFactory {
 
     @NotNull
     private Map<String, Authorizer> authorizers = new HashMap<>();
+
+    @NotNull
+    private Map<String, String> configProperties = new HashMap<>();
+
+    private String configClass;
+
+    @NotNull
+    private Map<String, String> clientsProperties = new HashMap<>();
+
+    @JsonProperty
+    public Map<String, String> getConfigProperties() {
+        return configProperties;
+    }
+
+    @JsonProperty
+    public void setConfigProperties(final Map<String, String> configProperties) {
+        this.configProperties = configProperties;
+    }
+
+    @JsonProperty
+    public String getConfigClass() {
+        return configClass;
+    }
+
+    @JsonProperty
+    public void setConfigClass(final String configClass) {
+        this.configClass = configClass;
+    }
+
+    @JsonProperty
+    public Map<String, String> getClientsProperties() {
+        return clientsProperties;
+    }
+
+    @JsonProperty
+    public void setClientsProperties(final Map<String, String> clientsProperties) {
+        this.clientsProperties = clientsProperties;
+    }
 
     @JsonProperty
     public List<JaxRsSecurityFilterConfiguration> getGlobalFilters() {
@@ -329,44 +369,72 @@ public class Pac4jFactory {
     }
 
     public Config build() {
-        Clients client = new Clients();
-        JaxRsConfig config = new JaxRsConfig();
+        // either the whole Config is built from a ConfigFactory class, or we initialize a default JaxRsConfig
+        final JaxRsConfig config;
+        if (configClass != null && !configProperties.isEmpty()) {
+            config = (JaxRsConfig) ConfigBuilder.build(configClass, configProperties);
+        } else {
+            config = new JaxRsConfig();
+        }
+        Clients newClients = config.getClients();
+        if (newClients == null) {
+            newClients = new Clients();
+            config.setClients(newClients);
+        }
+        if (newClients.getClients() == null) {
+            newClients.setClients(new ArrayList<>());
+        }
 
-        config.setClients(client);
         config.setDefaultClients(defaultClients);
 
+        // we can take the clients built from the properties
+        if (!clientsProperties.isEmpty()) {
+            final PropertiesConfigFactory propertiesConfigFactory = new PropertiesConfigFactory(clientsProperties);
+            final Config propertiesConfig = propertiesConfigFactory.build();
+            config.getClients().getClients().addAll(propertiesConfig.getClients().getClients());
+        }
+        // and the clients directly defined in the YAML file
+        if (!clients.isEmpty()) {
+            config.getClients().getClients().addAll(clients);
+        }
+
         if (callbackUrl != null) {
-            client.setCallbackUrl(callbackUrl);
+            newClients.setCallbackUrl(callbackUrl);
         }
         if (clientNameParameter != null) {
-            client.setClientNameParameter(clientNameParameter);
+            newClients.setClientNameParameter(clientNameParameter);
         }
-        client.setUrlResolver(urlResolver);
-        client.setAuthorizationGenerators(authorizationGenerators);
-        client.setClients(clients);
+        newClients.setUrlResolver(urlResolver);
+        if (!authorizationGenerators.isEmpty()) {
+            newClients.getAuthorizationGenerators().addAll(authorizationGenerators);
+        }
 
         if (defaultClient != null) {
-            boolean found = false;
-            for (Client c : clients) {
-                if (defaultClient.equals(c.getName())) {
-                    client.setDefaultClient(c);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                throw new IllegalArgumentException("Client '" + defaultClient
-                        + "' is not one of the configured clients");
-            }
+            final Client defClient = newClients.findClient(defaultClient);
+            newClients.setDefaultClient(defClient);
         }
 
-        config.setSecurityLogic(securityLogic);
-        config.setCallbackLogic(callbackLogic);
-        config.setLogoutLogic(logoutLogic);
-        config.setHttpActionAdapter(httpActionAdapter);
-        config.setAuthorizers(authorizers);
-        config.setMatchers(matchers);
-        config.setProfileManagerFactory(profileManagerFactory);
+        if (securityLogic != null) {
+            config.setSecurityLogic(securityLogic);
+        }
+        if (callbackLogic != null) {
+            config.setCallbackLogic(callbackLogic);
+        }
+        if (logoutLogic != null) {
+            config.setLogoutLogic(logoutLogic);
+        }
+        if (httpActionAdapter != null) {
+            config.setHttpActionAdapter(httpActionAdapter);
+        }
+        if (!authorizers.isEmpty()) {
+            config.getAuthorizers().putAll(authorizers);
+        }
+        if (!matchers.isEmpty()) {
+            config.getMatchers().putAll(matchers);
+        }
+        if (profileManagerFactory != null) {
+            config.setProfileManagerFactory(profileManagerFactory);
+        }
 
         return config;
     }
