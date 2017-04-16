@@ -2,6 +2,9 @@
   <img src="https://pac4j.github.io/pac4j/img/logo-dropwizard.png" width="300" />
 </p>
 
+[![Build Status](https://travis-ci.org/pac4j/dropwizard-pac4j.png?branch=master)](https://travis-ci.org/pac4j/dropwizard-pac4j)
+[![Maven Central](https://img.shields.io/maven-central/v/org.pac4j/dropwizard-pac4j.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.pac4j%22%20AND%20a%3A%22dropwizard-pac4j%22)
+
 # dropwizard-pac4j
 
 A [Dropwizard](http://www.dropwizard.io/) bundle for securing REST endpoints
@@ -239,11 +242,9 @@ If you have any question, please use the following mailing lists:
 
 The version 2.0.0-SNAPSHOT is under development.
 
-Maven artifacts are built via Travis:
-[![Build Status](https://travis-ci.org/pac4j/dropwizard-pac4j.png?branch=master)](https://travis-ci.org/pac4j/dropwizard-pac4j)
-and available in the
+Maven artifacts are built via Travis and available in the
 [Sonatype snapshots repository](https://oss.sonatype.org/content/repositories/snapshots/org/pac4j).
-This repository must be added in the Maven `pom.xml` file for example:
+This repository must be added in the Maven `settings.xml` or `pom.xml` files:
 
 ```xml
 <repositories>
