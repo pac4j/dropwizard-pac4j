@@ -85,7 +85,7 @@
     <dropwizard.version>1.1.0</dropwizard.version>
     <pac4j.version>2.0.0-RC3-SNAPSHOT</pac4j.version>
     <jax-rs-pac4j.version>2.0.0-RC3-SNAPSHOT</jax-rs-pac4j.version>
-    <j2e-pac4j.version>2.0.0-RC2</j2e-pac4j.version>
+    <j2e-pac4j.version>2.0.0-RC3-SNAPSHOT</j2e-pac4j.version>
   </properties>
 
   <dependencyManagement>
