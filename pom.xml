@@ -133,6 +133,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.pac4j</groupId>
+      <artifactId>pac4j-oauth</artifactId>
+      <version>${pac4j.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>io.dropwizard</groupId>
       <artifactId>dropwizard-testing</artifactId>
       <scope>test</scope>
