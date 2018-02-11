@@ -19,12 +19,12 @@ import org.pac4j.core.context.WebContext;
 import org.pac4j.core.engine.CallbackLogic;
 import org.pac4j.core.engine.LogoutLogic;
 import org.pac4j.core.engine.SecurityLogic;
-import org.pac4j.core.http.HttpActionAdapter;
-import org.pac4j.core.http.UrlResolver;
+import org.pac4j.core.http.adapter.HttpActionAdapter;
+import org.pac4j.core.http.ajax.AjaxRequestResolver;
+import org.pac4j.core.http.url.UrlResolver;
 import org.pac4j.core.matching.Matcher;
 import org.pac4j.core.profile.ProfileManager;
-import org.pac4j.jax.rs.annotations.Pac4JSecurity;
-import org.pac4j.jax.rs.pac4j.JaxRsConfig;
+import org.pac4j.jax.rs.pac4j.JaxRsAjaxRequestResolver;
 import org.pac4j.jax.rs.pac4j.JaxRsUrlResolver;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -58,9 +58,9 @@ public class Pac4jFactory {
 
     private LogoutLogic logoutLogic;
 
-    private String clientNameParameter;
-
     private String callbackUrl;
+
+    private AjaxRequestResolver ajaxRequestResolver = new JaxRsAjaxRequestResolver();
 
     private UrlResolver urlResolver = new JaxRsUrlResolver();
 
@@ -79,9 +79,7 @@ public class Pac4jFactory {
     @NotNull
     private List<Client> clients = new ArrayList<>();
 
-    private String defaultClient = null;
-
-    private String defaultClients = null;
+    private String defaultSecurityClients = null;
 
     @NotNull
     private Map<String, Authorizer> authorizers = new HashMap<>();
@@ -204,16 +202,6 @@ public class Pac4jFactory {
     }
 
     @JsonProperty
-    public String getClientNameParameter() {
-        return clientNameParameter;
-    }
-
-    @JsonProperty
-    public void setClientNameParameter(String clientNameParameter) {
-        this.clientNameParameter = clientNameParameter;
-    }
-
-    @JsonProperty
     public String getCallbackUrl() {
         return callbackUrl;
     }
@@ -254,46 +242,14 @@ public class Pac4jFactory {
         this.clients = clients;
     }
 
-    /**
-     * @since 1.1.0
-     * @return the name of the client to set with
-     *         {@link Clients#setDefaultClient(Client)}
-     */
     @JsonProperty
-    public String getDefaultClient() {
-        return defaultClient;
+    public String getDefaultSecurityClients() {
+        return defaultSecurityClients;
     }
 
-    /**
-     * @since 1.1.0
-     * @param defaultClient
-     *            the name of the client to set with
-     *            {@link Clients#setDefaultClient(Client)}
-     */
     @JsonProperty
-    public void setDefaultClient(String defaultClient) {
-        this.defaultClient = defaultClient;
-    }
-
-    /**
-     * @since 1.1.0
-     * @return the names of he clients to use by default with
-     *         {@link Pac4JSecurity}
-     */
-    @JsonProperty
-    public String getDefaultClients() {
-        return defaultClients;
-    }
-
-    /**
-     * @since 1.1.0
-     * @param defaultClients
-     *            the names of he clients to use by default with
-     *            {@link Pac4JSecurity}
-     */
-    @JsonProperty
-    public void setDefaultClients(String defaultClients) {
-        this.defaultClients = defaultClients;
+    public void setDefaultSecurityClients(String defaultSecurityClients) {
+        this.defaultSecurityClients = defaultSecurityClients;
     }
 
     @JsonProperty
@@ -304,6 +260,16 @@ public class Pac4jFactory {
     @JsonProperty
     public void setAuthorizers(Map<String, Authorizer> authorizers) {
         this.authorizers = authorizers;
+    }
+
+    @JsonProperty
+    public AjaxRequestResolver getAjaxRequestResolver() {
+        return ajaxRequestResolver;
+    }
+
+    @JsonProperty
+    public void setAjaxRequestResolver(AjaxRequestResolver ajaxRequestResolver) {
+        this.ajaxRequestResolver = ajaxRequestResolver;
     }
 
     @JsonProperty
@@ -369,12 +335,12 @@ public class Pac4jFactory {
     }
 
     public Config build() {
-        // either the whole Config is built from a ConfigFactory class, or we initialize a default JaxRsConfig
-        final JaxRsConfig config;
+        // either the whole Config is built from a ConfigFactory class, or we initialize a default Config
+        final Config config;
         if (configClass != null && !configProperties.isEmpty()) {
-            config = (JaxRsConfig) ConfigBuilder.build(configClass, configProperties);
+            config = ConfigBuilder.build(configClass, configProperties);
         } else {
-            config = new JaxRsConfig();
+            config = new Config();
         }
         Clients newClients = config.getClients();
         if (newClients == null) {
@@ -385,8 +351,6 @@ public class Pac4jFactory {
             newClients.setClients(new ArrayList<>());
         }
 
-        config.setDefaultClients(defaultClients);
-
         // we can take the clients built from the properties
         if (!clientsProperties.isEmpty()) {
             final PropertiesConfigFactory propertiesConfigFactory = new PropertiesConfigFactory(clientsProperties);
@@ -395,23 +359,19 @@ public class Pac4jFactory {
         }
         // and the clients directly defined in the YAML file
         if (!clients.isEmpty()) {
-            config.getClients().getClients().addAll(clients);
+            newClients.getClients().addAll(clients);
         }
 
         if (callbackUrl != null) {
             newClients.setCallbackUrl(callbackUrl);
         }
-        if (clientNameParameter != null) {
-            newClients.setClientNameParameter(clientNameParameter);
-        }
+        newClients.setAjaxRequestResolver(ajaxRequestResolver);
         newClients.setUrlResolver(urlResolver);
         if (!authorizationGenerators.isEmpty()) {
             newClients.getAuthorizationGenerators().addAll(authorizationGenerators);
         }
-
-        if (defaultClient != null) {
-            final Client defClient = newClients.findClient(defaultClient);
-            newClients.setDefaultClient(defClient);
+        if (defaultSecurityClients != null) {
+            newClients.setDefaultSecurityClients(defaultSecurityClients);
         }
 
         if (securityLogic != null) {

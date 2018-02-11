@@ -11,9 +11,10 @@ import org.pac4j.core.credentials.password.PasswordEncoder;
 import org.pac4j.core.engine.CallbackLogic;
 import org.pac4j.core.engine.LogoutLogic;
 import org.pac4j.core.engine.SecurityLogic;
-import org.pac4j.core.http.AjaxRequestResolver;
-import org.pac4j.core.http.HttpActionAdapter;
-import org.pac4j.core.http.UrlResolver;
+import org.pac4j.core.http.adapter.HttpActionAdapter;
+import org.pac4j.core.http.ajax.AjaxRequestResolver;
+import org.pac4j.core.http.callback.CallbackUrlResolver;
+import org.pac4j.core.http.url.UrlResolver;
 import org.pac4j.core.logout.LogoutActionBuilder;
 import org.pac4j.core.matching.Matcher;
 import org.pac4j.core.profile.creator.ProfileCreator;
@@ -54,6 +55,7 @@ public class DefaultFeatureSupport implements Pac4jFeatureSupport {
         // for Clients and Client subsclasses
         om.addMixIn(AjaxRequestResolver.class, ajaxRequestResolverMixin());
         om.addMixIn(UrlResolver.class, urlResolverMixin());
+        om.addMixIn(CallbackUrlResolver.class, callbackUrlResolverMixin());
         om.addMixIn(AuthorizationGenerator.class,
                 authorizationGeneratorMixin());
 
@@ -95,6 +97,10 @@ public class DefaultFeatureSupport implements Pac4jFeatureSupport {
     }
 
     private Class<?> urlResolverMixin() {
+        return Pac4jMixins.InstantiateByClassNameMixin.class;
+    }
+
+    private Class<?> callbackUrlResolverMixin() {
         return Pac4jMixins.InstantiateByClassNameMixin.class;
     }
 
