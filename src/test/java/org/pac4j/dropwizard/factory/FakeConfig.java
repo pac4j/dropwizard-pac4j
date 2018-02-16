@@ -1,8 +1,8 @@
 package org.pac4j.dropwizard.factory;
 
-import org.pac4j.jax.rs.pac4j.JaxRsConfig;
-
 import java.util.Map;
+
+import org.pac4j.core.config.Config;
 
 /**
  * Fake configuration for tests.
@@ -10,7 +10,7 @@ import java.util.Map;
  * @author Jerome Leleu
  * @since 2.0.0
  */
-public final class FakeConfig extends JaxRsConfig {
+public final class FakeConfig extends Config {
 
     private Map<String, String> properties;
 

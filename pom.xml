@@ -14,7 +14,7 @@
   <groupId>org.pac4j</groupId>
   <artifactId>dropwizard-pac4j</artifactId>
   <packaging>jar</packaging>
-  <version>2.0.3-SNAPSHOT</version>
+  <version>3.0.0-SNAPSHOT</version>
   <name>Dropwizard pac4j Support</name>
   <description>Dropwizard bundle adding support for the pac4j security engine</description>
   <url>https://github.com/pac4j/dropwizard-pac4j</url>
@@ -83,9 +83,9 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <dropwizard.version>1.2.2</dropwizard.version>
-    <pac4j.version>2.2.0</pac4j.version>
-    <jax-rs-pac4j.version>2.2.0-SNAPSHOT</jax-rs-pac4j.version>
-    <j2e-pac4j.version>3.0.0</j2e-pac4j.version>
+    <pac4j.version>3.0.0-SNAPSHOT</pac4j.version>
+    <jax-rs-pac4j.version>3.0.0-SNAPSHOT</jax-rs-pac4j.version>
+    <j2e-pac4j.version>4.0.0-SNAPSHOT</j2e-pac4j.version>
   </properties>
 
   <dependencyManagement>
