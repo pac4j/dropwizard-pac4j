@@ -83,7 +83,7 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <dropwizard.version>1.2.2</dropwizard.version>
-    <pac4j.version>2.2.0</pac4j.version>
+    <pac4j.version>2.2.1</pac4j.version>
     <jax-rs-pac4j.version>2.2.0-SNAPSHOT</jax-rs-pac4j.version>
     <j2e-pac4j.version>3.0.0</j2e-pac4j.version>
   </properties>
