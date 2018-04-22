@@ -22,9 +22,11 @@ public class BundleFactoryTest extends AbstractApplicationTest {
 
     }
 
-    private static final Condition<Object> CONDSI = new Condition<>(
-            s -> s instanceof ServletJaxRsContextFactoryProvider,
-            "pac4j singleton");
+    private static final Condition<Object> CONDCLASS = new Condition<>(
+            s -> {
+            		return s.equals(ServletJaxRsContextFactoryProvider.class);
+            	},
+            "pac4j class");
 
     @Test
     public void noPac4jInConfig() {
@@ -39,7 +41,7 @@ public class BundleFactoryTest extends AbstractApplicationTest {
         // registered anyway
         assertThat(om.findMixInClassFor(Client.class)).isNotNull();
         assertThat(env.jersey().getResourceConfig().getSingletons())
-                .doesNotHave(CONDSI);
+                .doesNotHave(CONDCLASS);
     }
 
     @Test
@@ -56,8 +58,8 @@ public class BundleFactoryTest extends AbstractApplicationTest {
         assertThat(config.getClients().getUrlResolver())
                 .isInstanceOf(JaxRsUrlResolver.class);
         assertThat(om.findMixInClassFor(Client.class)).isNotNull();
-        assertThat(env.jersey().getResourceConfig().getSingletons())
-                .haveAtLeastOne(CONDSI);
+        assertThat(env.jersey().getResourceConfig().getClasses())
+                .haveAtLeastOne(CONDCLASS);
 
         assertThat(env.getApplicationContext().getSessionHandler())
                 .isInstanceOf(SessionHandler.class);
