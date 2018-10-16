@@ -1,20 +1,16 @@
 package org.pac4j.dropwizard;
 
-import java.util.EnumSet;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
-
+import io.dropwizard.setup.Environment;
 import org.pac4j.core.config.Config;
+import org.pac4j.core.engine.SecurityLogic;
 import org.pac4j.dropwizard.Pac4jFactory.ServletCallbackFilterConfiguration;
 import org.pac4j.dropwizard.Pac4jFactory.ServletLogoutFilterConfiguration;
 import org.pac4j.dropwizard.Pac4jFactory.ServletSecurityFilterConfiguration;
-import org.pac4j.j2e.filter.AbstractConfigFilter;
-import org.pac4j.j2e.filter.CallbackFilter;
-import org.pac4j.j2e.filter.LogoutFilter;
-import org.pac4j.j2e.filter.SecurityFilter;
+import org.pac4j.j2e.filter.*;
 
-import io.dropwizard.setup.Environment;
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
+import java.util.EnumSet;
 
 /**
  * 
@@ -32,7 +28,15 @@ public final class J2EHelper {
     public static void registerSecurityFilter(Environment environment,
             Config config, ServletSecurityFilterConfiguration fConf) {
 
-        final SecurityFilter filter = new SecurityFilter();
+        final SecurityFilter filter = new SecurityFilter(config);
+        /*	Merely passing in config to the ctor above doesn't apply any security
+        	logic specified in the config. Seems like a bug in the SecurityFilter
+        	to me. Attempt to work around it by doing that work myself if I
+        	have any security logic set in the config.
+         */
+        SecurityLogic securityLogic = config.getSecurityLogic();
+        if (securityLogic != null)
+	        filter.setSecurityLogic(securityLogic);
 
         filter.setClients(fConf.getClients());
         filter.setAuthorizers(fConf.getAuthorizers());
