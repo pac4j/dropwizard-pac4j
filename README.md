@@ -109,7 +109,7 @@ pac4j:
   matchers:
     # this let the /user/session url be handled by the annotations
     excludeUserSession:
-      class: org.pac4j.core.matching.ExcludedPathMatcher
+      class: org.pac4j.core.matching.PathMatcher
       excludePath: ^/user/session$
   callbackUrl: /user/session
   defaultClient: DirectBasicAuthClient
