@@ -25,7 +25,7 @@ public class AbstractApplicationTest {
 
     public void setup(
             Class<? extends Application<TestConfiguration>> applicationClass,
-            String configPath, ConfigOverride... configOverrides) {
+            String configPath, ConfigOverride... configOverrides) throws Exception{
         dropwizardTestSupport = new DropwizardTestSupport<>(applicationClass,
                 ResourceHelpers.resourceFilePath(configPath), configOverrides);
         dropwizardTestSupport.before();

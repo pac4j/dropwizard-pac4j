@@ -27,7 +27,7 @@ public class EndToEndTest extends AbstractApplicationTest {
         }
     }
 
-    private void setup(ConfigOverride config) {
+    private void setup(ConfigOverride config) throws Exception {
         super.setup(App.class, "end-to-end-test.yaml", config);
     }
 
