@@ -3,7 +3,7 @@ package org.pac4j.dropwizard.factory;
 import org.pac4j.core.authorization.authorizer.IsAnonymousAuthorizer;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.config.ConfigFactory;
-import org.pac4j.core.matching.PathMatcher;
+import org.pac4j.core.matching.matcher.PathMatcher;
 
 import java.util.Map;
 

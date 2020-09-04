@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import javax.validation.constraints.NotNull;
 
@@ -15,15 +14,14 @@ import org.pac4j.core.client.Client;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.config.ConfigBuilder;
-import org.pac4j.core.context.WebContext;
 import org.pac4j.core.engine.CallbackLogic;
 import org.pac4j.core.engine.LogoutLogic;
 import org.pac4j.core.engine.SecurityLogic;
 import org.pac4j.core.http.adapter.HttpActionAdapter;
 import org.pac4j.core.http.ajax.AjaxRequestResolver;
 import org.pac4j.core.http.url.UrlResolver;
-import org.pac4j.core.matching.Matcher;
-import org.pac4j.core.profile.ProfileManager;
+import org.pac4j.core.matching.matcher.Matcher;
+import org.pac4j.core.profile.factory.ProfileManagerFactory;
 import org.pac4j.jax.rs.pac4j.JaxRsAjaxRequestResolver;
 import org.pac4j.jax.rs.pac4j.JaxRsUrlResolver;
 
@@ -33,9 +31,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Dropwizard configuration factory to configure pac4j's {@link Config},
  * {@link Clients}, global JAX-RS
  * {@link org.pac4j.jax.rs.filters.SecurityFilter}s as well as Servlet's
- * {@link org.pac4j.j2e.filter.SecurityFilter}s,
- * {@link org.pac4j.j2e.filter.CallbackFilter}s and
- * {@link org.pac4j.j2e.filter.LogoutFilter}s.
+ * {@link org.pac4j.jee.filter.SecurityFilter}s,
+ * {@link org.pac4j.jee.filter.CallbackFilter}s and
+ * {@link org.pac4j.jee.filter.LogoutFilter}s.
  *
  * @see Pac4jConfiguration
  * @see org.pac4j.core.config.Config
@@ -66,7 +64,7 @@ public class Pac4jFactory {
 
     private HttpActionAdapter httpActionAdapter;
 
-    private Function<WebContext, ProfileManager> profileManagerFactory;
+    private ProfileManagerFactory profileManagerFactory;
 
     private boolean sessionEnabled = true;
 
@@ -297,7 +295,7 @@ public class Pac4jFactory {
     }
 
     @JsonProperty
-    public Function<WebContext, ProfileManager> getProfileManagerFactory() {
+    public ProfileManagerFactory getProfileManagerFactory() {
         return profileManagerFactory;
     }
 
@@ -308,8 +306,7 @@ public class Pac4jFactory {
      *            manager
      */
     @JsonProperty
-    public void setProfileManagerFactory(
-            Function<WebContext, ProfileManager> profileManagerFactory) {
+    public void setProfileManagerFactory(ProfileManagerFactory profileManagerFactory) {
         this.profileManagerFactory = profileManagerFactory;
     }
 
@@ -393,7 +390,7 @@ public class Pac4jFactory {
             config.getMatchers().putAll(matchers);
         }
         if (profileManagerFactory != null) {
-            config.setProfileManagerFactory(profileManagerFactory);
+            config.setProfileManagerFactory("profileManagerFactory", profileManagerFactory);
         }
 
         return config;
@@ -469,7 +466,7 @@ public class Pac4jFactory {
 
     /**
      * @since 1.1.0
-     * @see org.pac4j.j2e.filter.SecurityFilter
+     * @see org.pac4j.jee.filter.SecurityFilter
      */
     public static class ServletSecurityFilterConfiguration
             extends SecurityFilterConfiguration {
@@ -544,7 +541,7 @@ public class Pac4jFactory {
 
     /**
      * @since 1.1.0
-     * @see org.pac4j.j2e.filter.CallbackFilter
+     * @see org.pac4j.jee.filter.CallbackFilter
      */
     public static class ServletCallbackFilterConfiguration {
 
@@ -600,7 +597,7 @@ public class Pac4jFactory {
 
     /**
      * @since 1.1.0
-     * @see org.pac4j.j2e.filter.LogoutFilter
+     * @see org.pac4j.jee.filter.LogoutFilter
      */
     public static class ServletLogoutFilterConfiguration {
 

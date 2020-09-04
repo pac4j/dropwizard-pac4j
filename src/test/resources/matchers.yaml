@@ -1,5 +1,5 @@
 matchers:
   excludeUserSession:
-    class: org.pac4j.core.matching.PathMatcher
+    class: org.pac4j.core.matching.matcher.PathMatcher
     excludedPatterns:
       - ^/user/session$
