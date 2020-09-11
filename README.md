@@ -257,7 +257,7 @@ If you have any questions, want to contribute or be notified about the new relea
 
 ## Development
 
-The version 4.0.0-SNAPSHOT is under development.
+The version 4.0.1-SNAPSHOT is under development.
 
 Maven artifacts are built via Travis and available in the
 [Sonatype snapshots repository](https://oss.sonatype.org/content/repositories/snapshots/org/pac4j).
