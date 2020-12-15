@@ -16,19 +16,19 @@ import org.pac4j.core.http.ajax.AjaxRequestResolver;
 import org.pac4j.core.http.callback.CallbackUrlResolver;
 import org.pac4j.core.http.url.UrlResolver;
 import org.pac4j.core.logout.LogoutActionBuilder;
-import org.pac4j.core.matching.Matcher;
+import org.pac4j.core.matching.matcher.Matcher;
 import org.pac4j.core.profile.creator.ProfileCreator;
-import org.pac4j.core.redirect.RedirectActionBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.dropwizard.setup.Bootstrap;
+import org.pac4j.core.redirect.RedirectionActionBuilder;
 
 /**
  * This can be specialized in order to redefine some of the mixins to customize
  * Jackson's behaviour to parse pac4j's {@link Pac4jFactory} in case things are
  * missing.
- * 
+ *
  * @author Victor Noel - Linagora
  * @since 1.0.0
  *
@@ -65,9 +65,9 @@ public class DefaultFeatureSupport implements Pac4jFeatureSupport {
         om.addMixIn(ProfileCreator.class, profileCreatorMixin());
 
         // for IndirectClient
-        om.addMixIn(RedirectActionBuilder.class, redirectActionBuilderMixin());
+        om.addMixIn(RedirectionActionBuilder.class, redirectionActionBuilderMixin());
         om.addMixIn(LogoutActionBuilder.class, logoutActionBuilderMixin());
-        
+
         // for some of the Authenticators
         om.addMixIn(PasswordEncoder.class, passwordEncoderMixin());
     }
@@ -104,7 +104,7 @@ public class DefaultFeatureSupport implements Pac4jFeatureSupport {
         return Pac4jMixins.InstantiateByClassNameMixin.class;
     }
 
-    private Class<?> redirectActionBuilderMixin() {
+    private Class<?> redirectionActionBuilderMixin() {
         return Pac4jMixins.InstantiateByClassNameMixin.class;
     }
 

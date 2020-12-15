@@ -21,7 +21,7 @@ applications:
   which:
     - connects the values defined in the `pac4j` configuration section to the
       [`jax-rs-pac4j`](https://github.com/pac4j/jax-rs-pac4j/) and
-      [`j2e-pac4j`](https://github.com/pac4j/j2e-pac4j/) libraries.
+      [`jee-pac4j`](https://github.com/pac4j/jee-pac4j/) libraries.
     - enables the use of the annotation provided in by the
       [`jax-rs-pac4j`](https://github.com/pac4j/jax-rs-pac4j/) library.
     - enables Jetty session management by default.
@@ -31,9 +31,9 @@ applications:
 You need to add a dependency on:
 
 - the `dropwizard-pac4j` library (<em>groupId</em>: **org.pac4j**, *version*:
-**3.0.0**)
+**4.0.0**)
 - the appropriate `pac4j` [submodules](http://www.pac4j.org/docs/clients.html)
-(<em>groupId</em>: **org.pac4j**, *version*: **3.0.0**): `pac4j-oauth` for
+(<em>groupId</em>: **org.pac4j**, *version*: **4.0.3**): `pac4j-oauth` for
 OAuth support (Facebook, Twitter...), `pac4j-cas` for CAS support, `pac4j-ldap`
 for LDAP authentication, etc.
 
@@ -121,25 +121,25 @@ pac4j:
 
 - `globalFilters` to declare global filters: the `clients`, `authorizers`,
 `matchers`, `multiProfile` and `skipResponse` properties directly map to
-[the parameters](https://github.com/pac4j/jax-rs-pac4j/#3-protect-urls-securityfilter)
+[the parameters](https://github.com/pac4j/jax-rs-pac4j/wiki/Apply-security)
 used by `org.pac4j.jax.rs.filter.SecurityFilter`.
 
 - `servlet` to declare servlet-level filters:
  - `security`: the `clients`, `authorizers`, `matchers` and `multiProfile`
    properties directly map to
-   [the parameters](https://github.com/pac4j/j2e-pac4j#3-protect-urls-securityfilter)
-   used by `org.pac4j.j2e.filter.SecurityFilter`.
+   [the parameters](https://github.com/pac4j/jee-pac4j/wiki/Apply-security)
+   used by `org.pac4j.jee.filter.SecurityFilter`.
    The `mapping` property is used to optionally specify urls to which this
    filter will be applied to, defaulting to all urls (`/*`).
  - `callback`: the `defaultUrl`, `renewSession` and `multiProfile` properties
    directly map to
-   [the parameters](https://github.com/pac4j/j2e-pac4j#4-define-the-callback-endpoint-only-for-indirect-clients-callbackfilter)
-   used by `org.pac4j.j2e.filter.CallbackFilter`.
+   [the parameters](https://github.com/pac4j/jee-pac4j/wiki/Callback-configuration)
+   used by `org.pac4j.jee.filter.CallbackFilter`.
    The `mapping` property is used to specify urls to which this filter will be
    applied to. It does not usually contains a wildcard.
  - `logout`: the `defaultUrl` and `logoutUrlPattern` properties directly map to
-   [the parameters](https://github.com/pac4j/j2e-pac4j#6-logout-applicationlogoutfilter)
-   used by `org.pac4j.j2e.filter.ApplicationLogoutFilter`.
+   [the parameters](https://github.com/pac4j/jee-pac4j/wiki/Logout-configuration)
+   used by `org.pac4j.jee.filter.LogoutFilter`.
    The `mapping` property is used to specify urls to which this filter will be
    applied to. It does not usually contains a wildcard.
 
@@ -239,21 +239,25 @@ public final ResourceTestRule resources = ResourceTestRule.builder()
 
 See the [release notes](https://github.com/pac4j/dropwizard-pac4j/wiki/Release-Notes).
 Learn more by browsing the
-[dropwizard-pac4j Javadoc](http://www.javadoc.io/doc/org.pac4j/dropwizard-pac4j/2.0.2)
-and the [pac4j Javadoc](http://www.pac4j.org/apidocs/pac4j/2.1.0/index.html).
+[dropwizard-pac4j Javadoc](http://www.javadoc.io/doc/org.pac4j/dropwizard-pac4j/4.0.0)
+and the [pac4j Javadoc](https://www.javadoc.io/doc/org.pac4j/pac4j-core/4.0.3/index.html).
 
 
 ## Need help?
 
-If you have any question, please use the following mailing lists:
+If you need commercial support (premium support or new/specific features), contact us at [info@pac4j.org](mailto:info@pac4j.org).
 
-- [pac4j users](https://groups.google.com/forum/?hl=en#!forum/pac4j-users)
-- [pac4j developers](https://groups.google.com/forum/?hl=en#!forum/pac4j-dev)
+If you have any questions, want to contribute or be notified about the new releases and security fixes, please subscribe to the following [mailing lists](http://www.pac4j.org/mailing-lists.html):
+
+- [pac4j-users](https://groups.google.com/forum/?hl=en#!forum/pac4j-users)
+- [pac4j-developers](https://groups.google.com/forum/?hl=en#!forum/pac4j-dev)
+- [pac4j-announce](https://groups.google.com/forum/?hl=en#!forum/pac4j-announce)
+- [pac4j-security](https://groups.google.com/forum/#!forum/pac4j-security)
 
 
 ## Development
 
-The version 3.0.0-SNAPSHOT is under development.
+The version 4.0.1-SNAPSHOT is under development.
 
 Maven artifacts are built via Travis and available in the
 [Sonatype snapshots repository](https://oss.sonatype.org/content/repositories/snapshots/org/pac4j).

@@ -9,15 +9,15 @@ import org.pac4j.core.config.Config;
 import org.pac4j.dropwizard.Pac4jFactory.ServletCallbackFilterConfiguration;
 import org.pac4j.dropwizard.Pac4jFactory.ServletLogoutFilterConfiguration;
 import org.pac4j.dropwizard.Pac4jFactory.ServletSecurityFilterConfiguration;
-import org.pac4j.j2e.filter.AbstractConfigFilter;
-import org.pac4j.j2e.filter.CallbackFilter;
-import org.pac4j.j2e.filter.LogoutFilter;
-import org.pac4j.j2e.filter.SecurityFilter;
 
 import io.dropwizard.setup.Environment;
+import org.pac4j.jee.filter.AbstractConfigFilter;
+import org.pac4j.jee.filter.CallbackFilter;
+import org.pac4j.jee.filter.LogoutFilter;
+import org.pac4j.jee.filter.SecurityFilter;
 
 /**
- * 
+ *
  * @author Evan Meagher
  * @author Victor Noel - Linagora
  * @since 1.1.0
@@ -69,7 +69,7 @@ public final class J2EHelper {
     }
 
     private static void registerFilter(Environment environment, Config config,
-            AbstractConfigFilter filter, String mapping) {
+                                       AbstractConfigFilter filter, String mapping) {
 
         filter.setConfigOnly(config);
 

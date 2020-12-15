@@ -16,3 +16,4 @@ pac4j:
           class: org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator
   globalFilters:
     - clients: ""
+      authorizers: "none"

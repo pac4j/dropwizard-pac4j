@@ -17,3 +17,4 @@ pac4j:
   servlet:
     security:
       - clients: ""
+        authorizers: "none"

@@ -56,6 +56,11 @@
 
   <developers>
     <developer>
+      <id>leleuj</id>
+      <name>Jerome LELEU</name>
+      <email>leleuj@gmail.com</email>
+    </developer>
+    <developer>
       <id>victornoel</id>
       <name>Victor NOEL</name>
       <url>https://github.com/victornoel</url>
@@ -86,9 +91,9 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <dropwizard.version>2.0.17</dropwizard.version>
-    <pac4j.version>3.8.2</pac4j.version>
-    <jax-rs-pac4j.version>3.0.2</jax-rs-pac4j.version>
-    <j2e-pac4j.version>4.1.0</j2e-pac4j.version>
+    <pac4j.version>4.2.0</pac4j.version>
+    <jax-rs-pac4j.version>4.0.0</jax-rs-pac4j.version>
+    <jee-pac4j.version>5.0.0</jee-pac4j.version>
   </properties>
 
   <dependencyManagement>
@@ -245,11 +250,23 @@
       <groupId>org.pac4j</groupId>
       <artifactId>jersey-pac4j</artifactId>
       <version>${jax-rs-pac4j.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.pac4j</groupId>
+          <artifactId>pac4j-core</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.pac4j</groupId>
-      <artifactId>j2e-pac4j</artifactId>
-      <version>${j2e-pac4j.version}</version>
+      <artifactId>jee-pac4j</artifactId>
+      <version>${jee-pac4j.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.pac4j</groupId>
+          <artifactId>pac4j-core</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.pac4j</groupId>
@@ -285,17 +302,17 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.5.1</version>
+        <version>3.8.1</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>3.0.1</version>
+        <version>3.2.1</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.4</version>
+        <version>3.2.0</version>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -320,7 +337,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
-        <version>3.9.0</version>
+        <version>3.14.0</version>
         <configuration>
           <includeTests>true</includeTests>
           <printFailingErrors>true</printFailingErrors>
@@ -338,7 +355,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.0.0-M1</version>
+        <version>3.0.0-M3</version>
         <executions>
           <execution>
             <id>dependency-convergence</id>
