@@ -27,7 +27,7 @@ public class BundleFactoryTest extends AbstractApplicationTest {
             "pac4j singleton");
 
     @Test
-    public void noPac4jInConfig() {
+    public void noPac4jInConfig() throws Exception{
         setup(App.class, "no-pac4j.yaml");
 
         App app = dropwizardTestSupport.getApplication();
@@ -43,7 +43,7 @@ public class BundleFactoryTest extends AbstractApplicationTest {
     }
 
     @Test
-    public void emptyPac4jInConfig() {
+    public void emptyPac4jInConfig() throws Exception{
         setup(App.class, "empty-pac4j.yaml");
 
         App app = dropwizardTestSupport.getApplication();
@@ -64,7 +64,7 @@ public class BundleFactoryTest extends AbstractApplicationTest {
     }
 
     @Test
-    public void sessionEnabledForced() {
+    public void sessionEnabledForced() throws Exception {
         setup(App.class, "empty-pac4j.yaml",
                 ConfigOverride.config("pac4j.sessionEnabled", "true"));
 
@@ -79,7 +79,7 @@ public class BundleFactoryTest extends AbstractApplicationTest {
     }
 
     @Test
-    public void sessiondisabledForced() {
+    public void sessiondisabledForced() throws Exception {
         setup(App.class, "empty-pac4j.yaml",
                 ConfigOverride.config("pac4j.sessionEnabled", "false"));
 
