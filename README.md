@@ -10,6 +10,8 @@
 A [Dropwizard](http://www.dropwizard.io/) bundle for securing REST endpoints
 using [pac4j](http://www.pac4j.org/).
 
+Versions <= 4.x are based on Dropwizard v1.x while versions >= 5.x are based on Dropwizard v2.x (JDK 11).
+
 ## Usage
 
 `dropwizard-pac4j` provides two components which must be integrated into
@@ -245,19 +247,12 @@ and the [pac4j Javadoc](https://www.javadoc.io/doc/org.pac4j/pac4j-core/4.0.3/in
 
 ## Need help?
 
-If you need commercial support (premium support or new/specific features), contact us at [info@pac4j.org](mailto:info@pac4j.org).
-
-If you have any questions, want to contribute or be notified about the new releases and security fixes, please subscribe to the following [mailing lists](http://www.pac4j.org/mailing-lists.html):
-
-- [pac4j-users](https://groups.google.com/forum/?hl=en#!forum/pac4j-users)
-- [pac4j-developers](https://groups.google.com/forum/?hl=en#!forum/pac4j-dev)
-- [pac4j-announce](https://groups.google.com/forum/?hl=en#!forum/pac4j-announce)
-- [pac4j-security](https://groups.google.com/forum/#!forum/pac4j-security)
+You can use the [mailing lists](http://www.pac4j.org/mailing-lists.html) or the [commercial support](http://www.pac4j.org/commercial-support.html).
 
 
 ## Development
 
-The version 4.0.1-SNAPSHOT is under development.
+The version 5.0.0-SNAPSHOT is under development.
 
 Maven artifacts are built via Travis and available in the
 [Sonatype snapshots repository](https://oss.sonatype.org/content/repositories/snapshots/org/pac4j).
