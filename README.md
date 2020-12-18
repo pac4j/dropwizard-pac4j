@@ -10,7 +10,7 @@
 A [Dropwizard](http://www.dropwizard.io/) bundle for securing REST endpoints
 using [pac4j](http://www.pac4j.org/).
 
-Versions <= 4.x are based on Dropwizard v1.x while versions >= 5.x are based on Dropwizard v2.x (JDK 11).
+**The new version 5.0.0 is based on Dropwizard v2.x (JDK 11)** while previous versions were based on Dropwizard v1.x.
 
 ## Usage
 
@@ -33,9 +33,9 @@ applications:
 You need to add a dependency on:
 
 - the `dropwizard-pac4j` library (<em>groupId</em>: **org.pac4j**, *version*:
-**4.0.0**)
+**5.0.0**)
 - the appropriate `pac4j` [submodules](http://www.pac4j.org/docs/clients.html)
-(<em>groupId</em>: **org.pac4j**, *version*: **4.0.3**): `pac4j-oauth` for
+(<em>groupId</em>: **org.pac4j**, *version*: **4.3.0**): `pac4j-oauth` for
 OAuth support (Facebook, Twitter...), `pac4j-cas` for CAS support, `pac4j-ldap`
 for LDAP authentication, etc.
 
@@ -241,8 +241,8 @@ public final ResourceTestRule resources = ResourceTestRule.builder()
 
 See the [release notes](https://github.com/pac4j/dropwizard-pac4j/wiki/Release-Notes).
 Learn more by browsing the
-[dropwizard-pac4j Javadoc](http://www.javadoc.io/doc/org.pac4j/dropwizard-pac4j/4.0.0)
-and the [pac4j Javadoc](https://www.javadoc.io/doc/org.pac4j/pac4j-core/4.0.3/index.html).
+[dropwizard-pac4j Javadoc](http://www.javadoc.io/doc/org.pac4j/dropwizard-pac4j/5.0.0)
+and the [pac4j Javadoc](https://www.javadoc.io/doc/org.pac4j/pac4j-core/4.3.0/index.html).
 
 
 ## Need help?
@@ -252,7 +252,7 @@ You can use the [mailing lists](http://www.pac4j.org/mailing-lists.html) or the 
 
 ## Development
 
-The version 5.0.0-SNAPSHOT is under development.
+The version 5.0.1-SNAPSHOT is under development.
 
 Maven artifacts are built via Travis and available in the
 [Sonatype snapshots repository](https://oss.sonatype.org/content/repositories/snapshots/org/pac4j).
