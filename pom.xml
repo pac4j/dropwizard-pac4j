@@ -187,7 +187,7 @@
       <dependency>
         <groupId>org.glassfish.jersey.core</groupId>
         <artifactId>jersey-server</artifactId>
-        <version>2.34</version>
+        <version>3.0.2</version>
       </dependency>
       <!-- Required for dependency convergence -->
       <dependency>
