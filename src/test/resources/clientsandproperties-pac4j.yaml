@@ -1,7 +1,0 @@
-clientsProperties:
-  facebook.id: fbId
-  facebook.secret: fbSecret
-clients:
-  - org.pac4j.http.client.direct.DirectBasicAuthClient:
-      authenticator:
-        class: org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator
