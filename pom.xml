@@ -205,7 +205,7 @@
       <dependency>
         <groupId>org.objenesis</groupId>
         <artifactId>objenesis</artifactId>
-        <version>3.1</version>
+        <version>3.3</version>
       </dependency>
       <dependency>
         <groupId>org.pac4j</groupId>
