@@ -145,7 +145,7 @@
       <dependency>
         <groupId>org.checkerframework</groupId>
         <artifactId>checker-qual</artifactId>
-        <version>3.22.2</version>
+        <version>3.24.0</version>
       </dependency>
       <!-- Required for dependency convergence -->
       <dependency>
