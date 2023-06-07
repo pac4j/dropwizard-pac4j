@@ -21,7 +21,7 @@ import org.pac4j.core.profile.creator.ProfileCreator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.core.setup.Bootstrap;
 import org.pac4j.core.redirect.RedirectionActionBuilder;
 
 /**

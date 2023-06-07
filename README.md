@@ -10,7 +10,12 @@
 A [Dropwizard](http://www.dropwizard.io/) bundle for securing REST endpoints
 using [pac4j](http://www.pac4j.org/).
 
-**The new version 5.0.0 is based on Dropwizard v2.x (JDK 11)** while previous versions were based on Dropwizard v1.x.
+| dropwizard-pac4j | JDK | pac4j | jax-rs-pac4j | Dropwizard |
+|------------------|-----|-------|--------------|------------|
+| version >= 6     | 11  | v5    | v6           | v4         |
+| version >= 5     | 11  | v4    | v4           | v2         |
+| version >= 4     | 8   | v4    | v4           | v1         |
+| version >= 3     | 8   | v3    | v3           | v1         |
 
 ## Usage
 
@@ -122,18 +127,18 @@ pac4j:
 ```
 
 - `globalFilters` to declare global filters: the `clients`, `authorizers`,
-`matchers`, `multiProfile` and `skipResponse` properties directly map to
+`matchers`, and `skipResponse` properties directly map to
 [the parameters](https://github.com/pac4j/jax-rs-pac4j/wiki/Apply-security)
 used by `org.pac4j.jax.rs.filter.SecurityFilter`.
 
 - `servlet` to declare servlet-level filters:
- - `security`: the `clients`, `authorizers`, `matchers` and `multiProfile`
+ - `security`: the `clients`, `authorizers`, and `matchers`
    properties directly map to
    [the parameters](https://github.com/pac4j/jee-pac4j/wiki/Apply-security)
    used by `org.pac4j.jee.filter.SecurityFilter`.
    The `mapping` property is used to optionally specify urls to which this
    filter will be applied to, defaulting to all urls (`/*`).
- - `callback`: the `defaultUrl`, `renewSession` and `multiProfile` properties
+ - `callback`: the `defaultUrl`, and `renewSession` properties
    directly map to
    [the parameters](https://github.com/pac4j/jee-pac4j/wiki/Callback-configuration)
    used by `org.pac4j.jee.filter.CallbackFilter`.
