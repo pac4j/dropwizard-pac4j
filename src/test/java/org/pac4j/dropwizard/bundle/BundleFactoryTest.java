@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.assertj.core.api.Condition;
 import org.eclipse.jetty.server.session.SessionHandler;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.config.Config;
 import org.pac4j.dropwizard.AbstractApplicationTest;
@@ -13,7 +13,7 @@ import org.pac4j.jax.rs.servlet.features.ServletJaxRsContextFactoryProvider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import io.dropwizard.testing.ConfigOverride;
 
 public class BundleFactoryTest extends AbstractApplicationTest {

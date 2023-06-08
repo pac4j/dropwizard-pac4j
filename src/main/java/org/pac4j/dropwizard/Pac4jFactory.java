@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import org.pac4j.config.client.PropertiesConfigFactory;
 import org.pac4j.core.authorization.authorizer.Authorizer;
@@ -496,8 +496,6 @@ public class Pac4jFactory {
 
         private String matchers;
 
-        private Boolean multiProfile;
-
         @JsonProperty
         public String getClients() {
             return clients;
@@ -514,11 +512,6 @@ public class Pac4jFactory {
         }
 
         @JsonProperty
-        public Boolean getMultiProfile() {
-            return multiProfile;
-        }
-
-        @JsonProperty
         public void setClients(String clients) {
             this.clients = clients;
         }
@@ -531,11 +524,6 @@ public class Pac4jFactory {
         @JsonProperty
         public void setMatchers(String matchers) {
             this.matchers = matchers;
-        }
-
-        @JsonProperty
-        public void setMultiProfile(Boolean multiProfile) {
-            this.multiProfile = multiProfile;
         }
     }
 
@@ -550,8 +538,6 @@ public class Pac4jFactory {
 
         private String defaultUrl;
 
-        private Boolean multiProfile;
-
         private Boolean renewSession;
 
         @JsonProperty
@@ -562,11 +548,6 @@ public class Pac4jFactory {
         @JsonProperty
         public String getDefaultUrl() {
             return defaultUrl;
-        }
-
-        @JsonProperty
-        public Boolean getMultiProfile() {
-            return multiProfile;
         }
 
         @JsonProperty
@@ -582,11 +563,6 @@ public class Pac4jFactory {
         @JsonProperty
         public void setDefaultUrl(String defaultUrl) {
             this.defaultUrl = defaultUrl;
-        }
-
-        @JsonProperty
-        public void setMultiProfile(Boolean multiProfile) {
-            this.multiProfile = multiProfile;
         }
 
         @JsonProperty

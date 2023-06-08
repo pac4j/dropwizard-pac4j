@@ -1,18 +1,18 @@
 package org.pac4j.dropwizard;
 
-import javax.ws.rs.client.Client;
+import jakarta.ws.rs.client.Client;
 
 import org.glassfish.jersey.client.JerseyClientBuilder;
-import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Charsets;
 import com.google.common.io.BaseEncoding;
 
-import io.dropwizard.Application;
-import io.dropwizard.Configuration;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.setup.Bootstrap;
+import io.dropwizard.core.setup.Environment;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.DropwizardTestSupport;
 import io.dropwizard.testing.ResourceHelpers;
@@ -31,7 +31,7 @@ public class AbstractApplicationTest {
         dropwizardTestSupport.before();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         dropwizardTestSupport.after();
         client.close();

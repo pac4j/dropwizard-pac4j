@@ -10,24 +10,26 @@ import org.pac4j.dropwizard.Pac4jFactory.ServletCallbackFilterConfiguration;
 import org.pac4j.dropwizard.Pac4jFactory.ServletLogoutFilterConfiguration;
 import org.pac4j.dropwizard.Pac4jFactory.ServletSecurityFilterConfiguration;
 import org.pac4j.jax.rs.features.JaxRsConfigProvider;
+import org.pac4j.jax.rs.features.JaxRsSessionStoreProvider;
 import org.pac4j.jax.rs.features.Pac4JSecurityFeature;
 import org.pac4j.jax.rs.features.Pac4JSecurityFilterFeature;
 import org.pac4j.jax.rs.filters.SecurityFilter;
 import org.pac4j.jax.rs.jersey.features.Pac4JValueFactoryProvider;
+import org.pac4j.jax.rs.servlet.features.Pac4JServletFeature;
 import org.pac4j.jax.rs.servlet.features.ServletJaxRsContextFactoryProvider;
 
-import io.dropwizard.Application;
-import io.dropwizard.Configuration;
-import io.dropwizard.ConfiguredBundle;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.ConfiguredBundle;
+import io.dropwizard.core.setup.Bootstrap;
+import io.dropwizard.core.setup.Environment;
 import io.dropwizard.jetty.MutableServletContextHandler;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
 
 /**
  * A {@link ConfiguredBundle} which sets up {@link Pac4JSecurityFeature},
  * {@link Pac4JValueFactoryProvider} as well as installs {@link SecurityFilter}s
  * into a Dropwizard application's Jersey filter chain.
- * 
+ *
  * @author Evan Meagher
  * @author Victor Noel - Linagora
  * @since 1.0.0
@@ -48,7 +50,7 @@ public abstract class Pac4jBundle<T extends Configuration>
      * In case of override, do not forget to call
      * {@code super.supportedFeatures()} to get the default features, or to
      * redefine them instead!
-     * 
+     *
      * @see DefaultFeatureSupport
      * @return the features to support for configuration parsing
      */
@@ -67,14 +69,15 @@ public abstract class Pac4jBundle<T extends Configuration>
             config = pac4j.build();
 
             environment.jersey().register(new JaxRsConfigProvider(config));
+            environment.jersey().register(new JaxRsSessionStoreProvider(config));
+            environment.jersey().register(new Pac4JServletFeature(config));
 
             for (JaxRsSecurityFilterConfiguration fConf : pac4j
                     .getGlobalFilters()) {
                 environment.jersey()
                         .register(new Pac4JSecurityFilterFeature(
                                 fConf.getSkipResponse(), fConf.getAuthorizers(),
-                                fConf.getClients(), fConf.getMatchers(),
-                                fConf.getMultiProfile()));
+                                fConf.getClients(), fConf.getMatchers()));
             }
 
             for (ServletSecurityFilterConfiguration fConf : pac4j.getServlet()
@@ -107,7 +110,7 @@ public abstract class Pac4jBundle<T extends Configuration>
     /**
      * Override if needed, but prefer to exploit
      * {@link Pac4jFactory#setSessionEnabled(boolean)} first.
-     * 
+     *
      * @param environment
      *            the dropwizard {@link Environment}
      * @since 1.1.0
@@ -123,7 +126,7 @@ public abstract class Pac4jBundle<T extends Configuration>
     /**
      * To be used only after this bundle has been run (i.e., in the
      * {@link Application#run(Configuration, Environment)} method.
-     * 
+     *
      * @return the {@link Config} built during
      *         {@link #run(Configuration, Environment)} execution.
      */

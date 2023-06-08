@@ -2,13 +2,12 @@ package org.pac4j.dropwizard;
 
 import org.pac4j.core.config.Config;
 
-import io.dropwizard.Bundle;
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Configuration;
 
 /**
- * 
- * {@link Bundle}s can extend this to get a {@link Pac4jFactory}.
- * 
+ *
+ * {@link io.dropwizard.core.ConfiguredBundle}s can extend this to get a {@link Pac4jFactory}.
+ *
  * @author Evan Meagher
  * @since 1.0.0
  *
@@ -18,9 +17,9 @@ import io.dropwizard.Configuration;
 public interface Pac4jConfiguration<T extends Configuration> {
 
     /**
-     * The factory can comes from the configuration but also can be built by
+     * The factory can come from the configuration but also can be built by
      * hand in this method if desired.
-     * 
+     *
      * @param configuration
      *            the application's configuration
      * @return a {@link Pac4jFactory} that will be used to build a pac4j
