@@ -2,8 +2,8 @@ package org.pac4j.dropwizard;
 
 import java.util.EnumSet;
 
-import jakarta.servlet.DispatcherType;
-import jakarta.servlet.FilterRegistration;
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
 
 import org.pac4j.core.config.Config;
 import org.pac4j.dropwizard.Pac4jFactory.ServletCallbackFilterConfiguration;

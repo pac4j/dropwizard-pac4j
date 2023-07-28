@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 
 import org.pac4j.config.client.PropertiesConfigFactory;
 import org.pac4j.core.authorization.authorizer.Authorizer;
@@ -496,6 +496,8 @@ public class Pac4jFactory {
 
         private String matchers;
 
+        private Boolean multiProfile;
+
         @JsonProperty
         public String getClients() {
             return clients;
@@ -512,9 +514,15 @@ public class Pac4jFactory {
         }
 
         @JsonProperty
+        public Boolean getMultiProfile() {
+            return multiProfile;
+        }
+
+        @JsonProperty
         public void setClients(String clients) {
             this.clients = clients;
         }
+
 
         @JsonProperty
         public void setAuthorizers(String authorizers) {
@@ -525,6 +533,12 @@ public class Pac4jFactory {
         public void setMatchers(String matchers) {
             this.matchers = matchers;
         }
+
+        @JsonProperty
+        public void setMultiProfile(Boolean multiProfile) {
+            this.multiProfile = multiProfile;
+        }
+
     }
 
     /**
