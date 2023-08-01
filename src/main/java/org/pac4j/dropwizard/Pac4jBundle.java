@@ -77,7 +77,8 @@ public abstract class Pac4jBundle<T extends Configuration>
                 environment.jersey()
                         .register(new Pac4JSecurityFilterFeature(
                                 fConf.getSkipResponse(), fConf.getAuthorizers(),
-                                fConf.getClients(), fConf.getMatchers()));
+                                fConf.getClients(), fConf.getMatchers(),
+                                fConf.getMultiProfile()));
             }
 
             for (ServletSecurityFilterConfiguration fConf : pac4j.getServlet()

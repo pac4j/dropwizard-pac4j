@@ -1,6 +1,6 @@
 package org.pac4j.dropwizard;
 
-import jakarta.ws.rs.client.Client;
+import javax.ws.rs.client.Client;
 
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.jupiter.api.AfterEach;
