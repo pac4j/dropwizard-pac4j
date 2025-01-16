@@ -90,7 +90,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
-    <dropwizard.version>4.0.10</dropwizard.version>
+    <dropwizard.version>4.0.12</dropwizard.version>
     <pac4j.version>5.7.7</pac4j.version>
     <jax-rs-pac4j.version>6.0.1</jax-rs-pac4j.version>
     <jee-pac4j.version>7.1.0</jee-pac4j.version>
