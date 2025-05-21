@@ -2,7 +2,6 @@
   <img src="https://pac4j.github.io/pac4j/img/logo-dropwizard.png" width="300" />
 </p>
 
-[![Build Status](https://travis-ci.org/pac4j/dropwizard-pac4j.png?branch=master)](https://travis-ci.org/pac4j/dropwizard-pac4j)
 [![Maven Central](https://img.shields.io/maven-central/v/org.pac4j/dropwizard-pac4j.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.pac4j%22%20AND%20a%3A%22dropwizard-pac4j%22)
 
 # dropwizard-pac4j
@@ -258,18 +257,16 @@ You can use the [mailing lists](http://www.pac4j.org/mailing-lists.html) or the 
 
 ## Development
 
-The version 5.0.1-SNAPSHOT is under development.
+The version 6.0.1-SNAPSHOT is under development.
 
-Maven artifacts are built via Travis and available in the
-[Sonatype snapshots repository](https://oss.sonatype.org/content/repositories/snapshots/org/pac4j).
-This repository must be added in the Maven `settings.xml` or `pom.xml` files:
+Maven artifacts are built via Github Actions and available in the Central Portal Snapshots repository. This repository must be added in the Maven `pom.xml` file for example:
 
 ```xml
 <repositories>
   <repository>
-    <id>sonatype-nexus-snapshots</id>
-    <name>Sonatype Nexus Snapshots</name>
-    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    <name>Central Portal Snapshots</name>
+    <id>central-portal-snapshots</id>
+    <url>https://central.sonatype.com/repository/maven-snapshots/</url>
     <releases>
       <enabled>false</enabled>
     </releases>
