@@ -113,7 +113,7 @@
     <pac4j.version>5.7.7</pac4j.version>
     <jax-rs-pac4j.version>6.0.1</jax-rs-pac4j.version>
     <jee-pac4j.version>7.1.0</jee-pac4j.version>
-    <junit5.version>5.12.2</junit5.version>
+    <junit5.version>5.13.0</junit5.version>
   </properties>
 
   <dependencyManagement>
