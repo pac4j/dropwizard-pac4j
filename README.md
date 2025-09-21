@@ -165,7 +165,7 @@ Their name can be used in `filter`'s `authorizers` as well as in the
 
 - `clients`: the key is the class of the `Client` and its instance
 is configured based on the properties. Its name is by default the short
-name of its class, but it can also be set explictly.
+name of its class, but it can also be set explicitly.
 Their name can be used in `filter`'s `clients` as well as in the
 `Pac4JSecurity` annotation.
 
@@ -181,7 +181,7 @@ configured via `clients`. They will be used as the default value for the
 To specify instances of `Client`, `Authenticator`, `PasswordEncoder`,
 `CredentialsExtractor`, `ProfileCreator`, `AuthorizationGenerator`,
 `Authorizer`, `Matcher`, `CallbackUrlResolver`, `HttpActionAdapter`
-and `RedirectActionBuilder`, it only necessary to refer to their class name
+and `RedirectActionBuilder`, it is only necessary to refer to their class name
 using the `class` key as above and the other properties are set on the
 instantiated object.
 
@@ -193,7 +193,7 @@ within Servlet filters are only relative to the dropwizard
 `applicationContext`.
 
 For Jersey, this also includes `callbackUrl`s, enforced by
-`JaxRsCallbackUrlResolver`, which is the default`CallbackUrlResolver` in the
+`JaxRsCallbackUrlResolver`, which is the default `CallbackUrlResolver` in the
 config if not overridden.
 
 #### Advanced Configuration
