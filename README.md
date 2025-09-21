@@ -245,9 +245,6 @@ public final ResourceTestRule resources = ResourceTestRule.builder()
 ## Release notes
 
 See the [release notes](https://github.com/pac4j/dropwizard-pac4j/wiki/Release-Notes).
-Learn more by browsing the
-[dropwizard-pac4j Javadoc](http://www.javadoc.io/doc/org.pac4j/dropwizard-pac4j/5.0.0)
-and the [pac4j Javadoc](https://www.javadoc.io/doc/org.pac4j/pac4j-core/4.3.0/index.html).
 
 
 ## Need help?
