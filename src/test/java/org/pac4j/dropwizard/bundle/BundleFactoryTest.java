@@ -3,7 +3,7 @@ package org.pac4j.dropwizard.bundle;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.assertj.core.api.Condition;
-import org.eclipse.jetty.server.session.SessionHandler;
+import org.eclipse.jetty.ee10.servlet.SessionHandler;
 import org.junit.jupiter.api.Test;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.config.Config;

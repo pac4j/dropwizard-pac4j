@@ -3,7 +3,7 @@ package org.pac4j.dropwizard;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.eclipse.jetty.server.session.SessionHandler;
+import org.eclipse.jetty.ee10.servlet.SessionHandler;
 import org.pac4j.core.config.Config;
 import org.pac4j.dropwizard.Pac4jFactory.JaxRsSecurityFilterConfiguration;
 import org.pac4j.dropwizard.Pac4jFactory.ServletCallbackFilterConfiguration;

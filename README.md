@@ -11,6 +11,7 @@ using [pac4j](http://www.pac4j.org/).
 
 | dropwizard-pac4j | JDK | pac4j | jax-rs-pac4j | Dropwizard |
 |------------------|-----|-------|--------------|------------|
+| version >= 7     | 17  | v5    | v6           | v5         |
 | version >= 6     | 11  | v5    | v6           | v4         |
 | version >= 5.3   | 11  | v5    | v5           | v3         |
 | version >= 5     | 11  | v4    | v4           | v2         |
