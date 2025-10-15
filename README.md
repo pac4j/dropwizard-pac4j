@@ -11,6 +11,7 @@ using [pac4j](http://www.pac4j.org/).
 
 | dropwizard-pac4j | JDK | pac4j | jax-rs-pac4j | Dropwizard |
 |------------------|-----|-------|--------------|------------|
+| version >= 7     | 17  | v5    | v6           | v5         |
 | version >= 6     | 11  | v5    | v6           | v4         |
 | version >= 5.3   | 11  | v5    | v5           | v3         |
 | version >= 5     | 11  | v4    | v4           | v2         |
@@ -254,7 +255,7 @@ You can use the [mailing lists](http://www.pac4j.org/mailing-lists.html) or the 
 
 ## Development
 
-The version 6.0.1-SNAPSHOT is under development.
+The version 7.0.0-SNAPSHOT is under development.
 
 Maven artifacts are built via Github Actions and available in the Central Portal Snapshots repository. This repository must be added in the Maven `pom.xml` file for example:
 
