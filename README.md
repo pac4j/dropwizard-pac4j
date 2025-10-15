@@ -255,7 +255,7 @@ You can use the [mailing lists](http://www.pac4j.org/mailing-lists.html) or the 
 
 ## Development
 
-The version 6.0.1-SNAPSHOT is under development.
+The version 7.0.0-SNAPSHOT is under development.
 
 Maven artifacts are built via Github Actions and available in the Central Portal Snapshots repository. This repository must be added in the Maven `pom.xml` file for example:
 
