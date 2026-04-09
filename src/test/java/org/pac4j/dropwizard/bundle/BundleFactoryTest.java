@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.config.Config;
 import org.pac4j.dropwizard.AbstractApplicationTest;
-import org.pac4j.jax.rs.pac4j.JaxRsUrlResolver;
 import org.pac4j.jax.rs.servlet.features.ServletJaxRsContextFactoryProvider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,9 +51,6 @@ public class BundleFactoryTest extends AbstractApplicationTest {
 
         Config config = app.bundle.getConfig();
         assertThat(config).isNotNull();
-        // this is the default url resolver!
-        assertThat(config.getClients().getUrlResolver())
-                .isInstanceOf(JaxRsUrlResolver.class);
         assertThat(om.findMixInClassFor(Client.class)).isNotNull();
         assertThat(env.jersey().getResourceConfig().getSingletons())
                 .haveAtLeastOne(CONDSI);

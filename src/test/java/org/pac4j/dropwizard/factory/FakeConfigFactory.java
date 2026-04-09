@@ -4,8 +4,7 @@ import org.pac4j.core.authorization.authorizer.IsAnonymousAuthorizer;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.config.ConfigFactory;
 import org.pac4j.core.matching.matcher.PathMatcher;
-
-import java.util.Map;
+import org.pac4j.oauth.client.FacebookClient;
 
 /**
  * Fake configuration factory for tests.
@@ -17,10 +16,10 @@ public final class FakeConfigFactory implements ConfigFactory {
 
     @Override
     public Config build(Object... parameters) {
-        final FakeConfig config = new FakeConfig();
-        config.setProperties((Map<String, String>) parameters[0]);
+        FakeConfig config = new FakeConfig();
+        config.addClient(new FacebookClient("fbId", "fbSecret"));
         config.setAuthorizer(new IsAnonymousAuthorizer());
-        config.setMatcher(new PathMatcher());
+        config.setMatcher(new PathMatcher().excludeRegex("^/user/session$"));
         return config;
     }
 }

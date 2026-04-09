@@ -4,6 +4,7 @@ import java.util.EnumSet;
 
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.FilterRegistration;
+import org.pac4j.core.adapter.FrameworkAdapter;
 
 import org.pac4j.core.config.Config;
 import org.pac4j.dropwizard.Pac4jFactory.ServletCallbackFilterConfiguration;
@@ -68,7 +69,7 @@ public final class J2EHelper {
 
     private static void registerFilter(Environment environment, Config config,
                                        AbstractConfigFilter filter, String mapping) {
-
+        FrameworkAdapter.INSTANCE.applyDefaultSettingsIfUndefined(config);
         filter.setConfig(config);
 
         final FilterRegistration.Dynamic filterRegistration = environment

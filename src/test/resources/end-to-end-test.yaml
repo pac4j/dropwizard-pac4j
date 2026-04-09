@@ -7,13 +7,7 @@ server:
       port: 0
 
 pac4j:
-  clients:
-    - org.pac4j.http.client.direct.DirectBasicAuthClient:
-        authenticator:
-          class: org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator
-    - org.pac4j.http.client.direct.DirectFormClient:
-        authenticator:
-          class: org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator
+  configFactory: org.pac4j.dropwizard.factory.DirectClientsConfigFactory
   globalFilters:
     - clients: ""
       authorizers: "none"

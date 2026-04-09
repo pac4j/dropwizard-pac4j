@@ -1,6 +1,0 @@
-clients:
-  - org.pac4j.http.client.direct.DirectBasicAuthClient:
-      authenticator:
-        class: org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator
-  - org.pac4j.http.client.direct.DirectBasicAuthClient:
-      name: basic

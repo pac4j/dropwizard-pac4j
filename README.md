@@ -11,6 +11,7 @@ using [pac4j](http://www.pac4j.org/).
 
 | dropwizard-pac4j | JDK | pac4j | jax-rs-pac4j | Dropwizard |
 |------------------|-----|-------|--------------|------------|
+| version >= 8     | 17  | v6    | v7           | v5         |
 | version >= 7     | 17  | v5    | v6           | v5         |
 | version >= 6     | 11  | v5    | v6           | v4         |
 | version >= 5.3   | 11  | v5    | v5           | v3         |
@@ -30,7 +31,7 @@ applications:
     - connects the values defined in the `pac4j` configuration section to the
       [`jax-rs-pac4j`](https://github.com/pac4j/jax-rs-pac4j/) and
       [`jee-pac4j`](https://github.com/pac4j/jee-pac4j/) libraries.
-    - enables the use of the annotation provided in by the
+    - enables the use of the annotation provided by the
       [`jax-rs-pac4j`](https://github.com/pac4j/jax-rs-pac4j/) library.
     - enables Jetty session management by default.
 
@@ -39,9 +40,9 @@ applications:
 You need to add a dependency on:
 
 - the `dropwizard-pac4j` library (<em>groupId</em>: **org.pac4j**, *version*:
-**7.0.0**)
+**8.0.0**)
 - the appropriate `pac4j` [submodules](http://www.pac4j.org/docs/clients.html)
-(<em>groupId</em>: **org.pac4j**, *version*: **6.2.2**): `pac4j-oauth` for
+(<em>groupId</em>: **org.pac4j**, *version*: **6.4.1**): `pac4j-oauth` for
 OAuth support (Facebook, Twitter...), `pac4j-cas` for CAS support, `pac4j-ldap`
 for LDAP authentication, etc.
 
@@ -63,7 +64,7 @@ public class MySecureApplication extends Application<MySecureConfiguration> {
     };
 
     @Override
-    public void initialize(Bootstrap<TestConfiguration> bootstrap) {
+    public void initialize(Bootstrap<MySecureConfiguration> bootstrap) {
         bootstrap.addBundle(bundle);
     }
 
@@ -103,9 +104,10 @@ Add a `pac4j` section to a Dropwizard application's configuration file:
 
 ```yaml
 pac4j:
+  configFactory: com.example.security.MyConfigFactory
   # those protect the whole application at Jersey level
   globalFilters:
-    - matchers: excludeUserSession
+    - matchers: securityMatcher
       authorizers: isAuthenticated
   servlet:
     security:
@@ -114,23 +116,25 @@ pac4j:
       - ...
     logout:
       - ...
-  matchers:
-    # this let the /user/session url be handled by the annotations
-    excludeUserSession:
-      class: org.pac4j.core.matching.PathMatcher
-      excludePath: ^/user/session$
-  callbackUrl: /user/session
-  defaultClient: DirectBasicAuthClient
-  clients:
-    - org.pac4j.http.client.direct.DirectBasicAuthClient:
-        authenticator:
-          class: org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator
 ```
 
+- `configFactory`: fully-qualified class name of a custom implementation of
+  `org.pac4j.core.config.ConfigFactory`. This factory is responsible for
+  building the pac4j `Config` (clients, authorizers, matchers, callback URL,
+  logic components, etc.).
+For example:
+```java
+public class MyConfigFactory implements ConfigFactory {
+    @Override
+    public Config build(Object... parameters) {
+        return new Config(/* your clients/authorizers/matchers */);
+    }
+}
+```
 - `globalFilters` to declare global filters: the `clients`, `authorizers`,
 `matchers`, and `skipResponse` properties directly map to
 [the parameters](https://github.com/pac4j/jax-rs-pac4j/wiki/Apply-security)
-used by `org.pac4j.jax.rs.filter.SecurityFilter`.
+used by `org.pac4j.jax.rs.filters.SecurityFilter`.
 
 - `servlet` to declare servlet-level filters:
  - `security`: the `clients`, `authorizers`, and `matchers`
@@ -151,51 +155,22 @@ used by `org.pac4j.jax.rs.filter.SecurityFilter`.
    The `mapping` property is used to specify urls to which this filter will be
    applied to. It does not usually contains a wildcard.
 
-- `sessionEnabled`: set to `false` to disable Jetty session management.
-If not set, the bundle will simply enable it by default.
-
-- `matchers`: the key is the name of the `Matcher` and its instance is
-declared as explained below.
-Their name can be used in `filter`'s `matchers` as well as in the
-`Pac4JSecurity` annotation.
-
-- `authorizers`: the key is the name of the `Authorizer` and its instance is
-declared as explained below.
-Their name can be used in `filter`'s `authorizers` as well as in the
-`Pac4JSecurity` annotation.
-
-- `clients`: the key is the class of the `Client` and its instance
-is configured based on the properties. Its name is by default the short
-name of its class, but it can also be set explicitly.
-Their name can be used in `filter`'s `clients` as well as in the
-`Pac4JSecurity` annotation.
-
-- `defaultClient`: the name of one of the client configured via `clients`.
-It will be used as the default pac4j `Client`. Pac4j exploits it in particular
-when no client is specified during callback, but also when no clients are
-specified on a security filter.
-
-- `defaultClients`: the names (separated by commas) of some of the clients
-configured via `clients`. They will be used as the default value for the
-`clients` parameter of the `Pac4JSecurity` annotation.
-
-To specify instances of `Client`, `Authenticator`, `PasswordEncoder`,
-`CredentialsExtractor`, `ProfileCreator`, `AuthorizationGenerator`,
-`Authorizer`, `Matcher`, `CallbackUrlResolver`, `HttpActionAdapter`
-and `RedirectActionBuilder`, it is only necessary to refer to their class name
-using the `class` key as above and the other properties are set on the
-instantiated object.
+- `sessionEnabled`: set to `false` to disable Jetty session management
+  (enabled by default).
+Define pac4j component-level configuration (`clients`, `authorizers`,
+`matchers`, callback URL, and related settings) inside your
+`ConfigFactory` implementation.
+In most setups, sensible defaults are applied automatically for both Jersey
+resources and servlet filters.
 
 #### URLs Relativity
 
 Note that all urls used within Jersey filters are relative to the dropwizard
-`applicationContext` suffixed by the dropwizard `roothPath` while the urls used
+`applicationContext` suffixed by the dropwizard `rootPath` while the urls used
 within Servlet filters are only relative to the dropwizard
 `applicationContext`.
-
-For Jersey, this also includes `callbackUrl`s, enforced by
-`JaxRsCallbackUrlResolver`, which is the default `CallbackUrlResolver` in the
-config if not overridden.
+For Jersey, this also includes `callbackUrl`s defined in your `ConfigFactory`
+configuration.
 
 #### Advanced Configuration
 
@@ -209,7 +184,7 @@ public class MySecureApplication extends Application<MySecureConfiguration> {
 
     @Override
     public void run(MySecureConfiguration config, Environment env) throws Exception {
-        Config conf = bundle.getConfig()
+        Config conf = bundle.getConfig();
         
         DirectBasicAuthClient c = conf.getClients().findClient(DirectBasicAuthClient.class);
         c.setCredentialsExtractor(...);
@@ -242,6 +217,11 @@ public final ResourceTestRule resources = ResourceTestRule.builder()
       .addProvider(new Pac4JValueFactoryProvider.Binder(new CockpitProfile("my-mock-user-id")))
       .build();
 ```
+## Demos
+
+Start with the [dropwizard-pac4j-demo](https://github.com/pac4j/dropwizard-pac4j-demo).
+
+The demo illustrates several ways to integrate pac4j with Dropwizard (JAX-RS views, REST resources, and servlet/JAX-RS combinations) with authentication mechanisms like form login, basic auth, CAS, LDAP and SQL.
 
 ## Release notes
 
@@ -255,7 +235,7 @@ You can use the [mailing lists](http://www.pac4j.org/mailing-lists.html) or the 
 
 ## Development
 
-The version 7.0.0-SNAPSHOT is under development.
+The version 8.0.0-SNAPSHOT is under development.
 
 Maven artifacts are built via Github Actions and available in the Central Portal Snapshots repository. This repository must be added in the Maven `pom.xml` file for example:
 
