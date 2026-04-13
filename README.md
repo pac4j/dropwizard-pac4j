@@ -2,8 +2,6 @@
   <img src="https://pac4j.github.io/pac4j/img/logo-dropwizard.png" width="300" />
 </p>
 
-[![Maven Central](https://img.shields.io/maven-central/v/org.pac4j/dropwizard-pac4j.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.pac4j%22%20AND%20a%3A%22dropwizard-pac4j%22)
-
 # dropwizard-pac4j
 
 A [Dropwizard](http://www.dropwizard.io/) bundle for securing REST endpoints
@@ -225,6 +223,8 @@ The demo illustrates several ways to integrate pac4j with Dropwizard (JAX-RS vie
 
 ## Release notes
 
+The latest release is: [![Maven Central](https://img.shields.io/maven-central/v/org.pac4j/dropwizard-pac4j.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.pac4j%22%20AND%20a%3A%22dropwizard-pac4j%22).
+
 See the [release notes](https://github.com/pac4j/dropwizard-pac4j/wiki/Release-Notes).
 
 
@@ -235,7 +235,7 @@ You can use the [mailing lists](http://www.pac4j.org/mailing-lists.html) or the 
 
 ## Development
 
-The version 8.0.0-SNAPSHOT is under development.
+The version 8.0.1-SNAPSHOT is under development.
 
 Maven artifacts are built via Github Actions and available in the Central Portal Snapshots repository. This repository must be added in the Maven `pom.xml` file for example:
 
