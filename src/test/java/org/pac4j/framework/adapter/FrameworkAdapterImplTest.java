@@ -25,7 +25,7 @@ final class FrameworkAdapterImplTest {
     }
 
     @Test
-    void shouldSetDefaultSessionStoreFactory() {
+    void shouldSetDefaultSessionStoreFactoryIfUndefined() {
         Config config = new Config();
 
         assertNull(config.getSessionStoreFactory());
