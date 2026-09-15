@@ -31,7 +31,7 @@ public class FrameworkAdapterImpl extends JEEFrameworkAdapter {
         CommonHelper.assertNotNull("config", config);
 
         config.setWebContextFactoryIfUndefined(this::buildWebContext);
-        config.setSessionStoreFactory(parameters -> {
+        config.setSessionStoreFactoryIfUndefined(parameters -> {
             if (parameters instanceof JEEFrameworkParameters) {
                 return JEESessionStoreFactory.INSTANCE.newSessionStore(parameters);
             }
