@@ -4,8 +4,8 @@
 
 # dropwizard-pac4j
 
-A [Dropwizard](http://www.dropwizard.io/) bundle for securing REST endpoints
-using [pac4j](http://www.pac4j.org/).
+A [Dropwizard](https://www.dropwizard.io/) bundle for securing REST endpoints
+using [pac4j](https://www.pac4j.org/).
 
 | dropwizard-pac4j | JDK | pac4j | jax-rs-pac4j | Dropwizard |
 |------------------|-----|-------|--------------|------------|
@@ -24,7 +24,7 @@ applications:
 
 - A configuration factory populated by values from a `pac4j` section within an
   application's config file.
-- A Dropwizard [bundle](http://www.dropwizard.io/1.0.5/docs/manual/core.html#bundles)
+- A Dropwizard [bundle](https://www.dropwizard.io/en/stable/manual/core.html#bundles)
   which:
     - connects the values defined in the `pac4j` configuration section to the
       [`jax-rs-pac4j`](https://github.com/pac4j/jax-rs-pac4j/) and
@@ -38,9 +38,9 @@ applications:
 You need to add a dependency on:
 
 - the `dropwizard-pac4j` library (<em>groupId</em>: **org.pac4j**, *version*:
-**8.0.0**)
-- the appropriate `pac4j` [submodules](http://www.pac4j.org/docs/clients.html)
-(<em>groupId</em>: **org.pac4j**, *version*: **6.4.1**): `pac4j-oauth` for
+**8.0.1**)
+- the appropriate `pac4j` [submodules](https://www.pac4j.org/docs/clients.html)
+(<em>groupId</em>: **org.pac4j**, *version*: **6.5.8**): `pac4j-oauth` for
 OAuth support (Facebook, Twitter...), `pac4j-cas` for CAS support, `pac4j-ldap`
 for LDAP authentication, etc.
 
@@ -140,21 +140,23 @@ used by `org.pac4j.jax.rs.filters.SecurityFilter`.
    [the parameters](https://github.com/pac4j/jee-pac4j/wiki/Apply-security)
    used by `org.pac4j.jee.filter.SecurityFilter`.
    The `mapping` property is used to optionally specify urls to which this
-   filter will be applied to, defaulting to all urls (`/*`).
+   filter will be applied, defaulting to all urls (`/*`).
  - `callback`: the `defaultUrl`, and `renewSession` properties
    directly map to
    [the parameters](https://github.com/pac4j/jee-pac4j/wiki/Callback-configuration)
    used by `org.pac4j.jee.filter.CallbackFilter`.
    The `mapping` property is used to specify urls to which this filter will be
-   applied to. It does not usually contains a wildcard.
- - `logout`: the `defaultUrl` and `logoutUrlPattern` properties directly map to
+   applied. It does not usually contain a wildcard.
+ - `logout`: the `defaultUrl`, `logoutUrlPattern`, `localLogout`,
+   `destroySession` and `centralLogout` properties directly map to
    [the parameters](https://github.com/pac4j/jee-pac4j/wiki/Logout-configuration)
    used by `org.pac4j.jee.filter.LogoutFilter`.
    The `mapping` property is used to specify urls to which this filter will be
-   applied to. It does not usually contains a wildcard.
+   applied. It does not usually contain a wildcard.
 
 - `sessionEnabled`: set to `false` to disable Jetty session management
   (enabled by default).
+
 Define pac4j component-level configuration (`clients`, `authorizers`,
 `matchers`, callback URL, and related settings) inside your
 `ConfigFactory` implementation.
@@ -184,7 +186,8 @@ public class MySecureApplication extends Application<MySecureConfiguration> {
     public void run(MySecureConfiguration config, Environment env) throws Exception {
         Config conf = bundle.getConfig();
         
-        DirectBasicAuthClient c = conf.getClients().findClient(DirectBasicAuthClient.class);
+        DirectBasicAuthClient c = (DirectBasicAuthClient) conf.getClients()
+            .findClient("DirectBasicAuthClient").orElseThrow();
         c.setCredentialsExtractor(...);
         
         env.jersey().register(new DogsResource());
@@ -198,23 +201,34 @@ From here, `jax-rs-pac4j` takes over with its annotations. See `pac4j`
 documentation on how to implement `Client`s, `Authorizer`s, `Matcher`s and all
 the other points of extension.
 
-* [pac4j's website](http://www.pac4j.org) and
+* [pac4j's website](https://www.pac4j.org) and
   [README](https://github.com/pac4j/pac4j)
 * [`jax-rs-pac4j`'s README](https://github.com/pac4j/jax-rs-pac4j)
 
-### Usage with Dropwizard's ResourceTestRule
+### Usage with Dropwizard's ResourceExtension
 
-When using `ResourceTestRule`, it usually make sense to mock the profile that
-is injected for `@Pac4jProfile` annotations by using one of the alternative
-`Pac4JValueFactoryProvider` binders:
+When using `ResourceExtension` (JUnit 5), it usually makes sense to mock the
+profile that is injected for `@Pac4JProfile` annotations by using one of the
+alternative `Pac4JValueFactoryProvider` binders:
 
 ```java
-@Rule
-public final ResourceTestRule resources = ResourceTestRule.builder()
-      .addProvide(MyResource.class)
-      .addProvider(new Pac4JValueFactoryProvider.Binder(new CockpitProfile("my-mock-user-id")))
-      .build();
+@ExtendWith(DropwizardExtensionsSupport.class)
+class MyResourceTest {
+
+    private static final CommonProfile PROFILE = new CommonProfile();
+    static {
+        PROFILE.setId("my-mock-user-id");
+    }
+
+    private static final ResourceExtension RESOURCES = ResourceExtension.builder()
+        .addResource(new MyResource())
+        .addProvider(new Pac4JValueFactoryProvider.Binder(PROFILE))
+        .build();
+
+    ...
+}
 ```
+
 ## Demos
 
 Start with the [dropwizard-pac4j-demo](https://github.com/pac4j/dropwizard-pac4j-demo).
@@ -230,12 +244,12 @@ See the [release notes](https://github.com/pac4j/dropwizard-pac4j/wiki/Release-N
 
 ## Need help?
 
-You can use the [mailing lists](http://www.pac4j.org/mailing-lists.html) or the [commercial support](http://www.pac4j.org/commercial-support.html).
+You can use the [mailing lists](https://www.pac4j.org/mailing-lists.html) or the [commercial support](https://www.pac4j.org/commercial-support.html).
 
 
 ## Development
 
-The version 8.0.1-SNAPSHOT is under development.
+The version 8.0.2-SNAPSHOT is under development.
 
 Maven artifacts are built via Github Actions and available in the Central Portal Snapshots repository. This repository must be added in the Maven `pom.xml` file for example:
 
