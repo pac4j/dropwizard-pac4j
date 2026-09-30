@@ -179,9 +179,41 @@ Define pac4j component-level configuration (`clients`, `authorizers`,
 `ConfigFactory` implementation.
 In most setups, sensible defaults are applied automatically for both Jersey
 resources and servlet filters.
-In particular, JAX-RS requests are always considered as AJAX requests (a 401
-error is returned instead of a redirection to the identity provider) while
-servlet requests are handled as usual (see `DropwizardAjaxRequestResolver`).
+
+#### AJAX requests and indirect clients
+
+By default, the `DropwizardAjaxRequestResolver` is used:
+
+- JAX-RS requests are always considered as AJAX requests: when an indirect
+  client (form, CAS, OpenID Connect, SAML...) must start the login process, a
+  401 error is returned instead of a redirection to the identity provider. This
+  suits REST APIs, for which a redirection would break the API clients (like a
+  single page application calling the API with `fetch`).
+- Servlet requests (from the servlet filters) are handled as usual: indirect
+  clients redirect to the identity provider, unless the request is an AJAX one
+  (`X-Requested-With: XMLHttpRequest` header).
+
+This has no impact on direct clients (basic auth, headers, JWT...), which never
+redirect and always return a 401 error when the credentials are missing or
+invalid.
+
+If your JAX-RS resources serve web pages (like Dropwizard views) protected by
+indirect clients, use the default pac4j behavior in your `ConfigFactory` so
+that the indirect clients redirect to the identity provider:
+
+```java
+public class MyConfigFactory implements ConfigFactory {
+    @Override
+    public Config build(Object... parameters) {
+        final Config config = new Config(/* your clients */);
+        config.getClients().setAjaxRequestResolver(new DefaultAjaxRequestResolver());
+        return config;
+    }
+}
+```
+
+See the [dropwizard-pac4j-demo](https://github.com/pac4j/dropwizard-pac4j-demo)
+for a complete example.
 
 #### URLs Relativity
 
@@ -253,7 +285,7 @@ class MyResourceTest {
 
 Start with the [dropwizard-pac4j-demo](https://github.com/pac4j/dropwizard-pac4j-demo).
 
-The demo illustrates several ways to integrate pac4j with Dropwizard (JAX-RS views, REST resources, and servlet/JAX-RS combinations) with authentication mechanisms like form login, basic auth, CAS, LDAP and SQL.
+The demo protects Dropwizard views served by JAX-RS resources with form login, basic auth (indirect and direct) and CAS.
 
 ## Release notes
 
