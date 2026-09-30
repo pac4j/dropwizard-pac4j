@@ -1,8 +1,5 @@
 package org.pac4j.dropwizard;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.eclipse.jetty.ee10.servlet.SessionHandler;
 import org.pac4j.core.config.Config;
 import org.pac4j.dropwizard.Pac4jFactory.JaxRsSecurityFilterConfiguration;
@@ -21,7 +18,6 @@ import org.pac4j.jax.rs.servlet.features.ServletJaxRsContextFactoryProvider;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.Configuration;
 import io.dropwizard.core.ConfiguredBundle;
-import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import io.dropwizard.jetty.MutableServletContextHandler;
 
@@ -40,32 +36,18 @@ public abstract class Pac4jBundle<T extends Configuration>
     private Config config;
 
     @Override
-    public final void initialize(Bootstrap<?> bootstrap) {
-        for (Pac4jFeatureSupport fs : supportedFeatures()) {
-            fs.setup(bootstrap);
-        }
-    }
-
-    /**
-     * In case of override, do not forget to call
-     * {@code super.supportedFeatures()} to get the default features, or to
-     * redefine them instead!
-     *
-     * @see DefaultFeatureSupport
-     * @return the features to support for configuration parsing
-     */
-    protected Collection<Pac4jFeatureSupport> supportedFeatures() {
-        ArrayList<Pac4jFeatureSupport> res = new ArrayList<>();
-        res.add(new DefaultFeatureSupport());
-        return res;
-    }
-
-    @Override
     public final void run(T configuration, Environment environment)
             throws Exception {
         final Pac4jFactory pac4j = getPac4jFactory(configuration);
 
         if (pac4j != null) {
+            if (pac4j.getGlobalFilters().size() > 1) {
+                // Jersey only keeps one instance of a given component class
+                throw new IllegalArgumentException(
+                        "Only one pac4j global filter is supported, found: "
+                                + pac4j.getGlobalFilters().size());
+            }
+
             config = pac4j.build();
 
             environment.jersey().register(new JaxRsConfigProvider(config));

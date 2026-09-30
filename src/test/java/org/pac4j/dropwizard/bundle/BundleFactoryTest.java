@@ -34,9 +34,8 @@ public class BundleFactoryTest extends AbstractApplicationTest {
         Environment env = dropwizardTestSupport.getEnvironment();
 
         assertThat(app.bundle.getConfig()).isNull();
-        // if one use the bundle with null pac4j, one will get the mixing
-        // registered anyway
-        assertThat(om.findMixInClassFor(Client.class)).isNotNull();
+        // the bundle does not customize the application's ObjectMapper
+        assertThat(om.findMixInClassFor(Client.class)).isNull();
         assertThat(env.jersey().getResourceConfig().getSingletons())
                 .doesNotHave(CONDSI);
     }
@@ -51,24 +50,9 @@ public class BundleFactoryTest extends AbstractApplicationTest {
 
         Config config = app.bundle.getConfig();
         assertThat(config).isNotNull();
-        assertThat(om.findMixInClassFor(Client.class)).isNotNull();
+        assertThat(om.findMixInClassFor(Client.class)).isNull();
         assertThat(env.jersey().getResourceConfig().getSingletons())
                 .haveAtLeastOne(CONDSI);
-
-        assertThat(env.getApplicationContext().getSessionHandler())
-                .isInstanceOf(SessionHandler.class);
-    }
-
-    @Test
-    public void sessionEnabledForced() throws Exception {
-        setup(App.class, "empty-pac4j.yaml",
-                ConfigOverride.config("pac4j.sessionEnabled", "true"));
-
-        App app = dropwizardTestSupport.getApplication();
-        Environment env = dropwizardTestSupport.getEnvironment();
-
-        Config config = app.bundle.getConfig();
-        assertThat(config).isNotNull();
 
         assertThat(env.getApplicationContext().getSessionHandler())
                 .isInstanceOf(SessionHandler.class);

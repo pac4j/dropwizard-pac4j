@@ -4,11 +4,14 @@ import org.junit.jupiter.api.Test;
 import org.pac4j.core.adapter.FrameworkAdapter;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.context.session.SessionStoreFactory;
+import org.pac4j.core.http.ajax.DefaultAjaxRequestResolver;
+import org.pac4j.dropwizard.DropwizardAjaxRequestResolver;
 import org.pac4j.jax.rs.pac4j.NoOpSessionStoreFactory;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 final class FrameworkAdapterImplTest {
 
@@ -34,5 +37,27 @@ final class FrameworkAdapterImplTest {
         frameworkAdapter.applyDefaultSettingsIfUndefined(config);
 
         assertNotNull(config.getSessionStoreFactory());
+    }
+
+    @Test
+    void shouldSetDropwizardAjaxRequestResolverIfUndefined() {
+        Config config = new Config();
+
+        FrameworkAdapter frameworkAdapter = new FrameworkAdapterImpl();
+        frameworkAdapter.applyDefaultSettingsIfUndefined(config);
+
+        assertInstanceOf(DropwizardAjaxRequestResolver.class, config.getClients().getAjaxRequestResolver());
+    }
+
+    @Test
+    void shouldKeepUserDefinedAjaxRequestResolver() {
+        Config config = new Config();
+        DefaultAjaxRequestResolver ajaxRequestResolver = new DefaultAjaxRequestResolver();
+        config.getClients().setAjaxRequestResolver(ajaxRequestResolver);
+
+        FrameworkAdapter frameworkAdapter = new FrameworkAdapterImpl();
+        frameworkAdapter.applyDefaultSettingsIfUndefined(config);
+
+        assertSame(ajaxRequestResolver, config.getClients().getAjaxRequestResolver());
     }
 }

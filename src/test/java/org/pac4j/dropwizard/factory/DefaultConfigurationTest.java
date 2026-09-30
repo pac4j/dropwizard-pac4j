@@ -1,6 +1,7 @@
 package org.pac4j.dropwizard.factory;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.regex.Pattern;
 
@@ -12,6 +13,8 @@ import org.pac4j.core.matching.matcher.PathMatcher;
 import org.pac4j.dropwizard.AbstractConfigurationTest;
 import org.pac4j.dropwizard.Pac4jFactory;
 import org.pac4j.oauth.client.FacebookClient;
+
+import io.dropwizard.configuration.ConfigurationValidationException;
 
 public class DefaultConfigurationTest extends AbstractConfigurationTest {
 
@@ -44,5 +47,13 @@ public class DefaultConfigurationTest extends AbstractConfigurationTest {
         assertThat(config).isNotNull();
         assertThat(config.getClients()).isNotNull();
         assertThat(config.getClients().getClients()).isEmpty();
+    }
+
+    @Test
+    public void nestedFilterConfigurationsAreValidated() {
+        assertThatThrownBy(() -> getPac4jFactory("missing-mappings-pac4j.yaml"))
+                .isInstanceOf(ConfigurationValidationException.class)
+                .hasMessageContaining("servlet.callback[0].mapping")
+                .hasMessageContaining("servlet.logout[0].mapping");
     }
 }

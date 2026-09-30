@@ -2,12 +2,13 @@ package org.pac4j.dropwizard;
 
 import jakarta.ws.rs.client.Client;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.jupiter.api.AfterEach;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.Charsets;
-import com.google.common.io.BaseEncoding;
 
 import io.dropwizard.core.Application;
 import io.dropwizard.core.Configuration;
@@ -33,7 +34,9 @@ public class AbstractApplicationTest {
 
     @AfterEach
     public void tearDown() {
-        dropwizardTestSupport.after();
+        if (dropwizardTestSupport != null) {
+            dropwizardTestSupport.after();
+        }
         client.close();
     }
 
@@ -42,8 +45,8 @@ public class AbstractApplicationTest {
     }
 
     protected String mkAuthField(String username, String password) {
-        final String encodedBasicAuthCreds = BaseEncoding.base64().encode(String
-                .format("%s:%s", username, password).getBytes(Charsets.UTF_8));
+        final String encodedBasicAuthCreds = Base64.getEncoder().encodeToString(String
+                .format("%s:%s", username, password).getBytes(StandardCharsets.UTF_8));
         return String.format("Basic %s", encodedBasicAuthCreds);
     }
 

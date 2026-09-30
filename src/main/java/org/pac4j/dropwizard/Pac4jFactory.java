@@ -3,6 +3,7 @@ package org.pac4j.dropwizard;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.pac4j.core.adapter.FrameworkAdapter;
 import org.pac4j.core.client.Clients;
@@ -28,9 +29,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class Pac4jFactory {
 
+    @Valid
     @NotNull
     private List<JaxRsSecurityFilterConfiguration> globalFilters = new ArrayList<>();
 
+    @Valid
     @NotNull
     private ServletConfiguration servlet = new ServletConfiguration();
 
@@ -114,12 +117,15 @@ public class Pac4jFactory {
      */
     public static class ServletConfiguration {
 
+        @Valid
         @NotNull
         private List<ServletSecurityFilterConfiguration> security = new ArrayList<>();
 
+        @Valid
         @NotNull
         private List<ServletCallbackFilterConfiguration> callback = new ArrayList<>();
 
+        @Valid
         @NotNull
         private List<ServletLogoutFilterConfiguration> logout = new ArrayList<>();
 
@@ -253,6 +259,8 @@ public class Pac4jFactory {
 
         private Boolean renewSession;
 
+        private String defaultClient;
+
         @JsonProperty
         public String getMapping() {
             return mapping;
@@ -281,6 +289,26 @@ public class Pac4jFactory {
         @JsonProperty
         public void setRenewSession(Boolean renewSession) {
             this.renewSession = renewSession;
+        }
+
+        /**
+         * @since 8.1.0
+         * @return the client to use if none is defined in the callback request
+         */
+        @JsonProperty
+        public String getDefaultClient() {
+            return defaultClient;
+        }
+
+        /**
+         * @since 8.1.0
+         * @param defaultClient
+         *            the client to use if none is defined in the callback
+         *            request
+         */
+        @JsonProperty
+        public void setDefaultClient(String defaultClient) {
+            this.defaultClient = defaultClient;
         }
     }
 

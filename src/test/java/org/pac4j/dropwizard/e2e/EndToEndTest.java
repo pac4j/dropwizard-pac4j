@@ -1,6 +1,7 @@
 package org.pac4j.dropwizard.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.Form;
@@ -77,5 +78,11 @@ public class EndToEndTest extends AbstractApplicationTest {
 
         assertThat(response.getStatusInfo())
                 .isEqualTo(Response.Status.UNAUTHORIZED);
+    }
+
+    @Test
+    public void failsWithSeveralGlobalFilters() {
+        assertThatThrownBy(() -> super.setup(App.class, "end-to-end-multi-global-test.yaml"))
+                .hasStackTraceContaining("Only one pac4j global filter is supported, found: 2");
     }
 }

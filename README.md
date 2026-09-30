@@ -20,6 +20,7 @@ using [pac4j](https://www.pac4j.org/).
 
 | dropwizard-pac4j | JDK | pac4j | jax-rs-pac4j | Dropwizard |
 |------------------|-----|-------|--------------|------------|
+| version >= 8.1   | 17  | v6    | v8           | v5         |
 | version >= 8     | 17  | v6    | v7           | v5         |
 | version >= 7     | 17  | v5    | v6           | v5         |
 | version >= 6     | 11  | v5    | v6           | v4         |
@@ -49,14 +50,15 @@ applications:
 You need to add a dependency on:
 
 - the `dropwizard-pac4j` library (<em>groupId</em>: **org.pac4j**, *version*:
-**8.0.1**)
+[![Maven Central](https://img.shields.io/maven-central/v/org.pac4j/dropwizard-pac4j.svg)](https://repo.maven.apache.org/maven2/org/pac4j/dropwizard-pac4j/))
 - the appropriate `pac4j` [submodules](https://www.pac4j.org/docs/clients.html)
-(<em>groupId</em>: **org.pac4j**, *version*: **6.5.8**): `pac4j-oauth` for
+(<em>groupId</em>: **org.pac4j**, *version*:
+[![Maven Central](https://img.shields.io/maven-central/v/org.pac4j/pac4j-core.svg?versionPrefix=6)](https://repo.maven.apache.org/maven2/org/pac4j/pac4j-core/)): `pac4j-oauth` for
 OAuth support (Facebook, Twitter...), `pac4j-cas` for CAS support, `pac4j-ldap`
 for LDAP authentication, etc.
 
 All released artifacts are available in the
-[Maven central repository](http://search.maven.org/#search%7Cga%7C1%7Cpac4j).
+[Maven central repository](https://central.sonatype.com/namespace/org.pac4j).
 
 ### Installing the bundle
 
@@ -91,6 +93,7 @@ Update the application's configuration class to expose accessor methods for
 ```java
 public class MySecureConfiguration extends Configuration {
     @NotNull
+    @Valid
     Pac4jFactory pac4jFactory = new Pac4jFactory();
 
     @JsonProperty("pac4j")
@@ -105,9 +108,10 @@ public class MySecureConfiguration extends Configuration {
 }
 ```
 
+The `@Valid` annotation is required for the `pac4j` section to be validated.
+
 Note that it is also possible to have `pac4jFactory` be nullable and in this
-case, pac4j won't be configured but pac4j's type will be readable in the
-configuration. If the latter is not desired, do not use this bundle!
+case, pac4j won't be configured.
 
 Add a `pac4j` section to a Dropwizard application's configuration file:
 
@@ -140,10 +144,12 @@ public class MyConfigFactory implements ConfigFactory {
     }
 }
 ```
-- `globalFilters` to declare global filters: the `clients`, `authorizers`,
+- `globalFilters` to declare a global filter: the `clients`, `authorizers`,
 `matchers`, and `skipResponse` properties directly map to
 [the parameters](https://github.com/pac4j/jax-rs-pac4j/wiki/Apply-security)
 used by `org.pac4j.jax.rs.filters.SecurityFilter`.
+Only one global filter is supported: the application fails at startup if
+several ones are defined.
 
 - `servlet` to declare servlet-level filters:
  - `security`: the `clients`, `authorizers`, and `matchers`
@@ -152,7 +158,7 @@ used by `org.pac4j.jax.rs.filters.SecurityFilter`.
    used by `org.pac4j.jee.filter.SecurityFilter`.
    The `mapping` property is used to optionally specify urls to which this
    filter will be applied, defaulting to all urls (`/*`).
- - `callback`: the `defaultUrl`, and `renewSession` properties
+ - `callback`: the `defaultUrl`, `renewSession` and `defaultClient` properties
    directly map to
    [the parameters](https://github.com/pac4j/jee-pac4j/wiki/Callback-configuration)
    used by `org.pac4j.jee.filter.CallbackFilter`.
@@ -173,6 +179,9 @@ Define pac4j component-level configuration (`clients`, `authorizers`,
 `ConfigFactory` implementation.
 In most setups, sensible defaults are applied automatically for both Jersey
 resources and servlet filters.
+In particular, JAX-RS requests are always considered as AJAX requests (a 401
+error is returned instead of a redirection to the identity provider) while
+servlet requests are handled as usual (see `DropwizardAjaxRequestResolver`).
 
 #### URLs Relativity
 
@@ -248,10 +257,9 @@ The demo illustrates several ways to integrate pac4j with Dropwizard (JAX-RS vie
 
 ## Release notes
 
-The latest release is: [![Maven Central](https://img.shields.io/maven-central/v/org.pac4j/dropwizard-pac4j.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.pac4j%22%20AND%20a%3A%22dropwizard-pac4j%22).
+The latest release is: [![Maven Central](https://img.shields.io/maven-central/v/org.pac4j/dropwizard-pac4j.svg)](https://repo.maven.apache.org/maven2/org/pac4j/dropwizard-pac4j/).
 
-See the [release notes](https://github.com/pac4j/dropwizard-pac4j/wiki/Release-Notes).
-
+See the [release notes](https://github.com/pac4j/dropwizard-pac4j/wiki/Release-notes), which also describe the changes to make when upgrading.
 
 ## Need help?
 
@@ -260,7 +268,7 @@ You can use the [mailing lists](https://www.pac4j.org/mailing-lists.html) or the
 
 ## Development
 
-The version 8.0.2-SNAPSHOT is under development.
+The version 8.1.0-SNAPSHOT is under development.
 
 Maven artifacts are built via Github Actions and available in the Central Portal Snapshots repository. This repository must be added in the Maven `pom.xml` file for example:
 

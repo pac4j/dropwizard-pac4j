@@ -5,9 +5,9 @@ import org.pac4j.core.context.FrameworkParameters;
 import org.pac4j.core.context.WebContext;
 import org.pac4j.core.exception.TechnicalException;
 import org.pac4j.core.util.CommonHelper;
+import org.pac4j.dropwizard.DropwizardAjaxRequestResolver;
 import org.pac4j.jax.rs.filters.DefaultJaxRsHttpActionAdapter;
 import org.pac4j.jax.rs.pac4j.DefaultJaxRsWebContextFactory;
-import org.pac4j.jax.rs.pac4j.JaxRsAjaxRequestResolver;
 import org.pac4j.jax.rs.pac4j.JaxRsContext;
 import org.pac4j.jax.rs.pac4j.JaxRsFrameworkParameters;
 import org.pac4j.jax.rs.pac4j.JaxRsUrlResolver;
@@ -47,7 +47,7 @@ public class FrameworkAdapterImpl extends JEEFrameworkAdapter {
         var clients = config.getClients();
         if (clients != null) {
             if (clients.getAjaxRequestResolver() == null) {
-                clients.setAjaxRequestResolver(new JaxRsAjaxRequestResolver());
+                clients.setAjaxRequestResolver(new DropwizardAjaxRequestResolver());
             }
             if (clients.getUrlResolver() == null) {
                 clients.setUrlResolver(new JaxRsUrlResolver());

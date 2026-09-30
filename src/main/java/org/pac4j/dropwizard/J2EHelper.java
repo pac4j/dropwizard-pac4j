@@ -1,10 +1,12 @@
 package org.pac4j.dropwizard;
 
+import java.util.Arrays;
 import java.util.EnumSet;
 
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.FilterRegistration;
-import org.pac4j.core.adapter.FrameworkAdapter;
+import org.eclipse.jetty.ee10.servlet.FilterHolder;
+import org.eclipse.jetty.ee10.servlet.ServletHandler;
 
 import org.pac4j.core.config.Config;
 import org.pac4j.dropwizard.Pac4jFactory.ServletCallbackFilterConfiguration;
@@ -49,6 +51,7 @@ public final class J2EHelper {
 
         filter.setDefaultUrl(fConf.getDefaultUrl());
         filter.setRenewSession(fConf.getRenewSession());
+        filter.setDefaultClient(fConf.getDefaultClient());
 
         registerFilter(environment, config, filter, fConf.getMapping());
     }
@@ -69,13 +72,39 @@ public final class J2EHelper {
 
     private static void registerFilter(Environment environment, Config config,
                                        AbstractConfigFilter filter, String mapping) {
-        FrameworkAdapter.INSTANCE.applyDefaultSettingsIfUndefined(config);
         filter.setConfig(config);
 
+        final String name = uniqueFilterName(environment,
+                filter.getClass().getName());
         final FilterRegistration.Dynamic filterRegistration = environment
-                .servlets().addFilter(filter.getClass().getName(), filter);
+                .servlets().addFilter(name, filter);
 
         filterRegistration.addMappingForUrlPatterns(
                 EnumSet.of(DispatcherType.REQUEST), true, mapping);
+    }
+
+    /**
+     * Jetty binds a mapping to a filter by its name: several filters of the
+     * same class must have distinct names, otherwise the last registered one
+     * would be applied to all their mappings.
+     */
+    private static String uniqueFilterName(Environment environment,
+            String baseName) {
+        final ServletHandler handler = environment.getApplicationContext()
+                .getServletHandler();
+        String name = baseName;
+        int i = 1;
+        while (isFilterNameUsed(handler, name)) {
+            i++;
+            name = baseName + "-" + i;
+        }
+        return name;
+    }
+
+    private static boolean isFilterNameUsed(ServletHandler handler,
+            String name) {
+        final FilterHolder[] filters = handler.getFilters();
+        return filters != null && Arrays.stream(filters)
+                .anyMatch(f -> name.equals(f.getName()));
     }
 }

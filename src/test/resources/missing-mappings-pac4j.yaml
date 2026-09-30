@@ -1,0 +1,5 @@
+servlet:
+  callback:
+    - defaultUrl: /
+  logout:
+    - defaultUrl: /

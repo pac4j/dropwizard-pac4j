@@ -1,0 +1,18 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 0
+  adminConnectors:
+    - type: http
+      port: 0
+
+pac4j:
+  configFactory: org.pac4j.dropwizard.factory.DirectClientsConfigFactory
+  servlet:
+    security:
+      - mapping: /dogs/basic
+        clients: DirectBasicAuthClient
+        authorizers: "none"
+      - mapping: /dogs/form
+        clients: DirectFormClient
+        authorizers: "none"

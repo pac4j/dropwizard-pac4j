@@ -1,0 +1,21 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 0
+  adminConnectors:
+    - type: http
+      port: 0
+
+pac4j:
+  configFactory: org.pac4j.dropwizard.factory.IndirectClientConfigFactory
+  servlet:
+    security:
+      - mapping: /dogs/*
+        clients: FormClient
+        authorizers: "none"
+    callback:
+      - mapping: /callback
+        defaultClient: FormClient
+    logout:
+      - mapping: /logout
+        defaultUrl: http://localhost/bye

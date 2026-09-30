@@ -78,4 +78,31 @@ public class EndToEndServletTest extends AbstractApplicationTest {
         assertThat(response.getStatusInfo())
                 .isEqualTo(Response.Status.UNAUTHORIZED);
     }
+
+    @Test
+    public void appliesEachServletFilterToItsOwnMapping() throws Exception {
+        super.setup(App.class, "end-to-end-servlet-multi-test.yaml");
+
+        // /dogs/basic is protected by the DirectBasicAuthClient
+        final Response basicOnBasic = client.target(getUrlPrefix() + "/dogs/basic")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, mkAuthField("rosebud", "rosebud"))
+                .get();
+        assertThat(basicOnBasic.getStatus()).isEqualTo(200);
+
+        // /dogs/form is protected by the DirectFormClient
+        final Response basicOnForm = client.target(getUrlPrefix() + "/dogs/form")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, mkAuthField("rosebud", "rosebud"))
+                .get();
+        assertThat(basicOnForm.getStatusInfo()).isEqualTo(Response.Status.UNAUTHORIZED);
+
+        Form form = new Form();
+        form.param("username", "rosebud");
+        form.param("password", "rosebud");
+        final Response formOnForm = client.target(getUrlPrefix() + "/dogs/form")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+        assertThat(formOnForm.getStatus()).isEqualTo(200);
+    }
 }
