@@ -2,6 +2,17 @@
   <img src="https://pac4j.github.io/pac4j/img/logo-dropwizard.png" width="300" />
 </p>
 
+<p align="center">
+  <a href="https://central.sonatype.com/artifact/org.pac4j/dropwizard-pac4j"><img src="https://img.shields.io/maven-central/v/org.pac4j/dropwizard-pac4j?label=Maven%20Central" alt="Maven Central" /></a>
+  <a href="https://github.com/pac4j/dropwizard-pac4j/actions/workflows/ci.yml"><img src="https://github.com/pac4j/dropwizard-pac4j/actions/workflows/ci.yml/badge.svg" alt="Build status" /></a>
+  <img src="https://img.shields.io/badge/Java-17%2B-blue" alt="Java 17+" />
+  <img src="https://img.shields.io/badge/Dropwizard-5.x-blue" alt="Dropwizard 5.x" />
+  <a href="https://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/license-Apache%202.0-blue" alt="Apache 2 license" /></a>
+</p>
+
+> `dropwizard-pac4j` is the Dropwizard implementation of **[pac4j](https://github.com/pac4j/pac4j)**, the security engine for Java.
+> If it is useful to you, please ⭐ **[star pac4j on GitHub](https://github.com/pac4j/pac4j)**: it helps other developers discover it!
+
 # dropwizard-pac4j
 
 A [Dropwizard](https://www.dropwizard.io/) bundle for securing REST endpoints
